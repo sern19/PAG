@@ -26,6 +26,7 @@
 #include <stdio.h>
 #include <string>
 #include <glad/glad.h>
+#include <glm/glm.hpp>
 
 class Shader
 {
@@ -43,6 +44,7 @@ public:
     void setBool(std::string pUniformName, bool pValue);
     void setInt(std::string pUniformName, int pValue);
     void setFloat(std::string pUniformName, float pValue);
+    void setMat4(std::string pUniformName, glm::mat4* pValue);
 };
 
 #endif /* Shader_hpp */

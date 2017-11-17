@@ -9,5 +9,5 @@ uniform sampler2D myTexture;
 
 void main()
 {
-    fragColor=mix(texture(myTexture, fragVertexTexture), vec4(fragVertexColor, 1.0f), 0.5f); //RGBA
+    fragColor=texture(myTexture, fragVertexTexture); //RGBA
 }

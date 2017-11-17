@@ -6,9 +6,12 @@ layout (location = 2) in vec2 vertexTexture; //Gdzie ma szukać współrzędnych
 out vec3 fragVertexColor; //Zmienna wyjściowa koloru wierzchołka
 out vec2 fragVertexTexture; //Zmienna wyjściowa współrzędnych tekstury wierzchołka
 
+uniform mat4 wvp;
+uniform mat4 transform;
+
 void main()
 {
     fragVertexColor=vertexColor;
     fragVertexTexture=vertexTexture;
-    gl_Position = vec4(vertexPosition, 1.0f); //(vec3,float) lub (float,float,float,float) 1-pozycja w przestrzeni, 0-kierunek w przestrzeni
+    gl_Position = wvp * transform * vec4(vertexPosition, 1.0f); //(vec3,float) lub (float,float,float,float) 1-pozycja w przestrzeni, 0-kierunek w przestrzeni
 }

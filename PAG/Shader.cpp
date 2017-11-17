@@ -44,7 +44,7 @@ std::string Shader::loadFile(std::string pFileName)
 {
     std::ifstream inputFile(pFileName);
     std::stringstream output;
-    if (!inputFile.is_open()) throw std::runtime_error("Nie można otworzyć pliku");
+    if (!inputFile.is_open()) throw std::runtime_error("(Shader::loadFile): Nie można otworzyć pliku");
     output << inputFile.rdbuf();
     return output.str();
 }
@@ -54,7 +54,7 @@ void Shader::compileShaderFromFile(GLint pShaderType, std::string pFileName)
     std::string shaderCode;
     GLuint shaderObject=glCreateShader(pShaderType); //Utworzenie obiektu shadera
     
-    if (!shaderObject) throw std::runtime_error("Błąd utworzenia shadera");
+    if (!shaderObject) throw std::runtime_error("(Shader::compileShaderFromFile): Błąd utworzenia shadera");
     
     try
     {
@@ -63,7 +63,7 @@ void Shader::compileShaderFromFile(GLint pShaderType, std::string pFileName)
     {
         throw err;
     }
-    if (shaderCode.empty()) throw std::runtime_error("Plik shadera jest pusty");
+    if (shaderCode.empty()) throw std::runtime_error("(Shader::compileShaderFromFile): Plik shadera jest pusty");
     
     //Przepisanie kodu i długości do zmiennych pomocniczych
     const char* shaderCodeChar=shaderCode.c_str();
@@ -80,7 +80,7 @@ void Shader::compileShaderFromFile(GLint pShaderType, std::string pFileName)
     glGetShaderiv(shaderObject, GL_COMPILE_STATUS, &compileStatus);
     if (!compileStatus)
     {
-        std::stringstream errorLog("Błąd kompilacji shadera\n");
+        std::stringstream errorLog("(Shader::compileShaderFromFile): Błąd kompilacji shadera\n");
         
         GLint logLength;
         glGetShaderiv(shaderObject, GL_INFO_LOG_LENGTH, &logLength); //Pobranie długości loga
@@ -106,7 +106,7 @@ void Shader::linkAndReloadProgram()
     {
         unlinkAndDeleteProgram();
         mProgramHandle=glCreateProgram();
-        if (!mProgramHandle) throw std::runtime_error("Błąd utworzenia programu");
+        if (!mProgramHandle) throw std::runtime_error("(Shader::linkAndReloadProgram): Błąd utworzenia programu");
     } else mProgramHandle=glCreateProgram();
     try
     {
@@ -138,4 +138,8 @@ void Shader::setInt(std::string pUniformName, int pValue)
 void Shader::setFloat(std::string pUniformName, float pValue)
 {
     glUniform1f(glGetUniformLocation(mProgramHandle, pUniformName.c_str()), pValue);
+}
+void Shader::setMat4(std::string pUniformName, glm::mat4* pValue)
+{
+    glUniformMatrix4fv(glGetUniformLocation(mProgramHandle, pUniformName.c_str()), 1, GL_FALSE, (float*)pValue); //Lokacja uniformu, ilość macierzy, czy transportować, wskażnik początku macierzy
 }

@@ -26,6 +26,9 @@
 #include <iostream>
 #include "Core.hpp"
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
 int main(int argc, const char * argv[])
 {
     try
@@ -35,6 +38,7 @@ int main(int argc, const char * argv[])
     } catch (std::runtime_error err)
     {
         std::cout << err.what();
+		std::cin.get();
         return -1;
     }
     return 0;

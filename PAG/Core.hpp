@@ -26,6 +26,7 @@
 #define GLFW_INCLUDE_NONE
 
 #include <stdio.h>
+#include <glm/glm.hpp>
 #include <glad/glad.h> //Do pobierania funkcji
 #include <GLFW/glfw3.h> //Główna pętla i inicjalizacja
 
@@ -33,6 +34,10 @@ class Window;
 class Mesh;
 class Shader;
 class Texture;
+class Scene;
+class Camera;
+class Input;
+class Transform;
 
 class Core
 {
@@ -41,7 +46,15 @@ private:
     Mesh* mMesh;
     Shader* mShader;
     Texture* mTexture;
+    Scene* mScene;
+    Camera* mCamera;
+    Input* mInput;
+    Transform* mTransform;
     void display();
+    
+	void updateObjectsPositions();
+    void initializeTransforms();
+    
 public:
     Core();
     ~Core();

@@ -31,7 +31,8 @@ Texture::Texture()
     try
     {
         loadTexture("Textures/Janicki.png");
-        loadTexture("Textures/Bricks.png",1);
+        loadTexture("Textures/Beata.png",1);
+        loadTexture("Textures/Kotlet.png",2);
     } catch (std::runtime_error err)
     {
         throw err;
@@ -46,9 +47,9 @@ void Texture::loadTexture(std::string pFileName, unsigned int pTextureNumber)
 {
     int width, height, numberOfChannels;
     GLuint imageDepth;
-    if (pTextureNumber>=NUMBER_OF_TEXTURES) throw std::runtime_error("Wybrany numer tekstury jest większy od maksymalnej ilości tekstur");
+    if (pTextureNumber>=NUMBER_OF_TEXTURES) throw std::runtime_error("(Texture::loadTexture): Wybrany numer tekstury jest większy od maksymalnej ilości tekstur");
     
-    //stbi_set_flip_vertically_on_load(true); //Obrócenie obrazu przed załadowaniem
+    stbi_set_flip_vertically_on_load(true); //Obrócenie obrazu przed załadowaniem
     unsigned char* textureData=stbi_load(pFileName.c_str(), &width, &height, &numberOfChannels, 0);
     if (textureData)
     {
@@ -73,12 +74,12 @@ void Texture::loadTexture(std::string pFileName, unsigned int pTextureNumber)
         glGenerateMipmap(GL_TEXTURE_2D);
         stbi_image_free(textureData);
     }
-    else throw std::runtime_error("Błąd odczytu pliku");
+    else throw std::runtime_error("(Texture::loadTexture): Błąd odczytu pliku");
 }
 void Texture::selectActiveTexture(unsigned int pTextureNumber)
 {
     
-    if (pTextureNumber>=NUMBER_OF_TEXTURES) throw std::runtime_error("Wybrany numer tekstury jest większy od maksymalnej ilości tekstur");
-    glActiveTexture(GL_TEXTURE0+pTextureNumber);
+    if (pTextureNumber>=NUMBER_OF_TEXTURES) throw std::runtime_error("(Texture::selectActiveTexture): Wybrany numer tekstury jest większy od maksymalnej ilości tekstur");
+    //glActiveTexture(GL_TEXTURE0+pTextureNumber);
     glBindTexture(GL_TEXTURE_2D, mTextures[pTextureNumber]);
 }

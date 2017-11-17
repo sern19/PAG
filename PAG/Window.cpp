@@ -58,7 +58,7 @@ void Window::createWindow(int pScreenWidth, int pScreenHeight)
     if (!mWindow) //W przypadku niepowodzenia zwalniamy zasoby i niszczymy okienka
     {
         glfwTerminate();
-        throw std::runtime_error("Nie można utworzyć okna");
+        throw std::runtime_error("(Window::createWindow): Nie można utworzyć okna");
     }
 }
 GLFWwindow* Window::getWindow()
