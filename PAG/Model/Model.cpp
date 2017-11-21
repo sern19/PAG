@@ -1,4 +1,4 @@
-// Input.hpp
+// Model.cpp
 //
 // Copyright (c) 2017 Krystian Owoc
 //
@@ -20,25 +20,22 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef Input_hpp
-#define Input_hpp
+#include "Model.hpp"
+#include "Node.hpp"
 
-#include <stdio.h>
-#include <GLFW/glfw3.h>
+Model::Model(const std::string& pModelPath) { loadModel(pModelPath); }
 
-class Camera;
-
-class Input
+void Model::loadModel(const std::string &pModelPath)
 {
-private:
-    double mLastMousePosX;
-    double mLastMousePosY;
-    const double mMouseSensivity;
-public:
-    Input(GLFWwindow *pWindow);
-    ~Input();
-    void processKeyboard(GLFWwindow* pWindow, Camera* pCamera);
-    void processMouse(GLFWwindow* pWindow, Camera* pCamera);
-};
+    
+}
 
-#endif /* Input_hpp */
+void Model::draw()
+{
+    //if (mRootNode) mRootNode->draw();
+}
+
+Model::~Model()
+{
+    //if (mRootNode) delete mRootNode;
+}

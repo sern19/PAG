@@ -55,9 +55,8 @@ Core::Core()
     {
         mWindow=new Window();
         //Inicjalizacja GLAD
-        if (!gladLoadGL())
-        throw std::runtime_error("(Core::Core): Nie można zainicjalizować biblioteki GLAD");
-        mMesh=new Mesh();
+        if (!gladLoadGL()) throw std::runtime_error("(Core::Core): Nie można zainicjalizować biblioteki GLAD");
+        //mMesh=new Mesh();
         mShader=new Shader();
         mTexture=new Texture();
         mScene=new Scene(mWindow->getWindow());
@@ -99,8 +98,8 @@ void Core::display()
     {
 		transform=mTransform->getChildCombinedTransformRotatedTowardsCamera(mCamera->getCameraPos(), i);
         mShader->setMat4("transform", &transform);
-        mTexture->selectActiveTexture(i%NUMBER_OF_TEXTURES);
-        mMesh->drawContent();
+        //mTexture->selectActiveTexture(i%NUMBER_OF_TEXTURES);
+        //mMesh->drawContent();
     }
     glfwSwapBuffers(mWindow->getWindow()); //Swap front- i backbuffer
     glfwPollEvents(); //Poll dla eventów

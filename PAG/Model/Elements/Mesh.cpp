@@ -22,10 +22,11 @@
 
 #include "Mesh.hpp"
 
+#include "Shader.hpp"
 #include <glad/glad.h>
 
 
-Mesh::Mesh()
+Mesh::Mesh(const std::vector<Vertex>& pVerticles, const std::vector<unsigned int>& pIndices): mVerticles(pVerticles), mIndices(pIndices)
 {
     loadContent();
 }
@@ -45,15 +46,15 @@ void Mesh::loadContent()
     //Bindowanie bufora, informacja, że zawiera on tablicę wierzchołków
     glBindBuffer(GL_ARRAY_BUFFER, mVertexBufferObject);
     //Wypełnienie bufora danymi o wierzchołkach (STATIC_DRAW - wyznaczone raz i odczytywane wielokrotnie)
-    glBufferData(GL_ARRAY_BUFFER, sizeof(mVerticles), mVerticles, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, mVerticles.size()*sizeof(Vertex), &mVerticles[0], GL_STATIC_DRAW);
     
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mElementObjectBuffer);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(mIndices), mIndices, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, mIndices.size()*sizeof(unsigned int), &mIndices[0], GL_STATIC_DRAW);
     
     //Informacja o interpretacji danych - indeks, rozmiar, typ, czy powinien nrmalizować, odległość między wierzchołkami (w tablicy), odległość od początku danych (w tablicy)
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(VerticlesColorTexture), 0); //Atrybut wierzchołków
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(VerticlesColorTexture), (GLvoid*)(sizeof(glm::vec3))); //Atrybut koloru - start po wierzchołkach (glm::vec3)
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(VerticlesColorTexture), (GLvoid*)(sizeof(glm::vec3)*2)); //Atrubut textury
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0); //Atrybut wierzchołków
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)(offsetof(Vertex, mNormal))); //Atrybut koloru - start po wierzchołkach (glm::vec3)
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)(offsetof(Vertex, mTexture))); //Atrubut textury
     
     //Podanie dostępu do wierzchołków w tablicy o indeksie 0-2
     glEnableVertexAttribArray(0);
@@ -61,7 +62,10 @@ void Mesh::loadContent()
     glEnableVertexAttribArray(2);
 }
 
-void Mesh::drawContent()
+void Mesh::drawContent(Shader* const pShader)
 {
-    glDrawArrays(GL_TRIANGLES, 0, 36);
+    //Bindowanie tablicy obiektów
+    glBindVertexArray(mVertexArrayObject);
+    glDrawArrays(GL_TRIANGLES, 0, mIndices.size());
+    glBindVertexArray(NULL);
 }

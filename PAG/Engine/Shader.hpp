@@ -1,4 +1,4 @@
-// Window.hpp
+// Shader.hpp
 //
 // Copyright (c) 2017 Krystian Owoc
 //
@@ -20,22 +20,35 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef Window_hpp
-#define Window_hpp
+#ifndef Shader_hpp
+#define Shader_hpp
 
 #include <stdio.h>
-#include <GLFW/glfw3.h> //Do tworzenia okna
-#include "Config.hpp"
+#include <string>
+#include <glad/glad.h>
+#include <glm/glm.hpp>
 
-class Window
+class Shader
 {
 private:
-    GLFWwindow *mWindow;
-    void createWindow(int pScreenWidth, int pScreenHeight);
+    GLuint mProgramHandle;
+    
+    std::string loadFile(const std::string& pFileName);
+    void compileShaderFromFile(const GLint& pShaderType, const std::string& pFileName);
 public:
-    Window();
-    Window(int pScreenWidth, int pScreenHeight);
-    GLFWwindow* getWindow();
+    Shader();
+    ~Shader();
+    void linkAndReloadProgram();
+    void unlinkAndDeleteProgram();
+    void useProgram();
+    //Uniformy
+    void setBool(const std::string& pUniformName, const bool* const pValue);
+    void setInt(const std::string& pUniformName, const int* const pValue);
+    void setFloat(const std::string& pUniformName, const float* const pValue);
+    void setMat4(const std::string& pUniformName, const glm::mat4* const pValue);
+    void setBool(const std::string& pUniformName, const bool& pValue);
+    void setInt(const std::string& pUniformName, const int& pValue);
+    void setFloat(const std::string& pUniformName, const float& pValue);
 };
 
-#endif /* Window_hpp */
+#endif /* Shader_hpp */

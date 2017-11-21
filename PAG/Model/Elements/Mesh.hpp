@@ -1,4 +1,4 @@
-// Shader.hpp
+// Mesh.hpp
 //
 // Copyright (c) 2017 Krystian Owoc
 //
@@ -20,31 +20,41 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef Shader_hpp
-#define Shader_hpp
+#ifndef Mesh_hpp
+#define Mesh_hpp
 
 #include <stdio.h>
-#include <string>
 #include <glad/glad.h>
+#include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
+#include <vector>
 
-class Shader
+class Shader;
+
+struct Vertex
 {
-private:
-    GLuint mProgramHandle;
-    std::string loadFile(std::string pFileName);
-    void compileShaderFromFile(GLint pShaderType, std::string pFileName);
-public:
-    Shader();
-    ~Shader();
-    void linkAndReloadProgram();
-    void unlinkAndDeleteProgram();
-    void useProgram();
-    //Uniformy
-    void setBool(std::string pUniformName, bool pValue);
-    void setInt(std::string pUniformName, int pValue);
-    void setFloat(std::string pUniformName, float pValue);
-    void setMat4(std::string pUniformName, glm::mat4* pValue);
+    glm::vec3 mVerticles={0,0,0};
+    glm::vec3 mNormal={0,0,0};
+    glm::vec2 mTexture={0,0};
+    Vertex(const glm::vec3& pVerticles) {mVerticles=pVerticles;};
+    Vertex(const glm::vec3& pVerticles, const glm::vec3& pNormal) {mVerticles=pVerticles;mNormal=pNormal;};
+    Vertex(const float& x, const float& y, const float& z, const float& u, const float& v) {mVerticles=glm::vec3(x,y,z); mTexture=glm::vec2(u,v);};
+    Vertex(const glm::vec3& pVerticles, const glm::vec3& pNormal, const glm::vec2& pTexture) {mVerticles=pVerticles;mNormal=pNormal;mTexture=pTexture;};
 };
 
-#endif /* Shader_hpp */
+class Mesh
+{
+private:
+    GLuint mVertexBufferObject=NULL;
+    GLuint mVertexArrayObject=NULL;
+    GLuint mElementObjectBuffer=NULL;
+    std::vector<Vertex> mVerticles;
+    std::vector<unsigned int> mIndices;
+    
+    void loadContent();
+public:
+    Mesh(const std::vector<Vertex>& pVerticles, const std::vector<unsigned int>& pIndices);
+    void drawContent(Shader* const pShader);
+};
+
+#endif /* Mesh_hpp */

@@ -43,7 +43,7 @@ Texture::~Texture()
     glDeleteTextures(NUMBER_OF_TEXTURES, mTextures);
 }
 
-void Texture::loadTexture(std::string pFileName, unsigned int pTextureNumber)
+void Texture::loadTexture(const std::string& pFileName, const unsigned int& pTextureNumber)
 {
     int width, height, numberOfChannels;
     GLuint imageDepth;
@@ -76,7 +76,7 @@ void Texture::loadTexture(std::string pFileName, unsigned int pTextureNumber)
     }
     else throw std::runtime_error("(Texture::loadTexture): Błąd odczytu pliku");
 }
-void Texture::selectActiveTexture(unsigned int pTextureNumber)
+void Texture::selectActiveTexture(const unsigned int& pTextureNumber)
 {
     
     if (pTextureNumber>=NUMBER_OF_TEXTURES) throw std::runtime_error("(Texture::selectActiveTexture): Wybrany numer tekstury jest większy od maksymalnej ilości tekstur");

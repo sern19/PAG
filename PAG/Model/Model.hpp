@@ -1,4 +1,4 @@
-// Window.cpp
+// Model.hpp
 //
 // Copyright (c) 2017 Krystian Owoc
 //
@@ -20,49 +20,27 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "Window.hpp"
-#include <stdexcept>
+#ifndef Model_hpp
+#define Model_hpp
 
-Window::Window()
-{
-    //Tworzenie okna
-    try
-    {
-        createWindow(SCREEN_WIDTH, SCREEN_HEIGHT);
-    } catch (std::runtime_error err)
-    {
-        throw err;
-    }
-    
-    //Tworzenie kontekstu
-    glfwMakeContextCurrent(mWindow);
-}
-Window::Window(int pScreenWidth, int pScreenHeight)
-{
-    //Tworzenie okna
-    try
-    {
-        createWindow(SCREEN_WIDTH, SCREEN_HEIGHT);
-    } catch (std::runtime_error err)
-    {
-        throw err;
-    }
-    
-    //Tworzenie kontekstu
-    glfwMakeContextCurrent(mWindow);
-}
+#include <stdio.h>
+#include <vector>
+#include <string>
 
-void Window::createWindow(int pScreenWidth, int pScreenHeight)
+class Node;
+
+class Model
 {
-    mWindow=glfwCreateWindow(pScreenWidth, pScreenHeight, WINDOW_NAME, NULL, NULL);
-    if (!mWindow) //W przypadku niepowodzenia zwalniamy zasoby i niszczymy okienka
-    {
-        glfwTerminate();
-        throw std::runtime_error("(Window::createWindow): Nie można utworzyć okna");
-    }
-}
-GLFWwindow* Window::getWindow()
-{
-    return mWindow;
+private:
+    Node* mRootNode=NULL;
+    std::string mModelDirectory;
     
-}
+    void loadModel(const std::string& pModelPath);
+public:
+    Model(const std::string& pModelPath);
+    ~Model();
+    void draw();
+    
+};
+
+#endif /* Model_hpp */

@@ -42,16 +42,16 @@ class Transform;
 class Core
 {
 private:
-    Window* mWindow;
-    Mesh* mMesh;
-    Shader* mShader;
-    Texture* mTexture;
-    Scene* mScene;
-    Camera* mCamera;
-    Input* mInput;
-    Transform* mTransform;
-    void display();
+    Window* mWindow=NULL;
+    Mesh* mMesh=NULL;
+    Shader* mShader=NULL;
+    Texture* mTexture=NULL;
+    Scene* mScene=NULL;
+    Camera* mCamera=NULL;
+    Input* mInput=NULL;
+    Transform* mTransform=NULL;
     
+    void display();
 	void updateObjectsPositions();
     void initializeTransforms();
     

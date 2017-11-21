@@ -26,10 +26,10 @@
 #include <glm/gtx/matrix_decompose.hpp>
 
 Transform::Transform() { mParentTransform=NULL; recalculateCacheVectors(); }
-Transform::Transform(Transform* pParent) { mParentTransform=pParent; recalculateCacheVectors(); }
+Transform::Transform(Transform* const pParent) { mParentTransform=pParent; recalculateCacheVectors(); }
 Transform::Transform(const Transform& pSourceTransform): mParentTransform(pSourceTransform.mParentTransform), mChildrensTransform(pSourceTransform.mChildrensTransform), mCachedMatrix(pSourceTransform.mCachedMatrix), mPosition(pSourceTransform.mPosition), mRotationAxis(pSourceTransform.mRotationAxis), mRotationAngle(pSourceTransform.mRotationAngle),  mScale(pSourceTransform.mScale), mNeedsUpdateCache(true) { }
 
-void Transform::updateChildrenPointers(Transform* pParent)
+void Transform::updateChildrenPointers(Transform* const pParent)
 {
     int i;
     if (mParentTransform!=NULL && pParent!=this) mParentTransform=pParent;
@@ -43,7 +43,7 @@ void Transform::setParentsCacheUpdate()
     mNeedsUpdateCache=true;
 }
 
-void Transform::setNeedsUpdateCache(Transform* pThisTransform)
+void Transform::setNeedsUpdateCache(const Transform* pThisTransform)
 {
     int i;
     if (this!=pThisTransform)
@@ -78,7 +78,7 @@ void Transform::recalculateCacheVectors()
     setNeedsUpdateCache(this);
 }
 
-glm::mat4 Transform::combineTransformWithChildren(int pChildNumber, int pChildCombinedTransformNumber)
+glm::mat4 Transform::combineTransformWithChildren(const int& pChildNumber, const int& pChildCombinedTransformNumber)
 {
     glm::mat4 output;
     output = glm::translate(output, mPosition);
@@ -103,7 +103,7 @@ void Transform::popChildren()
     recalculateCacheVectors();
 }
 
-void Transform::removeChildren(int pChildNumber)
+void Transform::removeChildren(const int& pChildNumber)
 {
     if (mChildrensTransform.size()>0 && pChildNumber<mChildrensTransform.size())
         mChildrensTransform.erase(mChildrensTransform.begin()+pChildNumber);
@@ -111,15 +111,15 @@ void Transform::removeChildren(int pChildNumber)
     recalculateCacheVectors();
 }
 
-Transform* Transform::getChildren(int pChildNumber)
+Transform* const Transform::getChildren(const int& pChildNumber)
 {
     if (pChildNumber>=mChildrensTransform.size()) throw std::runtime_error("(Transform::getChildren): Żądany numer dziecka jest większy od ilości dzieci");
     return &mChildrensTransform[pChildNumber].first;
 }
 
-void Transform::setPosition(glm::vec3 pPosition) { if (mPosition!=pPosition) { mPosition=pPosition; setNeedsUpdateCache(this); } }
-void Transform::setRotation(glm::vec3 pRotationAxis, float pRotationAngle) { if (mRotationAxis!=pRotationAxis || mRotationAngle!=pRotationAngle) { mRotationAxis=pRotationAxis; mRotationAngle=pRotationAngle; setNeedsUpdateCache(this); } }
-void Transform::setScale(glm::vec3 pScale) { if (mScale!=pScale) { mScale=pScale; setNeedsUpdateCache(this); } }
+void Transform::setPosition(const glm::vec3& pPosition) { if (mPosition!=pPosition) { mPosition=pPosition; setNeedsUpdateCache(this); } }
+void Transform::setRotation(const glm::vec3& pRotationAxis, const float& pRotationAngle) { if (mRotationAxis!=pRotationAxis || mRotationAngle!=pRotationAngle) { mRotationAxis=pRotationAxis; mRotationAngle=pRotationAngle; setNeedsUpdateCache(this); } }
+void Transform::setScale(const glm::vec3& pScale) { if (mScale!=pScale) { mScale=pScale; setNeedsUpdateCache(this); } }
 
 void Transform::updateCache()
 {
@@ -172,7 +172,7 @@ int Transform::getAllChildrensCount()
     }
 }
 
-glm::mat4 Transform::getChildCombinedTransformRotatedTowardsCamera(glm::vec3 pCameraPosition, int pChildNumber)
+const glm::mat4 Transform::getChildCombinedTransformRotatedTowardsCamera(const glm::vec3& pCameraPosition, const int& pChildNumber)
 {
     glm::mat4 output;
     
@@ -204,11 +204,9 @@ glm::mat4 Transform::getChildCombinedTransformRotatedTowardsCamera(glm::vec3 pCa
     return output;
 }
 
-glm::mat4 Transform::getChildCombinedTransform(int pChildNumber)
+const glm::mat4& Transform::getChildCombinedTransform(const int& pChildNumber)
 {
     if (pChildNumber>mCachedMatrix.size()) throw std::runtime_error("(Transform::getChildCombinedTransform): Żądany numer dziecka jest większy od ilości dzieci");
     if (mNeedsUpdateCache) updateCache();
     return mCachedMatrix[pChildNumber];
 }
-
-Transform::~Transform() {}

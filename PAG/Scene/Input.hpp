@@ -1,4 +1,4 @@
-// Camera.hpp
+// Input.hpp
 //
 // Copyright (c) 2017 Krystian Owoc
 //
@@ -20,29 +20,25 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef Camera_hpp
-#define Camera_hpp
+#ifndef Input_hpp
+#define Input_hpp
 
 #include <stdio.h>
-#include <glm/glm.hpp>
+#include <GLFW/glfw3.h>
 
-class Camera
+class Camera;
+
+class Input
 {
 private:
-    glm::vec3 mCameraPos;
-    glm::vec3 mCameraFront;
-    glm::vec3 mCameraUp;
-    float mCameraSpeed;
-    float mYaw;
-    float mPitch;
-    glm::vec3 calculateCameraFront();
+    double mLastMousePosX;
+    double mLastMousePosY;
+    const double mMouseSensivity;
 public:
-    Camera();
-    void moveInDirection(glm::vec3 pDirection);
-    void rotateByOffset(float pOffsetX, float pOffsetY);
-	glm::vec3 getCameraPos();
-    glm::mat4 generateViewSpace();
-    ~Camera();
+    Input(GLFWwindow* const pWindow);
+    ~Input();
+    void processKeyboard(GLFWwindow* const pWindow, Camera* const pCamera);
+    void processMouse(GLFWwindow* const pWindow, Camera* const pCamera);
 };
 
-#endif /* Camera_hpp */
+#endif /* Input_hpp */

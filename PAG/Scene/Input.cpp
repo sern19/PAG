@@ -24,12 +24,12 @@
 #include "Camera.hpp"
 #include "Config.hpp"
 
-Input::Input(GLFWwindow *pWindow): mMouseSensivity(MOUSE_SENSIVITY)
+Input::Input(GLFWwindow* const pWindow): mMouseSensivity(MOUSE_SENSIVITY)
 {
     glfwGetCursorPos(pWindow, &mLastMousePosX, &mLastMousePosY);
 }
 
-void Input::processKeyboard(GLFWwindow *pWindow, Camera *pCamera)
+void Input::processKeyboard(GLFWwindow* const pWindow, Camera* const pCamera)
 {
     glm::vec3 cameraMoveVector(0.0f);
     
@@ -51,7 +51,7 @@ void Input::processKeyboard(GLFWwindow *pWindow, Camera *pCamera)
     pCamera->moveInDirection(cameraMoveVector);
 }
 
-void Input::processMouse(GLFWwindow *pWindow, Camera *pCamera)
+void Input::processMouse(GLFWwindow* const pWindow, Camera* const pCamera)
 {
     double mousePosX, mousePosY;
     glfwGetCursorPos(pWindow, &mousePosX, &mousePosY);

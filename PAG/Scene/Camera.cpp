@@ -24,17 +24,16 @@
 #include "Config.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 
-Camera::Camera()
+Camera::Camera(): mCameraSpeed(CAMERA_MOVE_SPEED)
 {
     mYaw=CAMERA_STARTING_FRONT_YAW;
     mPitch=CAMERA_STARTING_FRONT_PITCH;
     mCameraPos=CAMERA_STARTING_POS;
     mCameraUp=CAMERA_UP;
-    mCameraSpeed=CAMERA_MOVE_SPEED;
     mCameraFront=calculateCameraFront();
 }
 
-glm::vec3 Camera::calculateCameraFront()
+const glm::vec3 Camera::calculateCameraFront()
 {
     glm::vec3 newFront;
     newFront.x = cos(glm::radians(mPitch)) * cos(glm::radians(mYaw));
@@ -43,7 +42,7 @@ glm::vec3 Camera::calculateCameraFront()
     return glm::normalize(newFront);
 }
 
-void Camera::moveInDirection(glm::vec3 pDirection)
+void Camera::moveInDirection(const glm::vec3& pDirection)
 {
     if (pDirection[0]>0)
         mCameraPos+=mCameraSpeed * mCameraFront;
@@ -60,7 +59,7 @@ void Camera::moveInDirection(glm::vec3 pDirection)
     mCameraFront=calculateCameraFront();
 }
 
-void Camera::rotateByOffset(float pOffsetX, float pOffsetY)
+void Camera::rotateByOffset(const float& pOffsetX, const float& pOffsetY)
 {
     mPitch+=pOffsetY;
     mYaw+=pOffsetX;
@@ -71,11 +70,11 @@ void Camera::rotateByOffset(float pOffsetX, float pOffsetY)
     mCameraFront=calculateCameraFront();
 }
 
-glm::vec3 Camera::getCameraPos()
+const glm::vec3& Camera::getCameraPos()
 {
 	return mCameraPos;
 }
 
-glm::mat4 Camera::generateViewSpace()  { return glm::lookAt(mCameraPos, mCameraPos + mCameraFront, mCameraUp); }
+const glm::mat4 Camera::generateViewSpace()  { return glm::lookAt(mCameraPos, mCameraPos + mCameraFront, mCameraUp); }
 
 Camera::~Camera() {}

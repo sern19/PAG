@@ -34,7 +34,7 @@ class Shader;
 class Transform
 {
 private:
-    Transform* mParentTransform;
+    Transform* mParentTransform=NULL;
     std::vector<std::pair<Transform,bool>> mChildrensTransform; // <Transform, flaga update>
     std::vector<glm::mat4> mCachedMatrix; //Liczba dzieci na końcu drzewa
     glm::vec3 mPosition = glm::vec3(0.0f);
@@ -45,35 +45,35 @@ private:
     bool mNeedsUpdateCache=true;
     
     
-    void updateChildrenPointers(Transform* pParent);
+    void updateChildrenPointers(Transform* const pParent);
     void setParentsCacheUpdate();
-    void setNeedsUpdateCache(Transform* pThisTransform);
+    void setNeedsUpdateCache(const Transform* pThisTransform);
     
     void recalculateCacheVectors();
     
-    glm::mat4 combineTransformWithChildren(int pChildNumber, int pChildCombinedTransformNumber=0);
+    glm::mat4 combineTransformWithChildren(const int& pChildNumber, const int& pChildCombinedTransformNumber=0);
+    
+    Transform(Transform* const pParent);
 public:
     Transform();
-    Transform(Transform* pParent);
     Transform(const Transform& pSourceTransform);
-    ~Transform();
     
     void pushChildren();
     void popChildren();
-    void removeChildren(int pChildNumber);
-    Transform* getChildren(int pChildNumber);
+    void removeChildren(const int& pChildNumber);
+    Transform* const getChildren(const int& pChildNumber);
     
-    void setPosition(glm::vec3 pPosition);
-    void setRotation(glm::vec3 pRotationAxis, float pRotationAngle);
-    void setScale(glm::vec3 pScale);
+    void setPosition(const glm::vec3& pPosition);
+    void setRotation(const glm::vec3& pRotationAxis, const float& pRotationAngle);
+    void setScale(const glm::vec3& pScale);
     
     
     void updateCache();
     
     //W tym kontekście dzieci oznaczają koniec drzewa
     int getAllChildrensCount();
-    glm::mat4 getChildCombinedTransformRotatedTowardsCamera(glm::vec3 pCameraPosition, int pChildNumber);
-    glm::mat4 getChildCombinedTransform(int pChildNumber);
+    const glm::mat4 getChildCombinedTransformRotatedTowardsCamera(const glm::vec3& pCameraPosition, const int& pChildNumber);
+    const glm::mat4& getChildCombinedTransform(const int& pChildNumber);
 };
 
 #endif /* Transform_hpp */

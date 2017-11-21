@@ -1,4 +1,4 @@
-// Texture.hpp
+// Scene.hpp
 //
 // Copyright (c) 2017 Krystian Owoc
 //
@@ -20,24 +20,34 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef Texture_hpp
-#define Texture_hpp
+#ifndef Scene_hpp
+#define Scene_hpp
+
+#define GLFW_INCLUDE_NONE
 
 #include <stdio.h>
-#include <string>
-#include <glad/glad.h>
+#include <glm/glm.hpp>
 #include <GLFW/glfw3.h>
-#include "Config.hpp"
 
-class Texture
+class Shader;
+
+class Scene
 {
 private:
-    GLuint mTextures[NUMBER_OF_TEXTURES]; //Tu by można spróbować vectora i dynamicznie dodawać i usuwać
+    glm::mat4 mWorldSpace;
+    glm::mat4 mViewSpace;
+    glm::mat4 mProjectionSpace;
+    glm::mat4 WVP; //World View Projection
 public:
-    Texture();
-    ~Texture();
-    void loadTexture(std::string pFileName, unsigned int pTextureNumber=0);
-    void selectActiveTexture(unsigned int pTextureNumber=0);
+    Scene(GLFWwindow* const pWindow);
+    const glm::mat4& getWorldSpace();
+    const glm::mat4& getViewSpace();
+    const glm::mat4& getProjectionSpace();
+    void updateWorldSpace(const glm::mat4& pWorldSpace);
+    void updateViewSpace(const glm::mat4& pViewSpace);
+    //void updateProjectionSpace(const glm::mat4 pProjectionSpace);
+    void updateWVP(Shader* const pShader);
+    ~Scene();
 };
 
-#endif /* Texture_hpp */
+#endif /* Scene_hpp */

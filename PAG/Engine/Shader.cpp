@@ -40,7 +40,7 @@ Shader::~Shader()
     if (mProgramHandle) glDeleteProgram(mProgramHandle);
 }
 
-std::string Shader::loadFile(std::string pFileName)
+std::string Shader::loadFile(const std::string& pFileName)
 {
     std::ifstream inputFile(pFileName);
     std::stringstream output;
@@ -49,7 +49,7 @@ std::string Shader::loadFile(std::string pFileName)
     return output.str();
 }
 
-void Shader::compileShaderFromFile(GLint pShaderType, std::string pFileName)
+void Shader::compileShaderFromFile(const GLint& pShaderType, const std::string& pFileName)
 {
     std::string shaderCode;
     GLuint shaderObject=glCreateShader(pShaderType); //Utworzenie obiektu shadera
@@ -127,19 +127,31 @@ void Shader::useProgram()
     glUseProgram(mProgramHandle);
 }
 
-void Shader::setBool(std::string pUniformName, bool pValue)
+void Shader::setBool(const std::string& pUniformName, const bool* const pValue)
 {
-    glUniform1i(glGetUniformLocation(mProgramHandle, pUniformName.c_str()), pValue);
+    glUniform1iv(glGetUniformLocation(mProgramHandle, pUniformName.c_str()), 1, (int*)pValue);
 }
-void Shader::setInt(std::string pUniformName, int pValue)
+void Shader::setInt(const std::string& pUniformName, const int* const pValue)
 {
-    glUniform1i(glGetUniformLocation(mProgramHandle, pUniformName.c_str()), pValue);
+    glUniform1iv(glGetUniformLocation(mProgramHandle, pUniformName.c_str()), 1, (int*)pValue);
 }
-void Shader::setFloat(std::string pUniformName, float pValue)
+void Shader::setFloat(const std::string& pUniformName, const float* const pValue)
 {
-    glUniform1f(glGetUniformLocation(mProgramHandle, pUniformName.c_str()), pValue);
+    glUniform1fv(glGetUniformLocation(mProgramHandle, pUniformName.c_str()), 1, (float*)pValue);
 }
-void Shader::setMat4(std::string pUniformName, glm::mat4* pValue)
+void Shader::setMat4(const std::string& pUniformName, const glm::mat4* const pValue)
 {
     glUniformMatrix4fv(glGetUniformLocation(mProgramHandle, pUniformName.c_str()), 1, GL_FALSE, (float*)pValue); //Lokacja uniformu, ilość macierzy, czy transportować, wskażnik początku macierzy
+}
+void Shader::setBool(const std::string& pUniformName, const bool& pValue)
+{
+    glUniform1i(glGetUniformLocation(mProgramHandle, pUniformName.c_str()),pValue);
+}
+void Shader::setInt(const std::string& pUniformName, const int& pValue)
+{
+    glUniform1i(glGetUniformLocation(mProgramHandle, pUniformName.c_str()),pValue);
+}
+void Shader::setFloat(const std::string& pUniformName, const float& pValue)
+{
+    glUniform1f(glGetUniformLocation(mProgramHandle, pUniformName.c_str()),pValue);
 }

@@ -24,7 +24,7 @@
 #include "Shader.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 
-Scene::Scene(GLFWwindow *pWindow)
+Scene::Scene(GLFWwindow* const pWindow)
 {
     int screenWidth, screenHeight;
     //Inicjalizacja macierzy świata oraz widoku
@@ -38,13 +38,13 @@ Scene::Scene(GLFWwindow *pWindow)
     mProjectionSpace=glm::perspective(45.0f, (float)screenWidth / (float)screenHeight, 0.001f, 50.0f); //FOV, Aspect Ratio, zNear, zFar
 }
 
-glm::mat4 Scene::getWorldSpace() { return mWorldSpace; }
-glm::mat4 Scene::getViewSpace() { return mViewSpace; }
-glm::mat4 Scene::getProjectionSpace() { return mProjectionSpace; }
-void Scene::updateWorldSpace(glm::mat4 pWorldSpace) { mWorldSpace=pWorldSpace; }
-void Scene::updateViewSpace(glm::mat4 pViewSpace) { mViewSpace=pViewSpace; }
+const glm::mat4& Scene::getWorldSpace() { return mWorldSpace; }
+const glm::mat4& Scene::getViewSpace() { return mViewSpace; }
+const glm::mat4& Scene::getProjectionSpace() { return mProjectionSpace; }
+void Scene::updateWorldSpace(const glm::mat4& pWorldSpace) { mWorldSpace=pWorldSpace; }
+void Scene::updateViewSpace(const glm::mat4& pViewSpace) { mViewSpace=pViewSpace; }
 
-void Scene::updateWVP(Shader* pShader)
+void Scene::updateWVP(Shader* const pShader)
 {
     //Ustawinie macierzy WVP
     glm::mat4 WVP = mProjectionSpace * mViewSpace * mWorldSpace; //Musi być w odwrotnej kolejności

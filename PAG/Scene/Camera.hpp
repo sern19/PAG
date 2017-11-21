@@ -1,4 +1,4 @@
-// Scene.hpp
+// Camera.hpp
 //
 // Copyright (c) 2017 Krystian Owoc
 //
@@ -20,34 +20,30 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef Scene_hpp
-#define Scene_hpp
-
-#define GLFW_INCLUDE_NONE
+#ifndef Camera_hpp
+#define Camera_hpp
 
 #include <stdio.h>
 #include <glm/glm.hpp>
-#include <GLFW/glfw3.h>
 
-class Shader;
-
-class Scene
+class Camera
 {
 private:
-    glm::mat4 mWorldSpace;
-    glm::mat4 mViewSpace;
-    glm::mat4 mProjectionSpace;
-    glm::mat4 WVP; //World View Projection
+    glm::vec3 mCameraPos;
+    glm::vec3 mCameraFront;
+    glm::vec3 mCameraUp;
+    const float mCameraSpeed;
+    float mYaw;
+    float mPitch;
+    
+    const glm::vec3 calculateCameraFront();
 public:
-    Scene(GLFWwindow *pWindow);
-    glm::mat4 getWorldSpace();
-    glm::mat4 getViewSpace();
-    glm::mat4 getProjectionSpace();
-    void updateWorldSpace(glm::mat4 pWorldSpace);
-    void updateViewSpace(glm::mat4 pViewSpace);
-    //void updateProjectionSpace(glm::mat4 pProjectionSpace);
-    void updateWVP(Shader* pShader);
-    ~Scene();
+    Camera();
+    void moveInDirection(const glm::vec3& pDirection);
+    void rotateByOffset(const float& pOffsetX, const float& pOffsetY);
+	const glm::vec3& getCameraPos();
+    const glm::mat4 generateViewSpace();
+    ~Camera();
 };
 
-#endif /* Scene_hpp */
+#endif /* Camera_hpp */
