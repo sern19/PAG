@@ -45,7 +45,7 @@ private:
 public:
     Textures(const aiScene* const pScene, const std::string& pTexturesPath, Shader *const pShader);
     const Material findTexturesForMaterial(aiMaterial* const pMaterial);
-    void setActiveTextures(const Material& pMaterial);
+    void setActiveTextures(const Material& pMaterial, Shader *const pShader);
 };
 
 

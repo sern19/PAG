@@ -30,8 +30,7 @@ Textures::Textures(const aiScene* const pScene, const std::string& pTexturesPath
 {
     loadTextures(pScene);
     //Przypisywanie tekstur
-    pShader->setInt("diffuse0", 0);
-    pShader->setInt("diffuse1", 1); //Docelowo przy normalnych i specularach, w jakiejś pętli
+    pShader->setInt("diffuse0", 0); //Docelowo przy normalnych i specularach, w jakiejś pętli
 }
 
 void Textures::loadTextures(const aiScene* const pScene)
@@ -104,8 +103,11 @@ const bool Textures::chcekIfIsLoaded(const std::string& pTexturePath, const std:
 const Material Textures::findTexturesForMaterial(aiMaterial* const pMaterial)
 {
     Material output;
+    aiColor3D temporaryColor;
     int i,j;
     //Diffuse
+    pMaterial->Get(AI_MATKEY_COLOR_DIFFUSE, temporaryColor);
+    output.mDiffuseColor=glm::vec4(temporaryColor.r, temporaryColor.g, temporaryColor.b, 1);
     for (i=0;i<pMaterial->GetTextureCount(aiTextureType_DIFFUSE);i++)
     {
         aiString textureName;
@@ -116,6 +118,8 @@ const Material Textures::findTexturesForMaterial(aiMaterial* const pMaterial)
             if (mDiffuseTextures[j].getTexturePath().compare(texturePath)==0) output.mDiffuseTextureID.push_back(j);
     }
     //Specular
+    pMaterial->Get(AI_MATKEY_COLOR_SPECULAR, temporaryColor);
+    output.mSpecularLevel=glm::vec4(temporaryColor.r, temporaryColor.g, temporaryColor.b, 1);
     for (i=0;i<pMaterial->GetTextureCount(aiTextureType_SPECULAR);i++)
     {
         aiString textureName;
@@ -138,9 +142,29 @@ const Material Textures::findTexturesForMaterial(aiMaterial* const pMaterial)
     return output;
 }
 
-void Textures::setActiveTextures(const Material& pMaterial)
+void Textures::setActiveTextures(const Material& pMaterial, Shader *const pShader)
 {
     int i;
+    //Sprawdzanie czy materiał używa tekstur
+    if (pMaterial.mDiffuseTextureID.size()==0)
+    {
+        pShader->setBool("shouldUseDiffuseTexture", false);
+        pShader->setVec3("diffuseColor", &pMaterial.mDiffuseColor);
+    }
+    else pShader->setBool("shouldUseDiffuseTexture", true);
+//    if (pMaterial.mSpecularTextureID.size()==0)
+//    {
+//        pShader->setBool("shouldUseSpecularTexture", false);
+//    }
+//    else pShader->setBool("shouldUseSpecularTexture", true);
+//    if (pMaterial.mNomralTextureID.size()==0)
+//    {
+//        pShader->setBool("shouldUseNormalTexture", false);
+//    }
+//    else pShader->setBool("shouldUseNormalTexture", true);
+    
+    //Przypisywanie tekstur
+    Texture::deselectAllTextures();
     for (i=0;i<pMaterial.mDiffuseTextureID.size();i++)
         mDiffuseTextures[pMaterial.mDiffuseTextureID[i]].selectActiveTexture(DIFFUSE_NAME, i);
     for (i=0;i<pMaterial.mSpecularTextureID.size();i++)

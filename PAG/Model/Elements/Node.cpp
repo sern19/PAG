@@ -93,7 +93,8 @@ Mesh Node::processMesh(const aiMesh* const pMesh, const aiScene* const pScene, T
     }
     
     Mesh output(verticles,indices);
-    output.setMaterial(pTextures->findTexturesForMaterial(pScene->mMaterials[pMesh->mMaterialIndex]));
+    if (pScene->mMaterials[pMesh->mMaterialIndex]!=NULL) output.setMaterial(pTextures->findTexturesForMaterial(pScene->mMaterials[pMesh->mMaterialIndex]));
+    else output.setMaterial(Material());
     return output;
 }
 

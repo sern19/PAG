@@ -77,6 +77,17 @@ void Texture::loadTexture(const std::string& pTexturePath)
     }
     else throw std::runtime_error("(Texture::loadTexture): Błąd odczytu pliku");
 }
+
+void Texture::deselectAllTextures()
+{
+    int i=0;
+    for (i=0;i<31;i++)
+    {
+        glActiveTexture(GL_TEXTURE0+i);
+        glBindTexture(GL_TEXTURE_2D, NULL);
+    }
+}
+
 void Texture::selectActiveTexture(const std::string& pTextureType, const unsigned int& pTextureNumber)
 {
     if (pTextureNumber>=MAXIMUM_NUMBER_OF_TEXTURES_PER_TYPE) std::runtime_error("(Texture::selectActiveTexture): Numer tekstury jest większy od dopuszczalnej ilości tekstur");

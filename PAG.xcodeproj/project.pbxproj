@@ -51,7 +51,6 @@
 		DD2F981E1FC512D100D2A445 /* 2b_suit_dif.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 2b_suit_dif.png; sourceTree = "<group>"; };
 		DD2F981F1FC512D100D2A445 /* 2b_hair2_nrm.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 2b_hair2_nrm.png; sourceTree = "<group>"; };
 		DD2F98211FC512D100D2A445 /* 2b_head_nrm.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 2b_head_nrm.png; sourceTree = "<group>"; };
-		DD2F98231FC512D100D2A445 /* 2b_hair1_spc.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 2b_hair1_spc.png; sourceTree = "<group>"; };
 		DD2F98241FC512D100D2A445 /* 2b_hair1_nrm.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 2b_hair1_nrm.png; sourceTree = "<group>"; };
 		DD2F98261FC512D100D2A445 /* 2B.fbx */ = {isa = PBXFileReference; lastKnownFileType = file; path = 2B.fbx; sourceTree = "<group>"; };
 		DD3B1AC01FBF7D90005E9485 /* PAG */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = PAG; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -237,7 +236,6 @@
 				DD2F981E1FC512D100D2A445 /* 2b_suit_dif.png */,
 				DD2F981F1FC512D100D2A445 /* 2b_hair2_nrm.png */,
 				DD2F98211FC512D100D2A445 /* 2b_head_nrm.png */,
-				DD2F98231FC512D100D2A445 /* 2b_hair1_spc.png */,
 				DD2F98241FC512D100D2A445 /* 2b_hair1_nrm.png */,
 			);
 			path = textures;
