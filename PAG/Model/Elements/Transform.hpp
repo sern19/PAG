@@ -67,11 +67,12 @@ public:
     void setRotation(const glm::vec3& pRotationAxis, const float& pRotationAngle);
     void setScale(const glm::vec3& pScale);
     
+    const bool& getNeedsUpdateCache();
     
     void updateCache();
     
     //W tym kontekście dzieci oznaczają koniec drzewa
-    int getAllChildrensCount();
+    const int getAllChildrensCount();
     const glm::mat4 getChildCombinedTransformRotatedTowardsCamera(const glm::vec3& pCameraPosition, const int& pChildNumber);
     const glm::mat4& getChildCombinedTransform(const int& pChildNumber);
 };

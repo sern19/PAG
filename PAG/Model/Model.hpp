@@ -27,20 +27,24 @@
 #include <vector>
 #include <string>
 
+class Textures;
 class Node;
+class Shader;
 
 class Model
 {
 private:
     Node* mRootNode=NULL;
+    Textures* mTextures=NULL;
     std::string mModelDirectory;
     
-    void loadModel(const std::string& pModelPath);
+    void loadModel(const std::string& pModelPath, Shader *const pShader);
 public:
-    Model(const std::string& pModelPath);
+    Model(const std::string& pModelPath, Shader *const pShader);
+    Model(const Model& pSourceModel);
     ~Model();
-    void draw();
-    
+    void draw(Shader *const pShader);
+    Node* const getRootNode();
 };
 
 #endif /* Model_hpp */

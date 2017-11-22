@@ -23,6 +23,7 @@
 #include "Mesh.hpp"
 
 #include "Shader.hpp"
+#include "Textures.hpp"
 #include <glad/glad.h>
 
 
@@ -62,8 +63,11 @@ void Mesh::loadContent()
     glEnableVertexAttribArray(2);
 }
 
-void Mesh::drawContent(Shader* const pShader)
+void Mesh::setMaterial(const Material& pMaterial) { mMaterial=pMaterial; }
+
+void Mesh::drawContent(Shader* const pShader, Textures* const pTextures)
 {
+    pTextures->setActiveTextures(mMaterial);
     //Bindowanie tablicy obiektów
     glBindVertexArray(mVertexArrayObject);
     glDrawArrays(GL_TRIANGLES, 0, mIndices.size());

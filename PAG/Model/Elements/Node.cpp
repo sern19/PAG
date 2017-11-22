@@ -21,3 +21,119 @@
 // THE SOFTWARE.
 
 #include "Node.hpp"
+
+#include "Mesh.hpp"
+#include "Transform.hpp"
+#include "Shader.hpp"
+#include "Textures.hpp"
+
+#include <iostream>
+
+Node::Node(const aiNode* const pNode, const aiScene* const pScene, Node* pParentNode, Textures* const pTextures): Node(pNode, pScene, pTextures) { mParentNode=pParentNode; }
+
+Node::Node(const aiNode* const pNode, const aiScene* const pScene, Textures* const pTextures)
+{
+    processNode(pNode, pScene, pTextures);
+    mElementTransform=new Transform();
+    updateChildrenPointers(this); //Może nie będzie potrzebne, ale przy vectorach lepiej dać
+    updateCache();
+}
+
+Node::Node(const Node& pSourceNode): mParentNode(pSourceNode.mParentNode), mCachedTransform(pSourceNode.mCachedTransform), mChildNodes(pSourceNode.mChildNodes), mMeshes(pSourceNode.mMeshes)
+{
+    mElementTransform=new Transform(*pSourceNode.mElementTransform);
+    updateChildrenPointers(this);
+}
+
+void Node::processNode(const aiNode* const pNode, const aiScene* const pScene, Textures* const pTextures)
+{
+    int i;
+    //Przetwarzanie własnych meshy
+    for (i=0;i<pNode->mNumMeshes;i++)
+        mMeshes.push_back(processMesh(pScene->mMeshes[pNode->mMeshes[i]], pScene, pTextures));
+    
+    //Przetwarzanie dzieci
+    for (i=0;i<pNode->mNumChildren;i++)
+        mChildNodes.push_back(Node(pNode->mChildren[i], pScene, this, pTextures));
+}
+
+Mesh Node::processMesh(const aiMesh* const pMesh, const aiScene* const pScene, Textures* const pTextures)
+{
+    std::vector<Vertex> verticles;
+    std::vector<unsigned int> indices;
+    unsigned int i,j;
+    
+    for (i=0;i<pMesh->mNumVertices;i++)
+    {
+        Vertex temporaryVertex;
+        //Pozycja
+        temporaryVertex.mPosition.x=pMesh->mVertices[i].x;
+        temporaryVertex.mPosition.y=pMesh->mVertices[i].y;
+        temporaryVertex.mPosition.z=pMesh->mVertices[i].z;
+        //Normalne
+        if (pMesh->mNormals)
+        {
+            temporaryVertex.mNormal.x=pMesh->mNormals[i].x;
+            temporaryVertex.mNormal.y=pMesh->mNormals[i].y;
+            temporaryVertex.mNormal.z=pMesh->mNormals[i].z;
+        }
+        //Tekstura
+        if (pMesh->mTextureCoords[0])
+        {
+            temporaryVertex.mTexture.x=pMesh->mTextureCoords[0][i].x;
+            temporaryVertex.mTexture.y=pMesh->mTextureCoords[0][i].y;
+        }
+        verticles.push_back(temporaryVertex);
+    }
+    
+    for (i=0;i<pMesh->mNumFaces;i++)
+    {
+        for (j=0;j<pMesh->mFaces[i].mNumIndices;j++)
+            indices.push_back(pMesh->mFaces[i].mIndices[j]);
+    }
+    
+    Mesh output(verticles,indices);
+    output.setMaterial(pTextures->findTexturesForMaterial(pScene->mMaterials[pMesh->mMaterialIndex]));
+    return output;
+}
+
+void Node::updateCache()
+{
+    int i;
+    if (mParentNode==NULL) mCachedTransform=mElementTransform->getChildCombinedTransform(0);
+    else mCachedTransform=mParentNode->mCachedTransform*mElementTransform->getChildCombinedTransform(0);
+    for (i=0;i<mChildNodes.size();i++)
+        mChildNodes[i].updateCache();
+}
+
+void Node::updateChildrenPointers(Node* const pParent)
+{
+    int i;
+    if (mParentNode!=NULL && pParent!=this) mParentNode=pParent;
+    for (i=0;i<mChildNodes.size();i++)
+        mChildNodes[i].updateChildrenPointers(this);
+}
+
+void Node::drawContent(Shader *const pShader, Textures* const pTextures)
+{
+    int i;
+    if (mElementTransform->getNeedsUpdateCache()) updateCache();
+    pShader->setMat4("model", &mCachedTransform);
+    for (i=0;i<mMeshes.size();i++)
+        mMeshes[i].drawContent(pShader, pTextures);
+    for (i=0;i<mChildNodes.size();i++)
+        mChildNodes[i].drawContent(pShader, pTextures);
+}
+
+const int& Node::getChildrensCount() { return mChildNodes.size(); }
+Transform* const Node::getNodeTransform() { return mElementTransform; }
+Node* const Node::getChildren(const unsigned int& pChildNumber)
+{
+    if (pChildNumber>mChildNodes.size()) throw std::runtime_error("(Node::getChildNode): Żądany numer dziecka jest większy od ilości dzieci");
+    return &mChildNodes[pChildNumber];
+}
+
+Node::~Node()
+{
+    if (mElementTransform) delete mElementTransform;
+}

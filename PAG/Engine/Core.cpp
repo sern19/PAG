@@ -24,13 +24,13 @@
 
 #include <stdexcept>
 #include "Window.hpp"
-#include "Mesh.hpp"
 #include "Shader.hpp"
-#include "Texture.hpp"
 #include "Scene.hpp"
 #include "Camera.hpp"
 #include "Input.hpp"
 #include "Transform.hpp"
+#include "Model.hpp"
+#include "Node.hpp"
 
 #include <iostream>
 
@@ -56,13 +56,10 @@ Core::Core()
         mWindow=new Window();
         //Inicjalizacja GLAD
         if (!gladLoadGL()) throw std::runtime_error("(Core::Core): Nie można zainicjalizować biblioteki GLAD");
-        //mMesh=new Mesh();
         mShader=new Shader();
-        mTexture=new Texture();
         mScene=new Scene(mWindow->getWindow());
         mCamera=new Camera();
         mInput=new Input(mWindow->getWindow());
-        mTransform= new Transform();
     } catch (std::runtime_error err)
     {
         throw err;
@@ -78,13 +75,10 @@ Core::Core()
 Core::~Core()
 {
     if (mWindow) delete mWindow;
-    if (mMesh) delete mMesh;
     if (mShader) delete mShader;
-    if (mTexture) delete mTexture;
     if (mScene) delete mScene;
     if (mCamera) delete mCamera;
     if (mInput) delete mInput;
-    if (mTransform) delete mTransform;
 }
 void Core::display()
 {
@@ -94,80 +88,25 @@ void Core::display()
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT); //Czyszczenie sceny
     mScene->updateViewSpace(mCamera->generateViewSpace());
     mScene->updateWVP(mShader);
-    for (i=0;i<mTransform->getAllChildrensCount();i++) //
-    {
-		transform=mTransform->getChildCombinedTransformRotatedTowardsCamera(mCamera->getCameraPos(), i);
-        mShader->setMat4("transform", &transform);
-        //mTexture->selectActiveTexture(i%NUMBER_OF_TEXTURES);
-        //mMesh->drawContent();
-    }
+    for (i=0;i<mModels.size();i++)
+        mModels[i].draw(mShader);
     glfwSwapBuffers(mWindow->getWindow()); //Swap front- i backbuffer
     glfwPollEvents(); //Poll dla eventów
 }
 
 void Core::updateObjectsPositions()
 {
-    //mTransform->setRotation(glm::vec3(0,1,0),glfwGetTime()/3.0f);
-    
-    ////Dzieci prawego
-    //mTransform->getChildren(0)->setRotation(glm::vec3(0,0,1),glfwGetTime()/2.0f);
-    //mTransform->getChildren(0)->getChildren(0)->setRotation(glm::vec3(1,0,0),glfwGetTime()/1.5f);
-    //mTransform->getChildren(0)->getChildren(1)->setRotation(glm::vec3(0,1,0),glfwGetTime()/1.5f);
-    //mTransform->getChildren(0)->getChildren(2)->setRotation(glm::vec3(0,0,1),glfwGetTime()/1.5f);
-    ////Dzieci lewego
-    //mTransform->getChildren(1)->setRotation(glm::vec3(0,1,1),glfwGetTime()/2.0f);
-    //mTransform->getChildren(1)->getChildren(0)->setRotation(glm::vec3(1,0,0),glfwGetTime()/1.5f);
-    //mTransform->getChildren(1)->getChildren(1)->setRotation(glm::vec3(0,1,0),glfwGetTime()/1.5f);
-    //mTransform->getChildren(1)->getChildren(2)->setRotation(glm::vec3(0,0,1),glfwGetTime()/1.5f);
-    ////Dzieci przedniego
-    //mTransform->getChildren(2)->setRotation(glm::vec3(1,0,1),glfwGetTime()/2.0f);
-    //mTransform->getChildren(2)->getChildren(0)->setRotation(glm::vec3(1,0,0),glfwGetTime()/1.5f);
-    //mTransform->getChildren(2)->getChildren(1)->setRotation(glm::vec3(0,1,0),glfwGetTime()/1.5f);
-    //mTransform->getChildren(2)->getChildren(2)->setRotation(glm::vec3(0,0,1),glfwGetTime()/1.5f);
 }
 
-void Core::initializeTransforms()
+void Core::loadModels()
 {
-    int i,j;
-    //Hierarchia
-    for (i=0;i<3;i++)
-    {
-        mTransform->pushChildren();
-        for(j=0;j<3;j++)
-        mTransform->getChildren(i)->pushChildren();
-    }
-    for (int i=0;i<3;i++)
-    mTransform->pushChildren();
-    
-    //Bazowe
-    mTransform->getChildren(0)->setPosition(glm::vec3(-3,0,1.5));
-    mTransform->getChildren(1)->setPosition(glm::vec3(3,0,1.5));
-    mTransform->getChildren(2)->setPosition(glm::vec3(0,0,-3));
-    mTransform->getChildren(3)->setPosition(glm::vec3(-3,0,1.5));
-    mTransform->getChildren(4)->setPosition(glm::vec3(3,0,1.5));
-    mTransform->getChildren(5)->setPosition(glm::vec3(0,0,-3));
-    
-    ////Dzieci prawego
-    mTransform->getChildren(0)->getChildren(0)->setPosition(glm::vec3(0,-2,0)); //
-    mTransform->getChildren(0)->getChildren(0)->setScale(glm::vec3(0.1,0.1,0.1));
-    mTransform->getChildren(0)->getChildren(1)->setPosition(glm::vec3(-2,1,0));
-    mTransform->getChildren(0)->getChildren(1)->setScale(glm::vec3(0.1,0.1,0.1));
-    mTransform->getChildren(0)->getChildren(2)->setPosition(glm::vec3(2,1,0));
-    mTransform->getChildren(0)->getChildren(2)->setScale(glm::vec3(0.1,0.1,0.1));
-    ////Dzieci lewego
-    mTransform->getChildren(1)->getChildren(0)->setPosition(glm::vec3(0,-2,0)); //
-    mTransform->getChildren(1)->getChildren(0)->setScale(glm::vec3(0.1,0.1,0.1));
-    mTransform->getChildren(1)->getChildren(1)->setPosition(glm::vec3(-2,1,0)); //
-    mTransform->getChildren(1)->getChildren(1)->setScale(glm::vec3(0.1,0.1,0.1));
-    mTransform->getChildren(1)->getChildren(2)->setPosition(glm::vec3(2,1,0));
-    mTransform->getChildren(1)->getChildren(2)->setScale(glm::vec3(0.1,0.1,0.1));
-    ////Dzieci przedniego
-    mTransform->getChildren(2)->getChildren(0)->setPosition(glm::vec3(0,-2,0)); //
-    mTransform->getChildren(2)->getChildren(0)->setScale(glm::vec3(0.1,0.1,0.1));
-    mTransform->getChildren(2)->getChildren(1)->setPosition(glm::vec3(-2,1,0));
-    mTransform->getChildren(2)->getChildren(1)->setScale(glm::vec3(0.1,0.1,0.1));
-    mTransform->getChildren(2)->getChildren(2)->setPosition(glm::vec3(2,1,0));
-    mTransform->getChildren(2)->getChildren(2)->setScale(glm::vec3(0.1,0.1,0.1));
+    mModels.push_back(Model("Models/2B/source/2B.fbx", mShader));
+    mModels.push_back(Model("Models/Chopper/source/chopper.obj", mShader));
+    mModels[0].getRootNode()->getNodeTransform()->setScale(glm::vec3(0.01,0.01,0.01));
+    mModels[1].getRootNode()->getNodeTransform()->setScale(glm::vec3(0.006,0.006,0.006));
+    mModels[0].getRootNode()->getNodeTransform()->setRotation(glm::vec3(1,0,0), -0.5f*M_PI);
+    mModels[0].getRootNode()->getNodeTransform()->setPosition(glm::vec3(-0.5,0,0));
+    mModels[1].getRootNode()->getNodeTransform()->setPosition(glm::vec3(0.5,0,0));
 }
 
 void Core::mainLoop()
@@ -175,14 +114,8 @@ void Core::mainLoop()
     double nextGameTick=glfwGetTime();
     int loops;
     
-    mTexture->selectActiveTexture(0);
-    mTexture->selectActiveTexture(1);
-    
-    mShader->setInt("myTexture1", 0);
-    mShader->setInt("myTexture2", 1);
-    
     glfwSetInputMode(mWindow->getWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED); //Przechwytuje i ukrywa kursor
-    initializeTransforms();
+    loadModels();
     
     while ((mWindow->getWindow())&&(!glfwWindowShouldClose(mWindow->getWindow())))
     {

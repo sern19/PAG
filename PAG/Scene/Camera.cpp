@@ -70,10 +70,7 @@ void Camera::rotateByOffset(const float& pOffsetX, const float& pOffsetY)
     mCameraFront=calculateCameraFront();
 }
 
-const glm::vec3& Camera::getCameraPos()
-{
-	return mCameraPos;
-}
+const glm::vec3& Camera::getCameraPos() { return mCameraPos; }
 
 const glm::mat4 Camera::generateViewSpace()  { return glm::lookAt(mCameraPos, mCameraPos + mCameraFront, mCameraUp); }
 

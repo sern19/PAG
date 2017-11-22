@@ -28,18 +28,21 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <vector>
+#include "Material.hpp"
 
 class Shader;
+class Textures;
 
 struct Vertex
 {
-    glm::vec3 mVerticles={0,0,0};
+    glm::vec3 mPosition={0,0,0};
     glm::vec3 mNormal={0,0,0};
     glm::vec2 mTexture={0,0};
-    Vertex(const glm::vec3& pVerticles) {mVerticles=pVerticles;};
-    Vertex(const glm::vec3& pVerticles, const glm::vec3& pNormal) {mVerticles=pVerticles;mNormal=pNormal;};
-    Vertex(const float& x, const float& y, const float& z, const float& u, const float& v) {mVerticles=glm::vec3(x,y,z); mTexture=glm::vec2(u,v);};
-    Vertex(const glm::vec3& pVerticles, const glm::vec3& pNormal, const glm::vec2& pTexture) {mVerticles=pVerticles;mNormal=pNormal;mTexture=pTexture;};
+    Vertex() { };
+    Vertex(const glm::vec3& pPosition) {mPosition=pPosition;};
+    Vertex(const glm::vec3& pPosition, const glm::vec3& pNormal) {mPosition=pPosition;mNormal=pNormal;};
+    Vertex(const float& x, const float& y, const float& z, const float& u, const float& v) {mPosition=glm::vec3(x,y,z); mTexture=glm::vec2(u,v);};
+    Vertex(const glm::vec3& pPosition, const glm::vec3& pNormal, const glm::vec2& pTexture) {mPosition=pPosition;mNormal=pNormal;mTexture=pTexture;};
 };
 
 class Mesh
@@ -50,11 +53,13 @@ private:
     GLuint mElementObjectBuffer=NULL;
     std::vector<Vertex> mVerticles;
     std::vector<unsigned int> mIndices;
+    Material mMaterial;
     
     void loadContent();
 public:
     Mesh(const std::vector<Vertex>& pVerticles, const std::vector<unsigned int>& pIndices);
-    void drawContent(Shader* const pShader);
+    void setMaterial(const Material& pMaterial);
+    void drawContent(Shader* const pShader, Textures* const pTextures);
 };
 
 #endif /* Mesh_hpp */

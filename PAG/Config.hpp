@@ -38,18 +38,23 @@
 #define ACTIVE_TEXTURE_FOR_PROGRAM 0
 
 #define VERTEX_SHADER_LOCATION "Shaders/basic.vert"
-//#define FRAGMENT_SHADER_LOCATION "Shaders/basic.frag"
-//#define FRAGMENT_SHADER_LOCATION "Shaders/lesson.frag"
+#define FRAGMENT_SHADER_LOCATION "Shaders/basic.frag"
 
-//Uncomment to use shader for blending transparent textures
-#define FRAGMENT_SHADER_LOCATION "Shaders/transparency.frag"
-
-#define CAMERA_STARTING_POS glm::vec3(0.0f, 0.0f, 1.5f)
+#define CAMERA_STARTING_POS glm::vec3(0.0f, 1.0f, 1.5f)
 #define CAMERA_STARTING_FRONT_YAW 270
-#define CAMERA_STARTING_FRONT_PITCH 0
+#define CAMERA_STARTING_FRONT_PITCH -20
 #define CAMERA_UP glm::vec3(0.0f, 1.0f, 0.0f)
 #define CAMERA_MOVE_SPEED 0.03f
 
 #define MOUSE_SENSIVITY 0.05f
+
+//Material stuff
+#define DIFFUSE_NAME "diffuse"
+#define SPECULAR_NAME "specular"
+#define NORMAL_NAME "normal"
+#define DIFFUSE_STARTING_INDEX 0
+#define SPECULAR_STARTING_INDEX 10
+#define NORMAL_STARTING_INDEX 20
+#define MAXIMUM_NUMBER_OF_TEXTURES_PER_TYPE 2
 
 #endif /* Config_h */

@@ -21,21 +21,45 @@
 // THE SOFTWARE.
 
 #include "Model.hpp"
+#include "Textures.hpp"
+#include "Texture.hpp"
 #include "Node.hpp"
 
-Model::Model(const std::string& pModelPath) { loadModel(pModelPath); }
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
 
-void Model::loadModel(const std::string &pModelPath)
+Model::Model(const std::string& pModelPath, Shader *const pShader) { loadModel(pModelPath, pShader); }
+
+Model::Model(const Model& pSourceModel): mModelDirectory(pSourceModel.mModelDirectory)
 {
+    mRootNode=new Node(*pSourceModel.mRootNode);
+    mTextures=new Textures(*pSourceModel.mTextures);
+}
+
+void Model::loadModel(const std::string &pModelPath, Shader *const pShader)
+{
+    Assimp::Importer importer;
+    const aiScene *scene = importer.ReadFile(pModelPath, aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs);
+    if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
+        throw std::runtime_error("(Model::loadModel): Błąd wczytywania modelu");
     
+    mModelDirectory=pModelPath;
+    mModelDirectory.erase(mModelDirectory.find("source/"));
+    
+    mTextures=new Textures(scene, mModelDirectory.append("textures/"), pShader);
+    mRootNode=new Node(scene->mRootNode, scene, mTextures);
 }
 
-void Model::draw()
+void Model::draw(Shader *const pShader)
 {
-    //if (mRootNode) mRootNode->draw();
+    if (mRootNode) mRootNode->drawContent(pShader, mTextures);
 }
+
+Node* const Model::getRootNode() { return mRootNode; }
 
 Model::~Model()
 {
-    //if (mRootNode) delete mRootNode;
+    if (mRootNode) delete mRootNode;
+    if (mTextures) delete mTextures;
 }

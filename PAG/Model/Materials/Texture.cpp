@@ -21,36 +21,37 @@
 // THE SOFTWARE.
 
 #include "Texture.hpp"
+#include "Config.hpp"
 #include <stb_image.h>
+#include <iostream>
 
-Texture::Texture()
+Texture::Texture(const std::string& pTexturePath): mTexturePath(pTexturePath)
 {
-    glGenTextures(NUMBER_OF_TEXTURES, mTextures); //Generowanie kontenera na tekstury
+    glGenTextures(1, &mTexture); //Generowanie kontenera na tekstury
     
-    //Wczytywanie domyślnej tekstury Janickiego i cegieł
     try
     {
-        loadTexture("Textures/Janicki.png");
-        loadTexture("Textures/Beata.png",1);
-        loadTexture("Textures/Kotlet.png",2);
+        loadTexture(pTexturePath);
     } catch (std::runtime_error err)
     {
         throw err;
     }
 }
+
+Texture::Texture(const Texture& pSourceTexture):Texture(pSourceTexture.mTexturePath) {}
+
 Texture::~Texture()
 {
-    glDeleteTextures(NUMBER_OF_TEXTURES, mTextures);
+    glDeleteTextures(1, &mTexture);
 }
 
-void Texture::loadTexture(const std::string& pFileName, const unsigned int& pTextureNumber)
+void Texture::loadTexture(const std::string& pTexturePath)
 {
     int width, height, numberOfChannels;
     GLuint imageDepth;
-    if (pTextureNumber>=NUMBER_OF_TEXTURES) throw std::runtime_error("(Texture::loadTexture): Wybrany numer tekstury jest większy od maksymalnej ilości tekstur");
     
-    stbi_set_flip_vertically_on_load(true); //Obrócenie obrazu przed załadowaniem
-    unsigned char* textureData=stbi_load(pFileName.c_str(), &width, &height, &numberOfChannels, 0);
+    //stbi_set_flip_vertically_on_load(true); //Obrócenie obrazu przed załadowaniem
+    unsigned char* textureData=stbi_load(pTexturePath.c_str(), &width, &height, &numberOfChannels, 0);
     if (textureData)
     {
         //Parametry dla wczytanej tekstury
@@ -62,7 +63,7 @@ void Texture::loadTexture(const std::string& pFileName, const unsigned int& pTex
         
         if (numberOfChannels==4) imageDepth=GL_RGBA; //W przypadku gdy obrazek jest 4 kanałowy, tekstura będzie RGBA
         else imageDepth=GL_RGB;
-        glBindTexture(GL_TEXTURE_2D, mTextures[pTextureNumber]);
+        glBindTexture(GL_TEXTURE_2D, mTexture);
         glTexImage2D(GL_TEXTURE_2D,
                      0, //Stopnie mipmappingu
                      imageDepth, //Wewnętrzny format teksela
@@ -76,10 +77,21 @@ void Texture::loadTexture(const std::string& pFileName, const unsigned int& pTex
     }
     else throw std::runtime_error("(Texture::loadTexture): Błąd odczytu pliku");
 }
-void Texture::selectActiveTexture(const unsigned int& pTextureNumber)
+void Texture::selectActiveTexture(const std::string& pTextureType, const unsigned int& pTextureNumber)
 {
-    
-    if (pTextureNumber>=NUMBER_OF_TEXTURES) throw std::runtime_error("(Texture::selectActiveTexture): Wybrany numer tekstury jest większy od maksymalnej ilości tekstur");
-    //glActiveTexture(GL_TEXTURE0+pTextureNumber);
-    glBindTexture(GL_TEXTURE_2D, mTextures[pTextureNumber]);
+    if (pTextureNumber>=MAXIMUM_NUMBER_OF_TEXTURES_PER_TYPE) std::runtime_error("(Texture::selectActiveTexture): Numer tekstury jest większy od dopuszczalnej ilości tekstur");
+    if (pTextureType.compare(DIFFUSE_NAME)==0)
+    {
+        glActiveTexture(GL_TEXTURE0+pTextureNumber);
+    } else if (pTextureType.compare(SPECULAR_NAME)==0)
+    {
+        glActiveTexture(GL_TEXTURE0+SPECULAR_STARTING_INDEX+pTextureNumber);
+    }
+    else if (pTextureType.compare(NORMAL_NAME)==0)
+    {
+        glActiveTexture(GL_TEXTURE0+NORMAL_STARTING_INDEX+pTextureNumber);
+    }
+    glBindTexture(GL_TEXTURE_2D, mTexture);
 }
+
+const std::string& Texture::getTexturePath(){ return mTexturePath; }

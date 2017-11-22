@@ -1,4 +1,4 @@
-// Texture.hpp
+// Material.hpp
 //
 // Copyright (c) 2017 Krystian Owoc
 //
@@ -20,24 +20,17 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef Texture_hpp
-#define Texture_hpp
+#ifndef Material_hpp
+#define Material_hpp
 
 #include <stdio.h>
-#include <string>
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-#include "Config.hpp"
 
-class Texture
+struct Material
 {
-private:
-    GLuint mTextures[NUMBER_OF_TEXTURES]; //Tu by można spróbować vectora i dynamicznie dodawać i usuwać
-public:
-    Texture();
-    ~Texture();
-    void loadTexture(const std::string& pFileName, const unsigned int& pTextureNumber=0);
-    void selectActiveTexture(const unsigned int& pTextureNumber=0);
+    std::vector<int> mDiffuseTextureID;
+    std::vector<int> mSpecularTextureID;
+    std::vector<int> mNomralTextureID;
+    Material() {};
 };
 
-#endif /* Texture_hpp */
+#endif /* Material_hpp */

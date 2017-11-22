@@ -27,34 +27,30 @@
 
 #include <stdio.h>
 #include <glm/glm.hpp>
+#include <vector>
 #include <glad/glad.h> //Do pobierania funkcji
 #include <GLFW/glfw3.h> //Główna pętla i inicjalizacja
 
 class Window;
-class Mesh;
 class Shader;
-class Texture;
 class Scene;
 class Camera;
 class Input;
-class Transform;
+class Model;
 
 class Core
 {
 private:
     Window* mWindow=NULL;
-    Mesh* mMesh=NULL;
     Shader* mShader=NULL;
-    Texture* mTexture=NULL;
     Scene* mScene=NULL;
     Camera* mCamera=NULL;
     Input* mInput=NULL;
-    Transform* mTransform=NULL;
+    std::vector<Model> mModels;
     
     void display();
 	void updateObjectsPositions();
-    void initializeTransforms();
-    
+    void loadModels();
 public:
     Core();
     ~Core();

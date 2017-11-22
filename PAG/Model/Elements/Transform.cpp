@@ -25,8 +25,8 @@
 
 #include <glm/gtx/matrix_decompose.hpp>
 
-Transform::Transform() { mParentTransform=NULL; recalculateCacheVectors(); }
-Transform::Transform(Transform* const pParent) { mParentTransform=pParent; recalculateCacheVectors(); }
+Transform::Transform() { recalculateCacheVectors(); }
+Transform::Transform(Transform* const pParent): Transform() { mParentTransform=pParent; }
 Transform::Transform(const Transform& pSourceTransform): mParentTransform(pSourceTransform.mParentTransform), mChildrensTransform(pSourceTransform.mChildrensTransform), mCachedMatrix(pSourceTransform.mCachedMatrix), mPosition(pSourceTransform.mPosition), mRotationAxis(pSourceTransform.mRotationAxis), mRotationAngle(pSourceTransform.mRotationAngle),  mScale(pSourceTransform.mScale), mNeedsUpdateCache(true) { }
 
 void Transform::updateChildrenPointers(Transform* const pParent)
@@ -121,6 +121,8 @@ void Transform::setPosition(const glm::vec3& pPosition) { if (mPosition!=pPositi
 void Transform::setRotation(const glm::vec3& pRotationAxis, const float& pRotationAngle) { if (mRotationAxis!=pRotationAxis || mRotationAngle!=pRotationAngle) { mRotationAxis=pRotationAxis; mRotationAngle=pRotationAngle; setNeedsUpdateCache(this); } }
 void Transform::setScale(const glm::vec3& pScale) { if (mScale!=pScale) { mScale=pScale; setNeedsUpdateCache(this); } }
 
+const bool& Transform::getNeedsUpdateCache() { return mNeedsUpdateCache; }
+
 void Transform::updateCache()
 {
     int i,j, cacheIndex=0;
@@ -160,7 +162,7 @@ void Transform::updateCache()
     mNeedsUpdateCache=false;
 }
 
-int Transform::getAllChildrensCount()
+const int Transform::getAllChildrensCount()
 {
     if (mChildrensTransform.size()==0) return 1;
     else
