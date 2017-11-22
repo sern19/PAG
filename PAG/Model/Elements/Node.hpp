@@ -36,17 +36,18 @@ class Textures;
 class Node
 {
 private:
-    Transform* mElementTransform=NULL; //Dla uproszczenia przyjmijmy, że może mieć tylko 1 gałąź dzieci
+    Transform* mElementTransform=NULL; //Dla uproszczenia przyjmijmy, że może mieć tylko 1 gałąź dzieci, jest zawsze w parze z mCachedTransform
     Node* mParentNode=NULL;
-    glm::mat4 mCachedTransform=glm::mat4(1.0f);
+    glm::mat4* mCachedTransform=NULL; //Mogłoby być jako zwykła zmienna, ale w celu zaoszczędzenia pamięci, pracujemy na wskaźnikach
     std::vector<Node> mChildNodes;
     std::vector<Mesh> mMeshes;
     
     Node(const aiNode* const pNode, const aiScene* const pScene, Node* const pParentNode, Textures* const pTextures);
     void processNode(const aiNode* const pNode, const aiScene* const pScene, Textures* const pTextures);
     Mesh processMesh(const aiMesh* const pMesh, const aiScene* const pScene, Textures* const pTextures);
-    void updateCache();
+    void updateCache(); //Uaktualnia jedynie gdy istnieje cache
     void updateChildrenPointers(Node* const pParent);
+    const glm::mat4& getTransform(); //Zwraca cache bądź niezmodyfikowane cache rodzica
 public:
     Node(const aiNode* const pNode, const aiScene* const pScene, Textures* const pTextures);
     Node(const Node& pSourceNode);

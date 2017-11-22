@@ -55,6 +55,7 @@ private:
     std::vector<unsigned int> mIndices;
     Material mMaterial;
     
+    void clearData();
     void loadContent();
 public:
     Mesh(const std::vector<Vertex>& pVerticles, const std::vector<unsigned int>& pIndices);

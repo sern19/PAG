@@ -49,7 +49,10 @@ void Textures::loadTextures(const aiScene* const pScene)
                 texturePath.append(textureName.C_Str());
                 if (!chcekIfIsLoaded(texturePath, DIFFUSE_NAME))
                 {
-                    mDiffuseTextures.push_back(Texture(texturePath));
+                    try
+                    {
+                        mDiffuseTextures.push_back(Texture(texturePath));
+                    } catch (std::runtime_error err) { throw err; }
                 }
             }
             //Specular
@@ -61,7 +64,10 @@ void Textures::loadTextures(const aiScene* const pScene)
                 texturePath.append(textureName.C_Str());
                 if (!chcekIfIsLoaded(texturePath, SPECULAR_NAME))
                 {
-                    mSpecularTextures.push_back(Texture(texturePath));
+                    try
+                    {
+                        mSpecularTextures.push_back(Texture(texturePath));
+                    } catch (std::runtime_error err) { throw err; }
                 }
             }
             //Normal
@@ -73,7 +79,10 @@ void Textures::loadTextures(const aiScene* const pScene)
                 texturePath.append(textureName.C_Str());
                 if (!chcekIfIsLoaded(texturePath, NORMAL_NAME))
                 {
-                    mNormalTextures.push_back(Texture(texturePath));
+                    try
+                    {
+                        mNormalTextures.push_back(Texture(texturePath));
+                    } catch (std::runtime_error err) { throw err; }
                 }
             }
         }
