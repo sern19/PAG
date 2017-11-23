@@ -38,7 +38,7 @@ class Node
 private:
     Transform* mElementTransform=NULL; //Dla uproszczenia przyjmijmy, że może mieć tylko 1 gałąź dzieci, jest zawsze w parze z mCachedTransform
     Node* mParentNode=NULL;
-    glm::mat4* mCachedTransform=NULL; //Mogłoby być jako zwykła zmienna, ale w celu zaoszczędzenia pamięci, pracujemy na wskaźnikach
+    glm::mat4 mCachedTransform=glm::mat4(1.0f);
     std::vector<Node> mChildNodes;
     std::vector<Mesh> mMeshes;
     
@@ -54,10 +54,12 @@ public:
     ~Node();
     
     void drawContent(Shader *const pShader, Textures* const pTextures);
+    void setIsSelected(const bool& pIsSelected);
     
     const int& getChildrensCount();
     Transform* const getNodeTransform();
     Node* const getChildren(const unsigned int& pChildNumber);
+    const std::vector<std::pair<Node*,float>> testRayOBBIntersection(const glm::vec3& pRaySource, const glm::vec3& pRayDirection); //Jeżeli będzie niedokładne, to możnaby przenieść do mesh'a
 };
 
 #endif /* Node_hpp */

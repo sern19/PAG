@@ -1,4 +1,4 @@
-// Material.hpp
+// ModelNodePicker.hpp
 //
 // Copyright (c) 2017 Krystian Owoc
 //
@@ -20,19 +20,26 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef Material_hpp
-#define Material_hpp
+#ifndef ModelNodePicker_hpp
+#define ModelNodePicker_hpp
+
+#define GLFW_INCLUDE_NONE
 
 #include <stdio.h>
+#include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
+#include <vector>
 
-struct Material
+class Node;
+class Scene;
+class Model;
+
+class ModelNodePicker
 {
-    std::vector<int> mDiffuseTextureID;
-    glm::vec3 mDiffuseColor=glm::vec3(1,0,0);
-    std::vector<int> mSpecularTextureID;
-    glm::vec3 mSpecularLevel=glm::vec3(1,1,1);
-    std::vector<int> mNomralTextureID;
-    Material() {};
+private:
+    ModelNodePicker(){};
+public:
+    static Node* const pickNode(Scene *const pScene, std::vector<Model>* pModels, const std::pair<int, int>& pScreenSize, const std::pair<double, double>& pMousePos);
 };
 
-#endif /* Material_hpp */
+#endif /* ModelNodePicker_hpp */

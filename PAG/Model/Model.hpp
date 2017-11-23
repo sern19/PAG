@@ -24,6 +24,7 @@
 #define Model_hpp
 
 #include <stdio.h>
+#include <glm/glm.hpp>
 #include <vector>
 #include <string>
 
@@ -45,6 +46,7 @@ public:
     ~Model();
     void draw(Shader *const pShader);
     Node* const getRootNode();
+   const std::pair<Node*,float> testRayOBBIntersection(const glm::vec3& pRaySource, const glm::vec3& pRayDirection);
 };
 
 #endif /* Model_hpp */

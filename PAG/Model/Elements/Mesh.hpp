@@ -53,14 +53,20 @@ private:
     GLuint mElementObjectBuffer=NULL;
     std::vector<Vertex> mVerticles;
     std::vector<unsigned int> mIndices;
+    std::pair<glm::vec4, glm::vec4> mOBB; //First - minimum, second - maximum
     Material mMaterial;
     
+    bool mIsSelected=false;
+    
     void clearData();
+    void generateOBB();
     void loadContent();
 public:
     Mesh(const std::vector<Vertex>& pVerticles, const std::vector<unsigned int>& pIndices);
     void setMaterial(const Material& pMaterial);
+    void setIsSelected(const bool& pIsSelected);
     void drawContent(Shader* const pShader, Textures* const pTextures);
+    const bool checkRayIntersection(const glm::vec3& pRaySource, const glm::vec3& pRayDirection, const glm::mat4& pTransform, float& pDistanceOutput);
 };
 
 #endif /* Mesh_hpp */

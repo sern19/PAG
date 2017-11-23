@@ -28,19 +28,21 @@
 #include "Textures.hpp"
 
 #include <iostream>
+#include <algorithm>
 
 Node::Node(const aiNode* const pNode, const aiScene* const pScene, Node* pParentNode, Textures* const pTextures): Node(pNode, pScene, pTextures) { mParentNode=pParentNode; }
 
 Node::Node(const aiNode* const pNode, const aiScene* const pScene, Textures* const pTextures)
 {
     processNode(pNode, pScene, pTextures);
+    mElementTransform=new Transform();
     updateChildrenPointers(this); //Może nie będzie potrzebne, ale przy vectorach lepiej dać
+    updateCache();
 }
 
 Node::Node(const Node& pSourceNode): mParentNode(pSourceNode.mParentNode), mCachedTransform(pSourceNode.mCachedTransform), mChildNodes(pSourceNode.mChildNodes), mMeshes(pSourceNode.mMeshes)
 {
     if (pSourceNode.mElementTransform) mElementTransform=new Transform(*pSourceNode.mElementTransform);
-    if (pSourceNode.mCachedTransform) mCachedTransform=new glm::mat4(*pSourceNode.mCachedTransform);
     updateChildrenPointers(this);
 }
 
@@ -100,11 +102,8 @@ Mesh Node::processMesh(const aiMesh* const pMesh, const aiScene* const pScene, T
 void Node::updateCache()
 {
     int i;
-    if (mParentNode==NULL&&mElementTransform) *mCachedTransform=mElementTransform->getChildCombinedTransform(0);
-    else
-    {
-        if (mElementTransform) *mCachedTransform=mParentNode->getTransform()*mElementTransform->getChildCombinedTransform(0);
-    }
+    if (mParentNode==NULL) mCachedTransform=mElementTransform->getChildCombinedTransform(0);
+    else mCachedTransform=mParentNode->mCachedTransform*mElementTransform->getChildCombinedTransform(0);
     for (i=0;i<mChildNodes.size();i++)
         mChildNodes[i].updateCache();
 }
@@ -117,51 +116,57 @@ void Node::updateChildrenPointers(Node* const pParent)
         mChildNodes[i].updateChildrenPointers(this);
 }
 
-const glm::mat4& Node::getTransform()
-{
-    if (mParentNode==NULL)
-    {
-        if (mCachedTransform) return *mCachedTransform;
-        else return glm::mat4(1.0);
-    }
-    else
-    {
-        if (mCachedTransform) return *mCachedTransform;
-        else return mParentNode->getTransform();
-    }
-}
-
 void Node::drawContent(Shader *const pShader, Textures* const pTextures)
 {
     int i;
     if (mElementTransform&&mElementTransform->getNeedsUpdateCache()) updateCache();
-    glm::mat4 outputTransform=getTransform(); 
-    pShader->setMat4("model", &outputTransform);
+    pShader->setMat4("model", &mCachedTransform);
     for (i=0;i<mMeshes.size();i++)
         mMeshes[i].drawContent(pShader, pTextures);
     for (i=0;i<mChildNodes.size();i++)
         mChildNodes[i].drawContent(pShader, pTextures);
 }
 
-const int& Node::getChildrensCount() { return mChildNodes.size(); }
-Transform* const Node::getNodeTransform()
+void Node::setIsSelected(const bool& pIsSelected)
 {
-    if (mElementTransform==NULL)
-    {
-        mElementTransform=new Transform();
-        mCachedTransform=new glm::mat4(1.0);
-        updateCache();
-    }
-    return mElementTransform;
+    int i;
+    for (i=0;i<mMeshes.size();i++)
+        mMeshes[i].setIsSelected(pIsSelected);
 }
+
+const int& Node::getChildrensCount() { return mChildNodes.size(); }
+Transform* const Node::getNodeTransform() { return mElementTransform; }
 Node* const Node::getChildren(const unsigned int& pChildNumber)
 {
     if (pChildNumber>mChildNodes.size()) throw std::runtime_error("(Node::getChildNode): Żądany numer dziecka jest większy od ilości dzieci");
     return &mChildNodes[pChildNumber];
 }
 
+const std::vector<std::pair<Node*,float>> Node::testRayOBBIntersection(const glm::vec3& pRaySource, const glm::vec3& pRayDirection)
+{
+    std::vector<std::pair<Node*,float>> output;
+    float distance;
+    int i;
+    
+    if (mElementTransform&&mElementTransform->getNeedsUpdateCache()) updateCache();
+    
+    for (i=0;i<mMeshes.size();i++)
+        if (mMeshes[i].checkRayIntersection(pRaySource, pRayDirection, mCachedTransform, distance)) output.push_back(std::pair<Node*,float>(this,distance));
+    
+    //Łączenie vectorów
+    if (mChildNodes.size()>0)
+    {
+        std::vector<std::pair<Node*,float>> childrenOutput;
+        for (i=0;i<mChildNodes.size();i++)
+        {
+            childrenOutput=mChildNodes[i].testRayOBBIntersection(pRaySource, pRayDirection);
+            output.insert(std::end(output), std::begin(childrenOutput), std::end(childrenOutput));
+        }
+    }
+    return output;
+}
+
 Node::~Node()
 {
     if (mElementTransform) delete mElementTransform;
-    if (mCachedTransform) delete mCachedTransform;
 }

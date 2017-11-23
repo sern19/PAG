@@ -63,3 +63,17 @@ Model::~Model()
     if (mRootNode) delete mRootNode;
     if (mTextures) delete mTextures;
 }
+
+const std::pair<Node*,float> Model::testRayOBBIntersection(const glm::vec3& pRaySource, const glm::vec3& pRayDirection)
+{
+    std::vector<std::pair<Node*,float>> intersectedNodes=mRootNode->testRayOBBIntersection(pRaySource, pRayDirection);
+    int i;
+    
+    if (intersectedNodes.size()==0) return std::pair<Node*,float>(NULL,FLT_MAX);
+    
+    std::pair<Node*,float> closestNode=intersectedNodes[0];
+    for (i=1;i<intersectedNodes.size();i++)
+        if (intersectedNodes[i].second<closestNode.second) closestNode=intersectedNodes[i];
+    
+    return closestNode;
+}

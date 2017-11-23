@@ -34,8 +34,6 @@
 
 #include <iostream>
 
-#include <glm/gtx/vector_angle.hpp>
-
 Core::Core()
 {
     //Wczytanie bliblioteki
@@ -67,9 +65,10 @@ Core::Core()
     }
     //Inicjalizacja
     glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glBlendFunc (GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE);
+    glEnable(GL_SAMPLE_ALPHA_TO_COVERAGE);
+    //glEnable(GL_CULL_FACE); //Psuje piórka
     glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     mShader->useProgram();
 }
@@ -103,10 +102,10 @@ void Core::loadModels()
 {
     mModels.push_back(Model("Models/2B/source/2B.fbx", mShader));
     mModels.push_back(Model("Models/Chopper/source/chopper.obj", mShader));
-    mModels[0].getRootNode()->getNodeTransform()->setScale(glm::vec3(0.01,0.01,0.01));
-    mModels[1].getRootNode()->getNodeTransform()->setScale(glm::vec3(0.006,0.006,0.006));
-    mModels[0].getRootNode()->getNodeTransform()->setRotation(glm::vec3(1,0,0), -0.5f*M_PI);
-    mModels[0].getRootNode()->getNodeTransform()->setPosition(glm::vec3(-0.5,0,0));
+    //mModels[0].getRootNode()->getNodeTransform()->setScale(glm::vec3(0.01,0.01,0.01));
+    //mModels[1].getRootNode()->getNodeTransform()->setScale(glm::vec3(0.006,0.006,0.006));
+    //mModels[0].getRootNode()->getNodeTransform()->setRotation(glm::vec3(1,0,0), -0.5f*M_PI);
+    mModels[0].getRootNode()->getNodeTransform()->setPosition(glm::vec3(-0.5,0,10));
     mModels[1].getRootNode()->getNodeTransform()->setPosition(glm::vec3(0.5,0,0));
 }
 
@@ -115,7 +114,6 @@ void Core::mainLoop()
     double nextGameTick=glfwGetTime();
     int loops;
     
-    glfwSetInputMode(mWindow->getWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED); //Przechwytuje i ukrywa kursor
     loadModels();
     
     while ((mWindow->getWindow())&&(!glfwWindowShouldClose(mWindow->getWindow())))
@@ -124,7 +122,7 @@ void Core::mainLoop()
         while ((glfwGetTime()>nextGameTick) && (loops<MAX_FRAMESKIP))
         {
             mInput->processKeyboard(mWindow->getWindow(), mCamera);
-            mInput->processMouse(mWindow->getWindow(), mCamera);
+            mInput->processMouse(mWindow->getWindow(), mScene, &mModels, mCamera);
             updateObjectsPositions();
             nextGameTick+=SKIP_TICKS;
             loops++;

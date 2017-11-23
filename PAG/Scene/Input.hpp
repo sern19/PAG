@@ -23,10 +23,16 @@
 #ifndef Input_hpp
 #define Input_hpp
 
+#define GLFW_INCLUDE_NONE
+
 #include <stdio.h>
+#include <vector>
 #include <GLFW/glfw3.h>
 
 class Camera;
+class Scene;
+class Model;
+class Node;
 
 class Input
 {
@@ -34,11 +40,20 @@ private:
     double mLastMousePosX;
     double mLastMousePosY;
     const double mMouseSensivity;
+    
+    Node* prev=NULL;
+    
+    bool mIsEditMode=false;
+    bool mIsKeyTPressed=0;
+    bool mIsMouseMiddlePressed=0;
+    bool mIsMouseLeftPressed=0;
+    
+    void toggleEditMode(GLFWwindow* const pWindow);
 public:
     Input(GLFWwindow* const pWindow);
     ~Input();
     void processKeyboard(GLFWwindow* const pWindow, Camera* const pCamera);
-    void processMouse(GLFWwindow* const pWindow, Camera* const pCamera);
+    void processMouse(GLFWwindow* const pWindow, Scene* const pScene, std::vector<Model>* const pModels, Camera* const pCamera);
 };
 
 #endif /* Input_hpp */

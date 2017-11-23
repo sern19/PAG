@@ -45,7 +45,6 @@ public:
     const glm::mat4& getProjectionSpace();
     void updateWorldSpace(const glm::mat4& pWorldSpace);
     void updateViewSpace(const glm::mat4& pViewSpace);
-    //void updateProjectionSpace(const glm::mat4 pProjectionSpace);
     void updateWVP(Shader* const pShader);
     ~Scene();
 };

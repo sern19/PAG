@@ -15,6 +15,7 @@
 		DD3B1AE31FBF8518005E9485 /* glad.c in Sources */ = {isa = PBXBuildFile; fileRef = DD3B1AE11FBF8517005E9485 /* glad.c */; };
 		DD3B1AE41FBF8518005E9485 /* stb_image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD3B1AE21FBF8518005E9485 /* stb_image.cpp */; };
 		DD7002A41FC4F4E200B198C5 /* Textures.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD7002A21FC4F4E200B198C5 /* Textures.cpp */; };
+		DD9E91101FC64988009C0AE3 /* ModelNodePicker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD9E910E1FC64988009C0AE3 /* ModelNodePicker.cpp */; };
 		DDD878301FBF8C9A00109AC6 /* Core.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DDD8781C1FBF8C9900109AC6 /* Core.cpp */; };
 		DDD878311FBF8C9A00109AC6 /* Transform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DDD8781D1FBF8C9900109AC6 /* Transform.cpp */; };
 		DDD878321FBF8C9A00109AC6 /* Window.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DDD878201FBF8C9900109AC6 /* Window.cpp */; };
@@ -70,6 +71,8 @@
 		DD7002A31FC4F4E200B198C5 /* Textures.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Textures.hpp; sourceTree = "<group>"; };
 		DD79D2BF1FBF8DE200558940 /* basic.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = basic.vert; sourceTree = "<group>"; };
 		DD79D2C21FBF8DE200558940 /* basic.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = basic.frag; sourceTree = "<group>"; };
+		DD9E910E1FC64988009C0AE3 /* ModelNodePicker.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ModelNodePicker.cpp; sourceTree = "<group>"; };
+		DD9E910F1FC64988009C0AE3 /* ModelNodePicker.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ModelNodePicker.hpp; sourceTree = "<group>"; };
 		DDC8406D1FC5143E0079E919 /* 002.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 002.png; sourceTree = "<group>"; };
 		DDC8406E1FC5143E0079E919 /* 016.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 016.png; sourceTree = "<group>"; };
 		DDC8406F1FC5143E0079E919 /* 017.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 017.png; sourceTree = "<group>"; };
@@ -167,6 +170,8 @@
 				DDD878221FBF8C9900109AC6 /* Input.hpp */,
 				DDD8782D1FBF8C9A00109AC6 /* Scene.cpp */,
 				DDD8781F1FBF8C9900109AC6 /* Scene.hpp */,
+				DD9E910E1FC64988009C0AE3 /* ModelNodePicker.cpp */,
+				DD9E910F1FC64988009C0AE3 /* ModelNodePicker.hpp */,
 			);
 			path = Scene;
 			sourceTree = "<group>";
@@ -468,6 +473,7 @@
 				DDD878331FBF8C9A00109AC6 /* Texture.cpp in Sources */,
 				DDD878371FBF8C9A00109AC6 /* Input.cpp in Sources */,
 				DDD878361FBF8C9A00109AC6 /* Camera.cpp in Sources */,
+				DD9E91101FC64988009C0AE3 /* ModelNodePicker.cpp in Sources */,
 				DDD878381FBF8C9A00109AC6 /* Scene.cpp in Sources */,
 				DDD878341FBF8C9A00109AC6 /* main.cpp in Sources */,
 				DDD878311FBF8C9A00109AC6 /* Transform.cpp in Sources */,
