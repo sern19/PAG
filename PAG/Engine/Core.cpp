@@ -102,10 +102,10 @@ void Core::loadModels()
 {
     mModels.push_back(Model("Models/2B/source/2B.fbx", mShader));
     mModels.push_back(Model("Models/Chopper/source/chopper.obj", mShader));
-    //mModels[0].getRootNode()->getNodeTransform()->setScale(glm::vec3(0.01,0.01,0.01));
-    //mModels[1].getRootNode()->getNodeTransform()->setScale(glm::vec3(0.006,0.006,0.006));
-    //mModels[0].getRootNode()->getNodeTransform()->setRotation(glm::vec3(1,0,0), -0.5f*M_PI);
-    mModels[0].getRootNode()->getNodeTransform()->setPosition(glm::vec3(-0.5,0,10));
+    mModels[0].getRootNode()->getNodeTransform()->setScale(glm::vec3(0.01,0.01,0.01));
+    mModels[1].getRootNode()->getNodeTransform()->setScale(glm::vec3(0.006,0.006,0.006));
+    mModels[0].getRootNode()->getNodeTransform()->setRotation(glm::vec3(1,0,0), -0.5f*M_PI);
+    mModels[0].getRootNode()->getNodeTransform()->setPosition(glm::vec3(-0.5,0,0));
     mModels[1].getRootNode()->getNodeTransform()->setPosition(glm::vec3(0.5,0,0));
 }
 

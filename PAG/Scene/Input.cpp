@@ -94,7 +94,7 @@ void Input::processMouse(GLFWwindow* const pWindow, Scene* const pScene, std::ve
         glfwGetCursorPos(pWindow, &mousePos.first, &mousePos.second);
         Node* lil=ModelNodePicker::pickNode(pScene, pModels, screenSize, mousePos);
         prev=lil;
-        //if (lil!=NULL) lil->setIsSelected(true);
+        if (lil!=NULL) lil->setIsSelected(true);
         mIsMouseLeftPressed=0;
     }
     if (glfwGetMouseButton(pWindow, GLFW_MOUSE_BUTTON_LEFT)==GLFW_PRESS) mIsMouseLeftPressed=1;

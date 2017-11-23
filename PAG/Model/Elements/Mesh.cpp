@@ -100,92 +100,54 @@ void Mesh::drawContent(Shader* const pShader, Textures* const pTextures)
     glBindVertexArray(NULL);
 }
 
-const bool Mesh::checkRayIntersection(const glm::vec3& pRaySource, const glm::vec3& pRayDirection, const glm::mat4& pTransform, float& pDistanceOutput)
+const bool Mesh::checkRayIntersection(const glm::vec3& pRaySource, const glm::vec3& pRayDirection, const glm::vec3 triangle[3], const glm::mat4& pTransform, float& pDistanceOutput)
 {
-    //Transformacja OBB
-    std::pair<glm::vec4, glm::vec4> transformedOBB=mOBB;
-    transformedOBB.first=transformedOBB.first*pTransform;
-    transformedOBB.second=transformedOBB.second*pTransform;
+    const float epsilon = 0.0000001;
+    glm::vec3 edge1, edge2, h, s, q;
+    float a,f,u,v,t;
     
-    float f,e,t1,t2;
-    float tMin=0.0f;
-    float tMax=FLT_MAX;
-    
-    //Używana do przeliczania przecięć z płaszczyznami
-    glm::vec3 delta=glm::vec3(pTransform[3].x, pTransform[3].y, pTransform[3].z)-pRaySource;
-    
-    //Sprawdzanie z dwiema płaszczyznami równoległymi do osi x
-    glm::vec3 axisX(pTransform[0].x, pTransform[0].y, pTransform[0].z);
-    f=glm::dot(pRayDirection, axisX);
-    e=glm::dot(axisX, delta);
-    
-    if (fabs(f) > 0.001f)
+    //Obliczanie krawędzi
+    edge1=triangle[1]-triangle[0];
+    edge2=triangle[2]-triangle[0];
+    h=glm::cross(pRayDirection, edge2);
+    a=glm::dot(edge1, h);
+    if (a>-epsilon&&a<epsilon)
+        return false;
+    f=1/a;
+    s=pRaySource-triangle[0];
+    u=f*glm::dot(s,h);
+    if (u<0.0||u>1.0)
+        return false;
+    q=glm::cross(s, edge1);
+    v=f*glm::dot(pRayDirection, q);
+    if (v<0.0||(u+v)>1.0)
+        return false;
+    t=f*glm::dot(edge2,q);
+    if (t>epsilon)
     {
-        //Odległości między źródłem, a przecięciami płaszczyzn
-        t1=(e+transformedOBB.first.x)/f; //Przecięcie z lewą płaszczyzną
-        t2=(e+transformedOBB.second.x)/f; //Przecięcie z prawą płaszczyzną
-        
-        if (t1>t2)
-            std::swap(t1,t2);
-        
-        if (t2<tMax) tMax=t2; //Najbliższe(bliższa płaszczyzna) dalekie przecięcie
-        if (t1>tMin) tMin=t1; //Najdalsze(dalsza płaszczyzna) bliskie przecięcie
-        
-        //Z rysunku - jeżeli dalekie przecięcie jest bliżej niż bliskie, to nie ma przecięcia
-        if (tMin>tMax)
-            return false;
-    } else //Gdy promień jest prawie równoległy do płaszczyzny
-        if (-e+transformedOBB.first.x>0.0f || -e+transformedOBB.second.x<0.0f)
-            return false;
+        pDistanceOutput=glm::dot(pRaySource, (pRaySource+pRayDirection*t));
+        return true;
+    }
+    else
+        return false;
+}
+
+const bool Mesh::checkRayIntersections(const glm::vec3& pRaySource, const glm::vec3& pRayDirection, const glm::mat4& pTransform, float& pDistanceOutput)
+{
+    int i;
+    glm::vec3 triangle[3];
+    float distance;
+    std::vector<float> distances;
     
-    //Sprawdzanie z dwiema płaszczyznami równoległymi do osi y
-    glm::vec3 axisY(pTransform[1].x, pTransform[1].y, pTransform[1].z);
-    f=glm::dot(pRayDirection, axisY);
-    e=glm::dot(axisY, delta);
-    
-    if (fabs(f) > 0.001f)
+    //Sprawdzanie dla każdego trójkąta odległości
+    for (i=0;i<mIndices.size()/3;i+=3)
     {
-        //Odległości między źródłem, a przecięciami płaszczyzn
-        t1=(e+transformedOBB.first.y)/f; //Przecięcie z lewą płaszczyzną
-        t2=(e+transformedOBB.second.y)/f; //Przecięcie z prawą płaszczyzną
-        
-        if (t1>t2)
-            std::swap(t1,t2);
-        
-        if (t2<tMax) tMax=t2; //Najbliższe(bliższa płaszczyzna) dalekie przecięcie
-        if (t1>tMin) tMin=t1; //Najdalsze(dalsza płaszczyzna) bliskie przecięcie
-        
-        //Z rysunku - jeżeli dalekie przecięcie jest bliżej niż bliskie, to nie ma przecięcia
-        if (tMin>tMax)
-            return false;
-    } else //Gdy promień jest prawie równoległy do płaszczyzny
-        if (-e+transformedOBB.first.y>0.0f || -e+transformedOBB.second.y<0.0f)
-            return false;
-    
-    //Sprawdzanie z dwiema płaszczyznami równoległymi do osi z
-    glm::vec3 axisZ(pTransform[2].x, pTransform[2].y, pTransform[2].z);
-    f=glm::dot(pRayDirection, axisZ);
-    e=glm::dot(axisZ, delta);
-    
-    if (fabs(f) > 0.001f)
-    {
-        //Odległości między źródłem, a przecięciami płaszczyzn
-        t1=(e+transformedOBB.first.z)/f; //Przecięcie z lewą płaszczyzną
-        t2=(e+transformedOBB.second.z)/f; //Przecięcie z prawą płaszczyzną
-        
-        if (t1>t2)
-            std::swap(t1,t2);
-        
-        if (t2<tMax) tMax=t2; //Najbliższe(bliższa płaszczyzna) dalekie przecięcie
-        if (t1>tMin) tMin=t1; //Najdalsze(dalsza płaszczyzna) bliskie przecięcie
-        
-        //Z rysunku - jeżeli dalekie przecięcie jest bliżej niż bliskie, to nie ma przecięcia
-        if (tMin>tMax)
-            return false;
-    } else //Gdy promień jest prawie równoległy do płaszczyzny
-        if (-e+transformedOBB.first.z>0.0f || -e+transformedOBB.second.z<0.0f)
-            return false;
-    
-    pDistanceOutput=tMin;
+        triangle[0]=glm::vec4(mVerticles[mIndices[i]].mPosition,1)*pTransform;
+        triangle[1]=glm::vec4(mVerticles[mIndices[i+1]].mPosition,1)*pTransform;
+        triangle[2]=glm::vec4(mVerticles[mIndices[i+2]].mPosition,1)*pTransform;
+        if (checkRayIntersection(pRaySource, pRayDirection, triangle, pTransform, distance)) distances.push_back(distance);
+    }
+    if (distances.size()==0) return false;
+    pDistanceOutput=*std::min_element(std::begin(distances), std::end(distances));
     return true;
 }

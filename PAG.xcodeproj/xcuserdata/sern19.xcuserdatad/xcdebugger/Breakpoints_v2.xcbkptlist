@@ -6,160 +6,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "No"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "PAG/Scene/Input.cpp"
-            timestampString = "533105729.541204"
+            filePath = "PAG/Model/Elements/Mesh.cpp"
+            timestampString = "533109080.958016"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "42"
-            endingLineNumber = "42"
-            landmarkName = "Input::toggleEditMode(GLFWwindow* const pWindow)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "PAG/Scene/Input.cpp"
-            timestampString = "533105729.541503"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "43"
-            endingLineNumber = "43"
-            landmarkName = "Input::toggleEditMode(GLFWwindow* const pWindow)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "PAG/Scene/Input.cpp"
-            timestampString = "533105729.541565"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "40"
-            endingLineNumber = "40"
-            landmarkName = "Input::toggleEditMode(GLFWwindow* const pWindow)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "PAG/Scene/Input.cpp"
-            timestampString = "533105729.541621"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "102"
-            endingLineNumber = "102"
-            landmarkName = "Input::processMouse(GLFWwindow* const pWindow, Scene* const pScene, std::vector&lt;Model&gt;* const pModels, Camera* const pCamera)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "PAG/Scene/Input.cpp"
-            timestampString = "533105729.541673"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "98"
-            endingLineNumber = "98"
-            landmarkName = "Input::processMouse(GLFWwindow* const pWindow, Scene* const pScene, std::vector&lt;Model&gt;* const pModels, Camera* const pCamera)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "PAG/Model/Elements/Node.cpp"
-            timestampString = "533105729.541725"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "117"
-            endingLineNumber = "117"
-            landmarkName = "Node::updateChildrenPointers(Node* const pParent)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "PAG/Model/Elements/Node.cpp"
-            timestampString = "533105729.541893"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "117"
-            endingLineNumber = "117"
-            landmarkName = "Node::updateChildrenPointers(Node* const pParent)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "PAG/Scene/ModelNodePicker.cpp"
-            timestampString = "533105729.541945"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "50"
-            endingLineNumber = "50"
-            landmarkName = "ModelNodePicker::pickNode(Scene *const pScene, std::vector&lt;Model&gt;* pModels, const std::pair&lt;int, int&gt;&amp; pScreenSize, const std::pair&lt;double, double&gt;&amp; pMousePos)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "PAG/Scene/ModelNodePicker.cpp"
-            timestampString = "533105729.542113"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "51"
-            endingLineNumber = "51"
-            landmarkName = "ModelNodePicker::pickNode(Scene *const pScene, std::vector&lt;Model&gt;* pModels, const std::pair&lt;int, int&gt;&amp; pScreenSize, const std::pair&lt;double, double&gt;&amp; pMousePos)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "PAG/Scene/ModelNodePicker.cpp"
-            timestampString = "533105729.54216"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "54"
-            endingLineNumber = "54"
-            landmarkName = "ModelNodePicker::pickNode(Scene *const pScene, std::vector&lt;Model&gt;* pModels, const std::pair&lt;int, int&gt;&amp; pScreenSize, const std::pair&lt;double, double&gt;&amp; pMousePos)"
+            startingLineNumber = "129"
+            endingLineNumber = "129"
+            landmarkName = "Mesh::checkRayIntersection(const glm::vec3&amp; pRaySource, const glm::vec3&amp; pRayDirection, const glm::vec3 triangle[3], const glm::mat4&amp; pTransform, float&amp; pDistanceOutput)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -170,26 +26,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Model/Elements/Mesh.cpp"
-            timestampString = "533105729.54221"
+            timestampString = "533109080.958503"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "193"
-            endingLineNumber = "193">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "PAG/Model/Model.cpp"
-            timestampString = "533105729.542639"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "56"
-            endingLineNumber = "56"
-            landmarkName = "Model::draw(Shader *const pShader)"
+            startingLineNumber = "132"
+            endingLineNumber = "132"
+            landmarkName = "Mesh::checkRayIntersection(const glm::vec3&amp; pRaySource, const glm::vec3&amp; pRayDirection, const glm::vec3 triangle[3], const glm::mat4&amp; pTransform, float&amp; pDistanceOutput)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -199,13 +41,29 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "PAG/Scene/ModelNodePicker.cpp"
-            timestampString = "533105729.542796"
+            filePath = "PAG/Model/Elements/Mesh.cpp"
+            timestampString = "533109080.958703"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "40"
-            endingLineNumber = "40"
-            landmarkName = "ModelNodePicker::pickNode(Scene *const pScene, std::vector&lt;Model&gt;* pModels, const std::pair&lt;int, int&gt;&amp; pScreenSize, const std::pair&lt;double, double&gt;&amp; pMousePos)"
+            startingLineNumber = "148"
+            endingLineNumber = "148"
+            landmarkName = "Mesh::checkRayIntersections(const glm::vec3&amp; pRaySource, const glm::vec3&amp; pRayDirection, const glm::mat4&amp; pTransform, float&amp; pDistanceOutput)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "PAG/Model/Elements/Mesh.cpp"
+            timestampString = "533109182.486721"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "124"
+            endingLineNumber = "124"
+            landmarkName = "Mesh::checkRayIntersection(const glm::vec3&amp; pRaySource, const glm::vec3&amp; pRayDirection, const glm::vec3 triangle[3], const glm::mat4&amp; pTransform, float&amp; pDistanceOutput)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
