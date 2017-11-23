@@ -132,6 +132,8 @@ void Node::setIsSelected(const bool& pIsSelected)
     int i;
     for (i=0;i<mMeshes.size();i++)
         mMeshes[i].setIsSelected(pIsSelected);
+    for (i=0;i<mChildNodes.size();i++)
+        mChildNodes[i].setIsSelected(pIsSelected);
 }
 
 const int& Node::getChildrensCount() { return mChildNodes.size(); }

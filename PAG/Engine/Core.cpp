@@ -31,6 +31,7 @@
 #include "Transform.hpp"
 #include "Model.hpp"
 #include "Node.hpp"
+#include "UserInterface.hpp"
 
 #include <iostream>
 
@@ -59,6 +60,7 @@ Core::Core()
         mScene=new Scene(mWindow->getWindow());
         mCamera=new Camera();
         mInput=new Input(mWindow->getWindow());
+        mUI=new UserInterface(mWindow->getWindow());
     } catch (std::runtime_error err)
     {
         throw err;
@@ -79,6 +81,7 @@ Core::~Core()
     if (mScene) delete mScene;
     if (mCamera) delete mCamera;
     if (mInput) delete mInput;
+    if (mUI) delete mUI;
 }
 void Core::display()
 {
@@ -90,6 +93,7 @@ void Core::display()
     mScene->updateWVP(mShader);
     for (i=0;i<mModels.size();i++)
         mModels[i].draw(mShader);
+    mUI->draw();
     glfwSwapBuffers(mWindow->getWindow()); //Swap front- i backbuffer
     glfwPollEvents(); //Poll dla eventów
 }
@@ -121,7 +125,7 @@ void Core::mainLoop()
         loops=0;
         while ((glfwGetTime()>nextGameTick) && (loops<MAX_FRAMESKIP))
         {
-            mInput->processKeyboard(mWindow->getWindow(), mCamera);
+            mInput->processKeyboard(mWindow->getWindow(), mUI, mCamera);
             mInput->processMouse(mWindow->getWindow(), mScene, &mModels, mCamera);
             updateObjectsPositions();
             nextGameTick+=SKIP_TICKS;

@@ -16,6 +16,10 @@
 		DD3B1AE41FBF8518005E9485 /* stb_image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD3B1AE21FBF8518005E9485 /* stb_image.cpp */; };
 		DD7002A41FC4F4E200B198C5 /* Textures.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD7002A21FC4F4E200B198C5 /* Textures.cpp */; };
 		DD9E91101FC64988009C0AE3 /* ModelNodePicker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD9E910E1FC64988009C0AE3 /* ModelNodePicker.cpp */; };
+		DD9E91131FC6AEA2009C0AE3 /* UserInterface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD9E91111FC6AEA2009C0AE3 /* UserInterface.cpp */; };
+		DD9E91191FC6AF90009C0AE3 /* imgui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD9E91161FC6AF90009C0AE3 /* imgui.cpp */; };
+		DD9E911A1FC6AF90009C0AE3 /* imgui_draw.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD9E91171FC6AF90009C0AE3 /* imgui_draw.cpp */; };
+		DD9E91211FC6B45C009C0AE3 /* imgui_impl_glfw_gl3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD9E911F1FC6B45B009C0AE3 /* imgui_impl_glfw_gl3.cpp */; };
 		DDD878301FBF8C9A00109AC6 /* Core.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DDD8781C1FBF8C9900109AC6 /* Core.cpp */; };
 		DDD878311FBF8C9A00109AC6 /* Transform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DDD8781D1FBF8C9900109AC6 /* Transform.cpp */; };
 		DDD878321FBF8C9A00109AC6 /* Window.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DDD878201FBF8C9900109AC6 /* Window.cpp */; };
@@ -73,6 +77,18 @@
 		DD79D2C21FBF8DE200558940 /* basic.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = basic.frag; sourceTree = "<group>"; };
 		DD9E910E1FC64988009C0AE3 /* ModelNodePicker.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ModelNodePicker.cpp; sourceTree = "<group>"; };
 		DD9E910F1FC64988009C0AE3 /* ModelNodePicker.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ModelNodePicker.hpp; sourceTree = "<group>"; };
+		DD9E91111FC6AEA2009C0AE3 /* UserInterface.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = UserInterface.cpp; sourceTree = "<group>"; };
+		DD9E91121FC6AEA2009C0AE3 /* UserInterface.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = UserInterface.hpp; sourceTree = "<group>"; };
+		DD9E91141FC6AF90009C0AE3 /* imgui.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imgui.h; sourceTree = "<group>"; };
+		DD9E91151FC6AF90009C0AE3 /* imconfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imconfig.h; sourceTree = "<group>"; };
+		DD9E91161FC6AF90009C0AE3 /* imgui.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = imgui.cpp; sourceTree = "<group>"; };
+		DD9E91171FC6AF90009C0AE3 /* imgui_draw.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = imgui_draw.cpp; sourceTree = "<group>"; };
+		DD9E91181FC6AF90009C0AE3 /* imgui_internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imgui_internal.h; sourceTree = "<group>"; };
+		DD9E911C1FC6B092009C0AE3 /* stb_truetype.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = stb_truetype.h; sourceTree = "<group>"; };
+		DD9E911D1FC6B092009C0AE3 /* stb_textedit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = stb_textedit.h; sourceTree = "<group>"; };
+		DD9E911E1FC6B093009C0AE3 /* stb_rect_pack.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = stb_rect_pack.h; sourceTree = "<group>"; };
+		DD9E911F1FC6B45B009C0AE3 /* imgui_impl_glfw_gl3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = imgui_impl_glfw_gl3.cpp; sourceTree = "<group>"; };
+		DD9E91201FC6B45C009C0AE3 /* imgui_impl_glfw_gl3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imgui_impl_glfw_gl3.h; sourceTree = "<group>"; };
 		DDC8406D1FC5143E0079E919 /* 002.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 002.png; sourceTree = "<group>"; };
 		DDC8406E1FC5143E0079E919 /* 016.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 016.png; sourceTree = "<group>"; };
 		DDC8406F1FC5143E0079E919 /* 017.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 017.png; sourceTree = "<group>"; };
@@ -196,6 +212,8 @@
 				DDD8781E1FBF8C9900109AC6 /* Shader.hpp */,
 				DDD878201FBF8C9900109AC6 /* Window.cpp */,
 				DDD878251FBF8C9900109AC6 /* Window.hpp */,
+				DD9E91111FC6AEA2009C0AE3 /* UserInterface.cpp */,
+				DD9E91121FC6AEA2009C0AE3 /* UserInterface.hpp */,
 			);
 			path = Engine;
 			sourceTree = "<group>";
@@ -305,6 +323,7 @@
 		DD3B1AD61FBF81DF005E9485 /* OpenGL stuff */ = {
 			isa = PBXGroup;
 			children = (
+				DD9E911B1FC6B081009C0AE3 /* ImGui */,
 				DD3B1AE11FBF8517005E9485 /* glad.c */,
 				DD3B1AE21FBF8518005E9485 /* stb_image.cpp */,
 			);
@@ -330,6 +349,23 @@
 				DD79D2C21FBF8DE200558940 /* basic.frag */,
 			);
 			path = Shaders;
+			sourceTree = "<group>";
+		};
+		DD9E911B1FC6B081009C0AE3 /* ImGui */ = {
+			isa = PBXGroup;
+			children = (
+				DD9E911E1FC6B093009C0AE3 /* stb_rect_pack.h */,
+				DD9E911D1FC6B092009C0AE3 /* stb_textedit.h */,
+				DD9E911C1FC6B092009C0AE3 /* stb_truetype.h */,
+				DD9E91151FC6AF90009C0AE3 /* imconfig.h */,
+				DD9E91171FC6AF90009C0AE3 /* imgui_draw.cpp */,
+				DD9E91181FC6AF90009C0AE3 /* imgui_internal.h */,
+				DD9E91161FC6AF90009C0AE3 /* imgui.cpp */,
+				DD9E91141FC6AF90009C0AE3 /* imgui.h */,
+				DD9E911F1FC6B45B009C0AE3 /* imgui_impl_glfw_gl3.cpp */,
+				DD9E91201FC6B45C009C0AE3 /* imgui_impl_glfw_gl3.h */,
+			);
+			path = ImGui;
 			sourceTree = "<group>";
 		};
 		DDC8406B1FC5143E0079E919 /* Chopper */ = {
@@ -472,14 +508,18 @@
 				DD3B1AE41FBF8518005E9485 /* stb_image.cpp in Sources */,
 				DDD878331FBF8C9A00109AC6 /* Texture.cpp in Sources */,
 				DDD878371FBF8C9A00109AC6 /* Input.cpp in Sources */,
+				DD9E91211FC6B45C009C0AE3 /* imgui_impl_glfw_gl3.cpp in Sources */,
 				DDD878361FBF8C9A00109AC6 /* Camera.cpp in Sources */,
 				DD9E91101FC64988009C0AE3 /* ModelNodePicker.cpp in Sources */,
 				DDD878381FBF8C9A00109AC6 /* Scene.cpp in Sources */,
 				DDD878341FBF8C9A00109AC6 /* main.cpp in Sources */,
+				DD9E91131FC6AEA2009C0AE3 /* UserInterface.cpp in Sources */,
+				DD9E911A1FC6AF90009C0AE3 /* imgui_draw.cpp in Sources */,
 				DDD878311FBF8C9A00109AC6 /* Transform.cpp in Sources */,
 				DDD878351FBF8C9A00109AC6 /* Mesh.cpp in Sources */,
 				DDD878391FBF8C9A00109AC6 /* Shader.cpp in Sources */,
 				DD3B1AE31FBF8518005E9485 /* glad.c in Sources */,
+				DD9E91191FC6AF90009C0AE3 /* imgui.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -23,27 +23,28 @@
 #include "Input.hpp"
 
 #include "Camera.hpp"
+#include "UserInterface.hpp"
 #include "ModelNodePicker.hpp"
 #include "Config.hpp"
 
-
-#include "Node.hpp"
-#include "Transform.hpp"
 Input::Input(GLFWwindow* const pWindow): mMouseSensivity(MOUSE_SENSIVITY)
 {
     glfwSetInputMode(pWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED); //Przechwytuje i ukrywa kursor
     glfwGetCursorPos(pWindow, &mLastMousePosX, &mLastMousePosY);
 }
 
-void Input::toggleEditMode(GLFWwindow* const pWindow)
+void Input::toggleEditMode(GLFWwindow* const pWindow, UserInterface* const pUI)
 {
     mIsEditMode=!mIsEditMode;
     mIsKeyTPressed=0;
-    if (mIsEditMode) glfwSetInputMode(pWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-    else glfwSetInputMode(pWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    if (mIsEditMode)
+        glfwSetInputMode(pWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+    else
+        glfwSetInputMode(pWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    pUI->setShouldShowInterface(mIsEditMode);
 }
 
-void Input::processKeyboard(GLFWwindow* const pWindow, Camera* const pCamera)
+void Input::processKeyboard(GLFWwindow* const pWindow, UserInterface* const pUI, Camera* const pCamera)
 {
     glm::vec3 cameraMoveVector(0.0f);
     
@@ -64,7 +65,7 @@ void Input::processKeyboard(GLFWwindow* const pWindow, Camera* const pCamera)
     
     //Uruchomienie trybu edycji
     if (glfwGetKey(pWindow, GLFW_KEY_T)==GLFW_PRESS) mIsKeyTPressed=1;
-    if (glfwGetKey(pWindow, GLFW_KEY_T)==GLFW_RELEASE&&mIsKeyTPressed) toggleEditMode(pWindow);
+    if (glfwGetKey(pWindow, GLFW_KEY_T)==GLFW_RELEASE&&mIsKeyTPressed) toggleEditMode(pWindow, pUI);
     
     pCamera->moveInDirection(cameraMoveVector);
 }
@@ -89,12 +90,11 @@ void Input::processMouse(GLFWwindow* const pWindow, Scene* const pScene, std::ve
     {
         std::pair<int, int> screenSize;
         std::pair<double, double> mousePos;
-        if (prev!=NULL) prev->setIsSelected(false);
         glfwGetWindowSize(pWindow, &screenSize.first, &screenSize.second);
         glfwGetCursorPos(pWindow, &mousePos.first, &mousePos.second);
         Node* lil=ModelNodePicker::pickNode(pScene, pModels, screenSize, mousePos);
-        prev=lil;
-        if (lil!=NULL) lil->setIsSelected(true);
+        //prev=lil;
+        //if (lil!=NULL) lil->setIsSelected(true);
         mIsMouseLeftPressed=0;
     }
     if (glfwGetMouseButton(pWindow, GLFW_MOUSE_BUTTON_LEFT)==GLFW_PRESS) mIsMouseLeftPressed=1;

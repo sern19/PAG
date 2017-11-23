@@ -1,4 +1,4 @@
-// Core.hpp
+// UserInterface.cpp
 //
 // Copyright (c) 2017 Krystian Owoc
 //
@@ -20,43 +20,29 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef Core_hpp
-#define Core_hpp
+#include "UserInterface.hpp"
+#include "imgui.h"
+#include "imgui_impl_glfw_gl3.h"
 
-#define GLFW_INCLUDE_NONE
-
-#include <stdio.h>
-#include <glm/glm.hpp>
-#include <vector>
-#include <glad/glad.h> //Do pobierania funkcji
-#include <GLFW/glfw3.h> //Główna pętla i inicjalizacja
-
-class Window;
-class Shader;
-class Scene;
-class Camera;
-class Input;
-class Model;
-class UserInterface;
-
-class Core
+UserInterface::UserInterface(GLFWwindow* const pWindow)
 {
-private:
-    Window* mWindow=NULL;
-    Shader* mShader=NULL;
-    Scene* mScene=NULL;
-    Camera* mCamera=NULL;
-    Input* mInput=NULL;
-    UserInterface* mUI=NULL;
-    std::vector<Model> mModels;
-    
-    void display();
-	void updateObjectsPositions();
-    void loadModels();
-public:
-    Core();
-    ~Core();
-    void mainLoop();
-};
+    ImGui_ImplGlfwGL3_Init(pWindow, true);
+}
 
-#endif /* Core_hpp */
+void UserInterface::draw()
+{
+    ImGui_ImplGlfwGL3_NewFrame();
+    
+    if (mShouldShowInterface)
+    {
+        ImGui::Begin("Window Title Here");
+        ImGui::Text("Hello, world!");
+        ImGui::End();
+    }
+    
+    // ImGui functions end here
+    ImGui::Render();
+    
+}
+
+void UserInterface::setShouldShowInterface(const bool& pShouldShowInterface) { mShouldShowInterface=pShouldShowInterface; }

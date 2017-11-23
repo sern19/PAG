@@ -32,7 +32,7 @@
 class Camera;
 class Scene;
 class Model;
-class Node;
+class UserInterface;
 
 class Input
 {
@@ -40,19 +40,17 @@ private:
     double mLastMousePosX;
     double mLastMousePosY;
     const double mMouseSensivity;
-    
-    Node* prev=NULL;
-    
+
     bool mIsEditMode=false;
     bool mIsKeyTPressed=0;
     bool mIsMouseMiddlePressed=0;
     bool mIsMouseLeftPressed=0;
     
-    void toggleEditMode(GLFWwindow* const pWindow);
+    void toggleEditMode(GLFWwindow* const pWindow, UserInterface* const pUI);
 public:
     Input(GLFWwindow* const pWindow);
     ~Input();
-    void processKeyboard(GLFWwindow* const pWindow, Camera* const pCamera);
+    void processKeyboard(GLFWwindow* const pWindow, UserInterface* const pUI, Camera* const pCamera);
     void processMouse(GLFWwindow* const pWindow, Scene* const pScene, std::vector<Model>* const pModels, Camera* const pCamera);
 };
 

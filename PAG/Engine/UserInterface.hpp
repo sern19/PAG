@@ -1,4 +1,4 @@
-// Core.hpp
+// UserInterface.hpp
 //
 // Copyright (c) 2017 Krystian Owoc
 //
@@ -20,43 +20,22 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef Core_hpp
-#define Core_hpp
-
-#define GLFW_INCLUDE_NONE
+#ifndef UserInterface_hpp
+#define UserInterface_hpp
 
 #include <stdio.h>
-#include <glm/glm.hpp>
-#include <vector>
-#include <glad/glad.h> //Do pobierania funkcji
-#include <GLFW/glfw3.h> //Główna pętla i inicjalizacja
+#include <GLFW/glfw3.h>
 
-class Window;
-class Shader;
-class Scene;
-class Camera;
-class Input;
-class Model;
-class UserInterface;
+class Node;
 
-class Core
+class UserInterface
 {
 private:
-    Window* mWindow=NULL;
-    Shader* mShader=NULL;
-    Scene* mScene=NULL;
-    Camera* mCamera=NULL;
-    Input* mInput=NULL;
-    UserInterface* mUI=NULL;
-    std::vector<Model> mModels;
-    
-    void display();
-	void updateObjectsPositions();
-    void loadModels();
+    bool mShouldShowInterface=false;
 public:
-    Core();
-    ~Core();
-    void mainLoop();
+    UserInterface(GLFWwindow* const pWindow);
+    void draw();
+    void setShouldShowInterface(const bool& pShouldShowInterface);
 };
 
-#endif /* Core_hpp */
+#endif /* UserInterface_hpp */
