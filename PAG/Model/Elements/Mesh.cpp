@@ -32,27 +32,6 @@ Mesh::Mesh(const std::vector<Vertex>& pVerticles, const std::vector<unsigned int
     loadContent();
 }
 
-void Mesh::generateOBB()
-{
-    int i;
-    mOBB.first=glm::vec4(mVerticles[0].mPosition, 1);
-    mOBB.second=glm::vec4(mVerticles[0].mPosition, 1);
-    //Minimum
-    for (i=1;i<mVerticles.size();i++)
-    {
-        if (mVerticles[i].mPosition.x<mOBB.first.x) mOBB.first.x=mVerticles[i].mPosition.x;
-        if (mVerticles[i].mPosition.y<mOBB.first.y) mOBB.first.y=mVerticles[i].mPosition.y;
-        if (mVerticles[i].mPosition.z<mOBB.first.z) mOBB.first.z=mVerticles[i].mPosition.z;
-    }
-    //Maximum
-    for (i=1;i<mVerticles.size();i++)
-    {
-        if (mVerticles[i].mPosition.x>mOBB.second.x) mOBB.second.x=mVerticles[i].mPosition.x;
-        if (mVerticles[i].mPosition.y>mOBB.second.y) mOBB.second.y=mVerticles[i].mPosition.y;
-        if (mVerticles[i].mPosition.z>mOBB.second.z) mOBB.second.z=mVerticles[i].mPosition.z;
-    }
-}
-
 void Mesh::loadContent()
 {
     //Generowanie tablicy obiektów
@@ -82,8 +61,6 @@ void Mesh::loadContent()
     glEnableVertexAttribArray(0);
     glEnableVertexAttribArray(1);
     glEnableVertexAttribArray(2);
-    
-    generateOBB();
 }
 
 void Mesh::setMaterial(const Material& pMaterial) { mMaterial=pMaterial; }
@@ -102,7 +79,7 @@ void Mesh::drawContent(Shader* const pShader, Textures* const pTextures)
 
 const bool Mesh::checkRayIntersection(const glm::vec3& pRaySource, const glm::vec3& pRayDirection, const glm::vec3 triangle[3], const glm::mat4& pTransform, float& pDistanceOutput)
 {
-    const float epsilon = 0.0000001;
+    const float epsilon = 0.00000001;
     glm::vec3 edge1, edge2, h, s, q;
     float a,f,u,v,t;
     
@@ -111,7 +88,7 @@ const bool Mesh::checkRayIntersection(const glm::vec3& pRaySource, const glm::ve
     edge2=triangle[2]-triangle[0];
     h=glm::cross(pRayDirection, edge2);
     a=glm::dot(edge1, h);
-    if (a>-epsilon&&a<epsilon)
+    if (fabs(a)< epsilon)
         return false;
     f=1/a;
     s=pRaySource-triangle[0];
@@ -125,7 +102,7 @@ const bool Mesh::checkRayIntersection(const glm::vec3& pRaySource, const glm::ve
     t=f*glm::dot(edge2,q);
     if (t>epsilon)
     {
-        pDistanceOutput=glm::dot(pRaySource, (pRaySource+pRayDirection*t));
+        pDistanceOutput=glm::distance(pRaySource, pRaySource+(pRayDirection*t));
         return true;
     }
     else
@@ -138,13 +115,13 @@ const bool Mesh::checkRayIntersections(const glm::vec3& pRaySource, const glm::v
     glm::vec3 triangle[3];
     float distance;
     std::vector<float> distances;
-    
     //Sprawdzanie dla każdego trójkąta odległości
-    for (i=0;i<mIndices.size()/3;i+=3)
+    for (i=0;i<mIndices.size();i+=3)
     {
-        triangle[0]=glm::vec4(mVerticles[mIndices[i]].mPosition,1)*pTransform;
-        triangle[1]=glm::vec4(mVerticles[mIndices[i+1]].mPosition,1)*pTransform;
-        triangle[2]=glm::vec4(mVerticles[mIndices[i+2]].mPosition,1)*pTransform;
+        //Transformacja
+        triangle[0]=glm::vec3(pTransform*glm::vec4(mVerticles[mIndices[i]].mPosition,1.0f)); //PAMIĘTAĆ NA PRZYSZŁOŚĆ O KOLEJNOŚCI - NIE STRACISZ BEZ SENSU GODZINY
+        triangle[1]=glm::vec3(pTransform*glm::vec4(mVerticles[mIndices[i+1]].mPosition,1.0f));
+        triangle[2]=glm::vec3(pTransform*glm::vec4(mVerticles[mIndices[i+2]].mPosition,1.0f));
         if (checkRayIntersection(pRaySource, pRayDirection, triangle, pTransform, distance)) distances.push_back(distance);
     }
     if (distances.size()==0) return false;

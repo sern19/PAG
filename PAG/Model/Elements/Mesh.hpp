@@ -53,13 +53,11 @@ private:
     GLuint mElementObjectBuffer=NULL;
     std::vector<Vertex> mVerticles;
     std::vector<unsigned int> mIndices;
-    std::pair<glm::vec4, glm::vec4> mOBB; //First - minimum, second - maximum
     Material mMaterial;
     
     bool mIsSelected=false;
     
     void clearData();
-    void generateOBB();
     void loadContent();
     const bool checkRayIntersection(const glm::vec3& pRaySource, const glm::vec3& pRayDirection, const glm::vec3 triangle[3], const glm::mat4& pTransform, float& pDistanceOutput);
 public:

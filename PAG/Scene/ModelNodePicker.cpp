@@ -35,7 +35,7 @@ Node* const ModelNodePicker::pickNode(Scene *const pScene, std::vector<Model>* p
     glm::vec4 rayEndPoint(
                             (2.0f*pMousePos.first)/pScreenSize.first-1.0f, //Normalizacja szerokości
                             1.0f-((2.0f*pMousePos.second)/pScreenSize.second), //Normalizacja wysokości
-                            1.0f, 1.0f); //0.0 w znormalizowanej postaci to plan daleki
+                            1.0f, 1.0f); //1.0 w znormalizowanej postaci to plan daleki
     
     //Odwrotne transformacje przez macierze świata
     glm::mat4 inverseVP=glm::inverse(pScene->getProjectionSpace()*pScene->getViewSpace());
@@ -53,7 +53,9 @@ Node* const ModelNodePicker::pickNode(Scene *const pScene, std::vector<Model>* p
     //Obliczanie najbliższego Node
     std::vector<std::pair<Node*,float>> intersectedNodes;
     for (i=0;i<pModels->size();i++)
+    {
         intersectedNodes.push_back(pModels->at(i).testRayOBBIntersection(rayStartPointWorld, rayDirectionWorld));
+    }
     if (intersectedNodes.size()==0) return NULL;
     
     std::pair<Node*,float> closestNode=intersectedNodes[0];

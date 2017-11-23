@@ -148,7 +148,7 @@ const std::vector<std::pair<Node*,float>> Node::testRayOBBIntersection(const glm
     float distance;
     int i;
     
-    if (mElementTransform&&mElementTransform->getNeedsUpdateCache()) updateCache();
+    if (mElementTransform->getNeedsUpdateCache()) updateCache();
     
     for (i=0;i<mMeshes.size();i++)
         if (mMeshes[i].checkRayIntersections(pRaySource, pRayDirection, mCachedTransform, distance)) output.push_back(std::pair<Node*,float>(this,distance));

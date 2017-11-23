@@ -59,7 +59,7 @@ public:
     const int& getChildrensCount();
     Transform* const getNodeTransform();
     Node* const getChildren(const unsigned int& pChildNumber);
-    const std::vector<std::pair<Node*,float>> testRayOBBIntersection(const glm::vec3& pRaySource, const glm::vec3& pRayDirection); //Jeżeli będzie niedokładne, to możnaby przenieść do mesh'a
+    const std::vector<std::pair<Node*,float>> testRayOBBIntersection(const glm::vec3& pRaySource, const glm::vec3& pRayDirection); //Możnaby spróbować tu jakieś OBB dla optymalizacji
 };
 
 #endif /* Node_hpp */

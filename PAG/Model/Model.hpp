@@ -46,7 +46,7 @@ public:
     ~Model();
     void draw(Shader *const pShader);
     Node* const getRootNode();
-   const std::pair<Node*,float> testRayOBBIntersection(const glm::vec3& pRaySource, const glm::vec3& pRayDirection);
+   const std::pair<Node*,float> testRayOBBIntersection(const glm::vec3& pRaySource, const glm::vec3& pRayDirection); //To samo co w Node, OBB dla optymalizacji
 };
 
 #endif /* Model_hpp */
