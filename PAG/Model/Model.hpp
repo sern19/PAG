@@ -40,6 +40,7 @@ private:
     Textures* mTextures=NULL;
     std::vector<GLenum> mAdditionalGLSettings;
     std::string mModelDirectory;
+    std::string mModelFilename;
     
     void loadModel(const std::string& pModelPath, Shader *const pShader);
 public:

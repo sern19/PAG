@@ -29,6 +29,29 @@
 #include <algorithm>
 #include <iterator>
 
+
+UserInterface::UserInterface(GLFWwindow* const pWindow)
+{
+    ImGui_ImplGlfwGL3_Init(pWindow, true);
+}
+
+void UserInterface::updateUITransformData()
+{
+    if (mSelectedTransform!=NULL)
+    {
+        mTranslateX=mSelectedTransform->getPosition().x;
+        mTranslateY=mSelectedTransform->getPosition().y;
+        mTranslateZ=mSelectedTransform->getPosition().z;
+        mScaleX=mSelectedTransform->getScale().x;
+        mScaleY=mSelectedTransform->getScale().y;
+        mScaleZ=mSelectedTransform->getScale().z;
+        mRotationAngle=mSelectedTransform->getRotation().second;
+        mRotationAxisX=mSelectedTransform->getRotation().first.x;
+        mRotationAxisY=mSelectedTransform->getRotation().first.y;
+        mRotationAxisZ=mSelectedTransform->getRotation().first.z;
+    }
+}
+
 void UserInterface::updateTransform()
 {
 	glm::vec3 temporaryValues;
@@ -49,22 +72,27 @@ void UserInterface::updateTransform()
 	mSelectedTransform->setRotation(temporaryValues, mRotationAngle);
 }
 
-UserInterface::UserInterface(GLFWwindow* const pWindow)
-{
-    ImGui_ImplGlfwGL3_Init(pWindow, true);
-}
-
 void UserInterface::draw()
 {
-    ImGui_ImplGlfwGL3_NewFrame();
+    static bool* temporaryBool=NULL; //Fix dla pokazującego się przyciusku X
     
+    ImGui_ImplGlfwGL3_NewFrame();
     if (mShouldShowInterface)
     {
+        int mainMenuHeight;
+        ImGui::BeginMainMenuBar();
+        ImGui::Text("Edit mode - press 'T' to enter explore mode");
+        mainMenuHeight=ImGui::GetWindowSize().y;
+        ImGui::EndMainMenuBar();
 		if (mSelectedNode != NULL)
 		{
-			ImGui::Begin("Selected transform");
-			ImGui::Text("Transform level %i", mSelectedTransformLevel);
-			if (ImGui::Button("Select parent node")) if (mSelectedNode->getParentNode()!=NULL) setSelectedNode(mSelectedNode->getParentNode());
+            //Przyciski selekcji modyfikowanego obiektu/informacje
+            ImGui::SetNextWindowPos(ImVec2(0,mainMenuHeight));
+            ImGui::SetNextWindowSize(ImVec2(240, 480));
+			ImGui::Begin("Selected node", temporaryBool, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
+            ImGui::Text("  Node level %i", mSelectedNode->getNodeLevel());
+			ImGui::Text("  Transform level %i", mSelectedTransform->getTransformLevel());
+			if (mSelectedNode->getParentNode()!=NULL && mSelectedNode->getNodeLevel()>0 && ImGui::Button("Select parent node"))setSelectedNode(mSelectedNode->getParentNode());
 			if (mSelectedTransform != NULL)
 			{
 				if (mSelectedTransform->getChildrensCount() == 0)
@@ -73,26 +101,68 @@ void UserInterface::draw()
 				}
 				else
 				{
-					//if (ImGui::Button("Select"))
+                    if (ImGui::Button("Select transform child"))
+                    {
+                        mSelectedTransform=mSelectedTransform->getChildren(0);
+                        updateUITransformData();
+                    }
+                    if (ImGui::Button("Delete transform child"))
+                    {
+                        mSelectedTransform->popChildren();
+                    }
 				}
+                if (mSelectedTransform->getParent()!=NULL && ImGui::Button("Select parent transform"))
+                {
+                    mSelectedTransform=mSelectedTransform->getParent();
+                    updateUITransformData();
+                }
 			}
 
+            //Pola z danymi
 			ImGui::Text("Position");
-			ImGui::InputFloat(":x", &mTranslateX, 0.01f, 1.0f);
-			ImGui::InputFloat(":y", &mTranslateY, 0.01f, 1.0f);
-			ImGui::InputFloat(":z", &mTranslateZ, 0.01f, 1.0f);
+            ImGui::PushID(0); //Imgui używa nazw pól jako id
+			ImGui::InputFloat(":x", &mTranslateX, 0.01f, 1, 2, ImGuiInputTextFlags_CharsDecimal);
+			ImGui::InputFloat(":y", &mTranslateY, 0.01f, 1, 2, ImGuiInputTextFlags_CharsDecimal);
+			ImGui::InputFloat(":z", &mTranslateZ, 0.01f, 1, 2, ImGuiInputTextFlags_CharsDecimal);
+            ImGui::PopID();
 			ImGui::Text("Scale");
-			ImGui::InputFloat(":x", &mScaleX, 0.01f, 1.0f);
-			ImGui::InputFloat(":y", &mScaleY, 0.01f, 1.0f);
-			ImGui::InputFloat(":z", &mScaleZ, 0.01f, 1.0f);
+            ImGui::PushID(1); //Więc aby dalsze przyciski były responsywne
+			ImGui::InputFloat(":x", &mScaleX, 0.001f, 0.1f, 3, ImGuiInputTextFlags_CharsDecimal);
+			ImGui::InputFloat(":y", &mScaleY, 0.001f, 0.1f, 3, ImGuiInputTextFlags_CharsDecimal);
+			ImGui::InputFloat(":z", &mScaleZ, 0.001f, 0.1f, 3, ImGuiInputTextFlags_CharsDecimal);
+            ImGui::PopID();
 			ImGui::Text("Rotate");
-			ImGui::InputFloat(":angle", &mRotationAngle, 0.01f, 1.0f);
-			ImGui::InputFloat(":x", &mRotationAxisX, 0.01f, 1.0f);
-			ImGui::InputFloat(":y", &mRotationAxisY, 0.01f, 1.0f);
-			ImGui::InputFloat(":z", &mRotationAxisZ, 0.01f, 1.0f);
-			if (ImGui::Button("Update transform")) if (mSelectedTransform != NULL) updateTransform();
+			ImGui::InputFloat(":angle", &mRotationAngle, 0.001f, 0.1f, 3, ImGuiInputTextFlags_CharsDecimal);
+            ImGui::PushID(2); //Używamy PushID
+			ImGui::InputFloat(":x", &mRotationAxisX, 1.0f, 1.0f, 1, ImGuiInputTextFlags_CharsDecimal);
+			ImGui::InputFloat(":y", &mRotationAxisY, 1.0f, 1.0f, 1, ImGuiInputTextFlags_CharsDecimal);
+			ImGui::InputFloat(":z", &mRotationAxisZ, 1.0f, 1.0f, 1, ImGuiInputTextFlags_CharsDecimal);
+            ImGui::PopID();
+            
+            //Przyciski aktualizacji transforma
+            if (mSelectedTransform!=NULL && ImGui::Button("Reset transform"))
+            {
+                if (mSelectedTransform->getTransformLevel()==0) mSelectedNode->resetNodeTransform();
+                else mSelectedTransform->resetTransform();
+                updateUITransformData();
+            }
+			if (mSelectedTransform!=NULL && ImGui::Button("Update transform")) updateTransform();
 			ImGui::End();
 		}
+        else
+        {
+            ImGui::SetNextWindowPos(ImVec2(0,mainMenuHeight));
+            ImGui::SetNextWindowSize(ImVec2(208, 48));
+            ImGui::Begin("No node selected", temporaryBool, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
+            ImGui::Text("  Press RMB to select node");
+            ImGui::End();
+        }
+    }
+    else
+    {
+        ImGui::BeginMainMenuBar();
+        ImGui::Text("Explore mode - press 'T' to enter edit mode");
+        ImGui::EndMainMenuBar();
     }
     
     // ImGui functions end here
@@ -100,7 +170,11 @@ void UserInterface::draw()
     
 }
 
-void UserInterface::setShouldShowInterface(const bool& pShouldShowInterface) { mShouldShowInterface=pShouldShowInterface; }
+void UserInterface::setShouldShowInterface(const bool& pShouldShowInterface)
+{
+    mShouldShowInterface=pShouldShowInterface;
+    if (mSelectedNode!=NULL) mSelectedNode->setIsSelected(pShouldShowInterface);
+}
 
 void UserInterface::setSelectedNode(Node * const pSelectedNode)
 {
@@ -111,18 +185,6 @@ void UserInterface::setSelectedNode(Node * const pSelectedNode)
 	{
 		mSelectedNode->setIsSelected(true);
 		mSelectedTransform=mSelectedNode->getNodeTransform();
-	}
-	if (mSelectedTransform!=NULL)
-	{
-		mTranslateX=mSelectedTransform->getPosition().x;
-		mTranslateY=mSelectedTransform->getPosition().y;
-		mTranslateZ=mSelectedTransform->getPosition().z;
-		mScaleX=mSelectedTransform->getScale().x;
-		mScaleY=mSelectedTransform->getScale().y;
-		mScaleZ=mSelectedTransform->getScale().z;
-		mRotationAngle=mSelectedTransform->getRotation().second;
-		mRotationAxisX=mSelectedTransform->getRotation().first.x;
-		mRotationAxisY=mSelectedTransform->getRotation().first.y;
-		mRotationAxisZ=mSelectedTransform->getRotation().first.z;
+        updateUITransformData();
 	}
 }

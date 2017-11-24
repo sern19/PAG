@@ -39,6 +39,7 @@ private:
     Transform* mElementTransform=NULL; //Dla uproszczenia przyjmijmy, że może mieć tylko 1 gałąź dzieci, jest zawsze w parze z mCachedTransform
     Node* mParentNode=NULL;
     glm::mat4 mCachedTransform=glm::mat4(1.0f);
+    const aiMatrix4x4 mOriginalTransform;
     std::vector<Node> mChildNodes;
     std::vector<Mesh> mMeshes;
     
@@ -56,7 +57,10 @@ public:
     void drawContent(Shader *const pShader, Textures* const pTextures);
     void setIsSelected(const bool& pIsSelected);
     
-    const int& getChildrensCount();
+    void resetNodeTransform();
+    
+    const unsigned int getChildrensCount();
+    const unsigned int getNodeLevel();
     Transform* const getNodeTransform();
 	Node* const getParentNode();
     Node* const getChildren(const unsigned int& pChildNumber);

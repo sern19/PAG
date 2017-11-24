@@ -37,9 +37,11 @@ private:
     bool mShouldShowInterface=false;
 	Node* mSelectedNode=NULL;
 	Transform* mSelectedTransform=NULL;
-	unsigned int mSelectedTransformLevel=0;
+
 	//Stringi do wyświetlania
 	float mTranslateX, mTranslateY, mTranslateZ, mScaleX, mScaleY, mScaleZ, mRotationAngle, mRotationAxisX, mRotationAxisY, mRotationAxisZ;
+    
+    void updateUITransformData();
 	void updateTransform();
 public:
     UserInterface(GLFWwindow* const pWindow);

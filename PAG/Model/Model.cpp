@@ -24,6 +24,7 @@
 #include "Textures.hpp"
 #include "Texture.hpp"
 #include "Node.hpp"
+#include "Config.hpp"
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
@@ -49,9 +50,10 @@ void Model::loadModel(const std::string &pModelPath, Shader *const pShader)
     }
     
     mModelDirectory=pModelPath;
-    mModelDirectory.erase(mModelDirectory.find("source/"));
+    mModelDirectory.erase(mModelDirectory.find(MODEL_SOURCE_FOLDER));
+    mModelFilename=pModelPath.substr(pModelPath.rfind(MODEL_SOURCE_FOLDER)+std::string(MODEL_SOURCE_FOLDER).length());
     
-    mTextures=new Textures(scene, mModelDirectory.append("textures/"), pShader);
+    mTextures=new Textures(scene, mModelDirectory.append(MODEL_TEXTURE_FOLDER), pShader);
     mRootNode=new Node(scene->mRootNode, scene, mTextures);
 }
 

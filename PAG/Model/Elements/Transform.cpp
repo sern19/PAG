@@ -118,6 +118,8 @@ Transform* const Transform::getChildren(const int& pChildNumber)
     return &mChildrensTransform[pChildNumber].first;
 }
 
+Transform* const Transform::getParent() { return mParentTransform; }
+
 void Transform::setPosition(const glm::vec3& pPosition) { if (mPosition!=pPosition) { mPosition=pPosition; setNeedsUpdateCache(this); } }
 void Transform::setRotation(const glm::vec3& pRotationAxis, const float& pRotationAngle) { if (mRotationAxis!=pRotationAxis || mRotationAngle!=pRotationAngle) { mRotationAxis=pRotationAxis; mRotationAngle=pRotationAngle; setNeedsUpdateCache(this); } }
 const glm::vec3 & Transform::getScale()
@@ -157,6 +159,13 @@ void Transform::importAiTransform(aiMatrix4x4 pMatrix)
     setRotation(glm::axis(gRotation), glm::angle(gRotation));
 }
 
+void Transform::resetTransform()
+{
+    setPosition(glm::vec3(0));
+    setScale(mScale=glm::vec3(1));
+    setRotation(glm::vec3(1.0f,0,0), 0);
+}
+
 void Transform::updateCache()
 {
     int i,j, cacheIndex=0;
@@ -194,6 +203,12 @@ void Transform::updateCache()
     }
     
     mNeedsUpdateCache=false;
+}
+
+const unsigned int Transform::getTransformLevel()
+{
+    if (mParentTransform==NULL) return 0;
+    else return mParentTransform->getTransformLevel()+1;
 }
 
 const int Transform::getAllChildrensCount()

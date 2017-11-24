@@ -33,8 +33,6 @@
 
 #define BACKGROUND_COLOR 0.2f,0.3f,0.3f,1.0f
 
-#define ACTIVE_TEXTURE_FOR_PROGRAM 0
-
 #define VERTEX_SHADER_LOCATION "Shaders/basic.vert"
 #define FRAGMENT_SHADER_LOCATION "Shaders/basic.frag"
 
@@ -45,6 +43,10 @@
 #define CAMERA_MOVE_SPEED 0.006f
 
 #define MOUSE_SENSIVITY 0.05f
+
+//Model stuff
+#define MODEL_SOURCE_FOLDER "source/"
+#define MODEL_TEXTURE_FOLDER "textures/"
 
 //Material stuff
 #define DIFFUSE_NAME "diffuse"

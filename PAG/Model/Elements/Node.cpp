@@ -32,7 +32,7 @@
 
 Node::Node(const aiNode* const pNode, const aiScene* const pScene, Node* pParentNode, Textures* const pTextures): Node(pNode, pScene, pTextures) { mParentNode=pParentNode; }
 
-Node::Node(const aiNode* const pNode, const aiScene* const pScene, Textures* const pTextures)
+Node::Node(const aiNode* const pNode, const aiScene* const pScene, Textures* const pTextures): mOriginalTransform(pNode->mTransformation)
 {
     mElementTransform=new Transform();
     processNode(pNode, pScene, pTextures);
@@ -40,7 +40,7 @@ Node::Node(const aiNode* const pNode, const aiScene* const pScene, Textures* con
     updateCache();
 }
 
-Node::Node(const Node& pSourceNode): mParentNode(pSourceNode.mParentNode), mCachedTransform(pSourceNode.mCachedTransform), mChildNodes(pSourceNode.mChildNodes), mMeshes(pSourceNode.mMeshes)
+Node::Node(const Node& pSourceNode): mParentNode(pSourceNode.mParentNode), mCachedTransform(pSourceNode.mCachedTransform), mChildNodes(pSourceNode.mChildNodes), mMeshes(pSourceNode.mMeshes), mOriginalTransform(pSourceNode.mOriginalTransform)
 {
     if (pSourceNode.mElementTransform) mElementTransform=new Transform(*pSourceNode.mElementTransform);
     updateChildrenPointers(this);
@@ -53,7 +53,7 @@ void Node::processNode(const aiNode* const pNode, const aiScene* const pScene, T
     for (i=0;i<pNode->mNumMeshes;i++)
         mMeshes.push_back(processMesh(pScene->mMeshes[pNode->mMeshes[i]], pScene, pTextures));
     
-    mElementTransform->importAiTransform(pNode->mTransformation);
+    resetNodeTransform();
     
     //Przetwarzanie dzieci
     for (i=0;i<pNode->mNumChildren;i++)
@@ -138,7 +138,14 @@ void Node::setIsSelected(const bool& pIsSelected)
         mChildNodes[i].setIsSelected(pIsSelected);
 }
 
-const int& Node::getChildrensCount() { return mChildNodes.size(); }
+void Node::resetNodeTransform() { mElementTransform->importAiTransform(mOriginalTransform); }
+
+const unsigned int Node::getNodeLevel()
+{
+    if (mParentNode==NULL) return 0;
+    else return mParentNode->getNodeLevel()+1;
+}
+const unsigned int Node::getChildrensCount() { return mChildNodes.size(); }
 Transform* const Node::getNodeTransform() { return mElementTransform; }
 Node * const Node::getParentNode() { return mParentNode; }
 Node* const Node::getChildren(const unsigned int& pChildNumber)

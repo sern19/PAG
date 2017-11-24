@@ -39,7 +39,7 @@ private:
     std::vector<std::pair<Transform,bool>> mChildrensTransform; // <Transform, flaga update>
     std::vector<glm::mat4> mCachedMatrix; //Liczba dzieci na końcu drzewa
     glm::vec3 mPosition = glm::vec3(0.0f);
-    glm::vec3 mRotationAxis = glm::vec3(1.0f);
+    glm::vec3 mRotationAxis = glm::vec3(1.0f,0,0);
     glm::vec3 mScale=glm::vec3(1.0f);
     float mRotationAngle=0.0f;
 	
@@ -63,6 +63,7 @@ public:
     void popChildren();
     void removeChildren(const int& pChildNumber);
     Transform* const getChildren(const int& pChildNumber);
+    Transform* const getParent();
     
     void setPosition(const glm::vec3& pPosition);
     void setRotation(const glm::vec3& pRotationAxis, const float& pRotationAngle);
@@ -77,6 +78,9 @@ public:
     
     void updateCache();
     
+    void resetTransform();
+    
+    const unsigned int getTransformLevel();
     //W tym kontekście dzieci oznaczają koniec drzewa
     const int getAllChildrensCount();
 	const int getChildrensCount();
