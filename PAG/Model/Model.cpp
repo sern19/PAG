@@ -40,9 +40,13 @@ Model::Model(const Model& pSourceModel): mModelDirectory(pSourceModel.mModelDire
 void Model::loadModel(const std::string &pModelPath, Shader *const pShader)
 {
     Assimp::Importer importer;
-    const aiScene *scene = importer.ReadFile(pModelPath, aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs);
+    const aiScene *scene = importer.ReadFile(pModelPath, aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices);
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
-        throw std::runtime_error("(Model::loadModel): Błąd wczytywania modelu");
+    {
+        std::string outputMessage="(Model::loadModel): Błąd wczytywania modelu\n\t(ASSIMP): ";
+        outputMessage+=importer.GetErrorString();
+        throw std::runtime_error(outputMessage);
+    }
     
     mModelDirectory=pModelPath;
     mModelDirectory.erase(mModelDirectory.find("source/"));
@@ -53,7 +57,29 @@ void Model::loadModel(const std::string &pModelPath, Shader *const pShader)
 
 void Model::draw(Shader *const pShader)
 {
-    if (mRootNode) mRootNode->drawContent(pShader, mTextures);
+    int i;
+    if (mRootNode)
+    {
+        for (i=0;i<mAdditionalGLSettings.size();i++)
+            glEnable(mAdditionalGLSettings[i]);
+        mRootNode->drawContent(pShader, mTextures);
+        for (i=0;i<mAdditionalGLSettings.size();i++)
+            glDisable(mAdditionalGLSettings[i]);
+    }
+}
+
+void Model::addGLSetting(const GLenum& pSetting)
+{
+    int i;
+    for (i=0;i<mAdditionalGLSettings.size();i++)
+        if (mAdditionalGLSettings[i]==pSetting) return;
+    mAdditionalGLSettings.push_back(pSetting);
+}
+void Model::removeGLSetting(const GLenum& pSetting)
+{
+    int i;
+    for (i=0;i<mAdditionalGLSettings.size();i++)
+        if (mAdditionalGLSettings[i]==pSetting) mAdditionalGLSettings.erase(mAdditionalGLSettings.begin()+i);
 }
 
 Node* const Model::getRootNode() { return mRootNode; }

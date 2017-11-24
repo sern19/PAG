@@ -155,11 +155,8 @@ void Textures::setActiveTextures(const Material& pMaterial, Shader *const pShade
 {
     int i;
     //Sprawdzanie czy materiał używa tekstur
-    if (pMaterial.mDiffuseTextureID.size()==0)
-    {
-        pShader->setBool("shouldUseDiffuseTexture", false);
-        pShader->setVec3("diffuseColor", &pMaterial.mDiffuseColor);
-    }
+    pShader->setVec3("diffuseColor", &pMaterial.mDiffuseColor);
+    if (pMaterial.mDiffuseTextureID.size()==0) pShader->setBool("shouldUseDiffuseTexture", false);
     else pShader->setBool("shouldUseDiffuseTexture", true);
 //    if (pMaterial.mSpecularTextureID.size()==0)
 //    {

@@ -21,8 +21,33 @@
 // THE SOFTWARE.
 
 #include "UserInterface.hpp"
+#include "Node.hpp"
+#include "Transform.hpp"
 #include "imgui.h"
 #include "imgui_impl_glfw_gl3.h"
+
+#include <algorithm>
+#include <iterator>
+
+void UserInterface::updateTransform()
+{
+	glm::vec3 temporaryValues;
+	//Position
+	temporaryValues.x=mTranslateX;
+	temporaryValues.y=mTranslateY;
+	temporaryValues.z=mTranslateZ;
+	mSelectedTransform->setPosition(temporaryValues);
+	//Scale
+	temporaryValues.x=mScaleX;
+	temporaryValues.y=mScaleY;
+	temporaryValues.z=mScaleZ;
+	mSelectedTransform->setScale(temporaryValues);
+	//Rotation
+	temporaryValues.x=mRotationAxisX;
+	temporaryValues.y=mRotationAxisY;
+	temporaryValues.z=mRotationAxisZ;
+	mSelectedTransform->setRotation(temporaryValues, mRotationAngle);
+}
 
 UserInterface::UserInterface(GLFWwindow* const pWindow)
 {
@@ -35,9 +60,39 @@ void UserInterface::draw()
     
     if (mShouldShowInterface)
     {
-        ImGui::Begin("Window Title Here");
-        ImGui::Text("Hello, world!");
-        ImGui::End();
+		if (mSelectedNode != NULL)
+		{
+			ImGui::Begin("Selected transform");
+			ImGui::Text("Transform level %i", mSelectedTransformLevel);
+			if (ImGui::Button("Select parent node")) if (mSelectedNode->getParentNode()!=NULL) setSelectedNode(mSelectedNode->getParentNode());
+			if (mSelectedTransform != NULL)
+			{
+				if (mSelectedTransform->getChildrensCount() == 0)
+				{
+					if (ImGui::Button("Add transform child")) mSelectedTransform->pushChildren();
+				}
+				else
+				{
+					//if (ImGui::Button("Select"))
+				}
+			}
+
+			ImGui::Text("Position");
+			ImGui::InputFloat(":x", &mTranslateX, 0.01f, 1.0f);
+			ImGui::InputFloat(":y", &mTranslateY, 0.01f, 1.0f);
+			ImGui::InputFloat(":z", &mTranslateZ, 0.01f, 1.0f);
+			ImGui::Text("Scale");
+			ImGui::InputFloat(":x", &mScaleX, 0.01f, 1.0f);
+			ImGui::InputFloat(":y", &mScaleY, 0.01f, 1.0f);
+			ImGui::InputFloat(":z", &mScaleZ, 0.01f, 1.0f);
+			ImGui::Text("Rotate");
+			ImGui::InputFloat(":angle", &mRotationAngle, 0.01f, 1.0f);
+			ImGui::InputFloat(":x", &mRotationAxisX, 0.01f, 1.0f);
+			ImGui::InputFloat(":y", &mRotationAxisY, 0.01f, 1.0f);
+			ImGui::InputFloat(":z", &mRotationAxisZ, 0.01f, 1.0f);
+			if (ImGui::Button("Update transform")) if (mSelectedTransform != NULL) updateTransform();
+			ImGui::End();
+		}
     }
     
     // ImGui functions end here
@@ -46,3 +101,28 @@ void UserInterface::draw()
 }
 
 void UserInterface::setShouldShowInterface(const bool& pShouldShowInterface) { mShouldShowInterface=pShouldShowInterface; }
+
+void UserInterface::setSelectedNode(Node * const pSelectedNode)
+{
+	if (mSelectedNode!=NULL) mSelectedNode->setIsSelected(false);
+	mSelectedNode = pSelectedNode;
+	mSelectedTransform=NULL;
+	if (mSelectedNode!=NULL)
+	{
+		mSelectedNode->setIsSelected(true);
+		mSelectedTransform=mSelectedNode->getNodeTransform();
+	}
+	if (mSelectedTransform!=NULL)
+	{
+		mTranslateX=mSelectedTransform->getPosition().x;
+		mTranslateY=mSelectedTransform->getPosition().y;
+		mTranslateZ=mSelectedTransform->getPosition().z;
+		mScaleX=mSelectedTransform->getScale().x;
+		mScaleY=mSelectedTransform->getScale().y;
+		mScaleZ=mSelectedTransform->getScale().z;
+		mRotationAngle=mSelectedTransform->getRotation().second;
+		mRotationAxisX=mSelectedTransform->getRotation().first.x;
+		mRotationAxisY=mSelectedTransform->getRotation().first.y;
+		mRotationAxisZ=mSelectedTransform->getRotation().first.z;
+	}
+}

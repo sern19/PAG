@@ -73,7 +73,7 @@ void Mesh::drawContent(Shader* const pShader, Textures* const pTextures)
     pTextures->setActiveTextures(temporaryMaterial, pShader);
     //Bindowanie tablicy obiektów
     glBindVertexArray(mVertexArrayObject);
-    glDrawArrays(GL_TRIANGLES, 0, mIndices.size());
+    glDrawElements(GL_TRIANGLES, mIndices.size(), GL_UNSIGNED_INT, 0);
     glBindVertexArray(NULL);
 }
 

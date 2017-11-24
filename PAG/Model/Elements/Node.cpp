@@ -34,8 +34,8 @@ Node::Node(const aiNode* const pNode, const aiScene* const pScene, Node* pParent
 
 Node::Node(const aiNode* const pNode, const aiScene* const pScene, Textures* const pTextures)
 {
-    processNode(pNode, pScene, pTextures);
     mElementTransform=new Transform();
+    processNode(pNode, pScene, pTextures);
     updateChildrenPointers(this); //Może nie będzie potrzebne, ale przy vectorach lepiej dać
     updateCache();
 }
@@ -52,6 +52,8 @@ void Node::processNode(const aiNode* const pNode, const aiScene* const pScene, T
     //Przetwarzanie własnych meshy
     for (i=0;i<pNode->mNumMeshes;i++)
         mMeshes.push_back(processMesh(pScene->mMeshes[pNode->mMeshes[i]], pScene, pTextures));
+    
+    mElementTransform->importAiTransform(pNode->mTransformation);
     
     //Przetwarzanie dzieci
     for (i=0;i<pNode->mNumChildren;i++)
@@ -138,6 +140,7 @@ void Node::setIsSelected(const bool& pIsSelected)
 
 const int& Node::getChildrensCount() { return mChildNodes.size(); }
 Transform* const Node::getNodeTransform() { return mElementTransform; }
+Node * const Node::getParentNode() { return mParentNode; }
 Node* const Node::getChildren(const unsigned int& pChildNumber)
 {
     if (pChildNumber>mChildNodes.size()) throw std::runtime_error("(Node::getChildNode): Żądany numer dziecka jest większy od ilości dzieci");

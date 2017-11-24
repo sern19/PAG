@@ -24,6 +24,7 @@
 #define Model_hpp
 
 #include <stdio.h>
+#include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <vector>
 #include <string>
@@ -37,6 +38,7 @@ class Model
 private:
     Node* mRootNode=NULL;
     Textures* mTextures=NULL;
+    std::vector<GLenum> mAdditionalGLSettings;
     std::string mModelDirectory;
     
     void loadModel(const std::string& pModelPath, Shader *const pShader);
@@ -45,8 +47,10 @@ public:
     Model(const Model& pSourceModel);
     ~Model();
     void draw(Shader *const pShader);
+    void addGLSetting(const GLenum& pSetting);
+    void removeGLSetting(const GLenum& pSetting);
     Node* const getRootNode();
-   const std::pair<Node*,float> testRayOBBIntersection(const glm::vec3& pRaySource, const glm::vec3& pRayDirection); //To samo co w Node, OBB dla optymalizacji
+    const std::pair<Node*,float> testRayOBBIntersection(const glm::vec3& pRaySource, const glm::vec3& pRayDirection); //To samo co w Node, OBB dla optymalizacji
 };
 
 #endif /* Model_hpp */

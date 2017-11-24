@@ -48,58 +48,56 @@ void Input::processKeyboard(GLFWwindow* const pWindow, UserInterface* const pUI,
 {
     glm::vec3 cameraMoveVector(0.0f);
     
-    if (glfwGetKey(pWindow, GLFW_KEY_W) == GLFW_PRESS)
+    if (glfwGetKey(pWindow, GLFW_KEY_W)==GLFW_PRESS)
         cameraMoveVector[0]=1;
-    else if (glfwGetKey(pWindow, GLFW_KEY_S) == GLFW_PRESS)
+    else if (glfwGetKey(pWindow, GLFW_KEY_S)==GLFW_PRESS)
         cameraMoveVector[0]=-1;
-    if (glfwGetKey(pWindow, GLFW_KEY_R) == GLFW_PRESS)
+    if (glfwGetKey(pWindow, GLFW_KEY_R)==GLFW_PRESS)
         cameraMoveVector[1]=-1;
-    else if (glfwGetKey(pWindow, GLFW_KEY_F) == GLFW_PRESS)
+    else if (glfwGetKey(pWindow, GLFW_KEY_F)==GLFW_PRESS)
         cameraMoveVector[1]=1;
-    if (glfwGetKey(pWindow, GLFW_KEY_A) == GLFW_PRESS)
+    if (glfwGetKey(pWindow, GLFW_KEY_A)==GLFW_PRESS)
         cameraMoveVector[2]=-1;
-    else if (glfwGetKey(pWindow, GLFW_KEY_D) == GLFW_PRESS)
+    else if (glfwGetKey(pWindow, GLFW_KEY_D)==GLFW_PRESS)
         cameraMoveVector[2]=1;
     
     if (glfwGetKey(pWindow, GLFW_KEY_ESCAPE)) glfwSetWindowShouldClose(pWindow, GLFW_TRUE);
     
     //Uruchomienie trybu edycji
     if (glfwGetKey(pWindow, GLFW_KEY_T)==GLFW_PRESS) mIsKeyTPressed=1;
-    if (glfwGetKey(pWindow, GLFW_KEY_T)==GLFW_RELEASE&&mIsKeyTPressed) toggleEditMode(pWindow, pUI);
+    if (glfwGetKey(pWindow, GLFW_KEY_T)==GLFW_RELEASE && mIsKeyTPressed) toggleEditMode(pWindow, pUI);
     
     pCamera->moveInDirection(cameraMoveVector);
 }
 
-void Input::processMouse(GLFWwindow* const pWindow, Scene* const pScene, std::vector<Model>* const pModels, Camera* const pCamera)
+void Input::processMouse(GLFWwindow* const pWindow, UserInterface* const pUI, Scene* const pScene, std::vector<Model>* const pModels, Camera* const pCamera)
 {
     double mousePosX, mousePosY;
     
     glfwGetCursorPos(pWindow, &mousePosX, &mousePosY);
 
-    float offsetX = (mousePosX - mLastMousePosX)*mMouseSensivity;
-    float offsetY = (mLastMousePosY - mousePosY)*mMouseSensivity; // Odwrócone, ponieważ współrzędne y zmieniają się od dołu do góry
+    float offsetX=(mousePosX-mLastMousePosX)*mMouseSensivity;
+    float offsetY=(mLastMousePosY-mousePosY)*mMouseSensivity; // Odwrócone, ponieważ współrzędne y zmieniają się od dołu do góry
 
-    mLastMousePosX = mousePosX;
-    mLastMousePosY = mousePosY;
+    mLastMousePosX=mousePosX;
+    mLastMousePosY=mousePosY;
 
     //W trybie edycji środkowy przycisk myszy pozwala poruszać kamerą
-    if (glfwGetMouseButton(pWindow, GLFW_MOUSE_BUTTON_MIDDLE)==GLFW_RELEASE&&mIsMouseMiddlePressed) mIsMouseMiddlePressed=0;
+    if (glfwGetMouseButton(pWindow, GLFW_MOUSE_BUTTON_MIDDLE)==GLFW_RELEASE && mIsMouseMiddlePressed) mIsMouseMiddlePressed=0;
     if (glfwGetMouseButton(pWindow, GLFW_MOUSE_BUTTON_MIDDLE)==GLFW_PRESS) mIsMouseMiddlePressed=1;
     
-    if (glfwGetMouseButton(pWindow, GLFW_MOUSE_BUTTON_LEFT)==GLFW_RELEASE&&mIsMouseLeftPressed)
+    if (glfwGetMouseButton(pWindow, GLFW_MOUSE_BUTTON_RIGHT)==GLFW_RELEASE&&mIsMouseRightPressed)
     {
         std::pair<int, int> screenSize;
         std::pair<double, double> mousePos;
         glfwGetWindowSize(pWindow, &screenSize.first, &screenSize.second);
         glfwGetCursorPos(pWindow, &mousePos.first, &mousePos.second);
-        Node* lil=ModelNodePicker::pickNode(pScene, pModels, screenSize, mousePos);
-        //prev=lil;
-        //if (lil!=NULL) lil->setIsSelected(true);
-        mIsMouseLeftPressed=0;
+        pUI->setSelectedNode(ModelNodePicker::pickNode(pScene, pModels, screenSize, mousePos));
+        mIsMouseRightPressed=0;
     }
-    if (glfwGetMouseButton(pWindow, GLFW_MOUSE_BUTTON_LEFT)==GLFW_PRESS) mIsMouseLeftPressed=1;
+    if (glfwGetMouseButton(pWindow, GLFW_MOUSE_BUTTON_RIGHT)==GLFW_PRESS) mIsMouseRightPressed=1;
     
-    if (!mIsEditMode||mIsMouseMiddlePressed) pCamera->rotateByOffset(offsetX, offsetY);
+    if (!mIsEditMode || mIsMouseMiddlePressed) pCamera->rotateByOffset(offsetX, offsetY);
 }
 
 Input::~Input() {}

@@ -33,7 +33,10 @@
 #include "Node.hpp"
 #include "UserInterface.hpp"
 
+#define _USE_MATH_DEFINES
+
 #include <iostream>
+#include <math.h>
 
 Core::Core()
 {
@@ -66,10 +69,8 @@ Core::Core()
         throw err;
     }
     //Inicjalizacja
-    glEnable(GL_BLEND);
     glBlendFunc (GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_DEPTH_TEST);
-    glEnable(GL_SAMPLE_ALPHA_TO_COVERAGE);
     //glEnable(GL_CULL_FACE); //Psuje piórka
     glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     mShader->useProgram();
@@ -106,11 +107,20 @@ void Core::loadModels()
 {
     mModels.push_back(Model("Models/2B/source/2B.fbx", mShader));
     mModels.push_back(Model("Models/Chopper/source/chopper.obj", mShader));
+    mModels.push_back(Model("Models/Nanosuit/source/nanosuit.obj", mShader));
+    mModels.push_back(Model("Models/Cubes/source/Cubes.fbx", mShader));
+
+    mModels[0].addGLSetting(GL_BLEND);
+    mModels[0].addGLSetting(GL_SAMPLE_ALPHA_TO_COVERAGE);
+
     mModels[0].getRootNode()->getNodeTransform()->setScale(glm::vec3(0.01,0.01,0.01));
     mModels[1].getRootNode()->getNodeTransform()->setScale(glm::vec3(0.006,0.006,0.006));
-    mModels[0].getRootNode()->getNodeTransform()->setRotation(glm::vec3(1,0,0), -0.5f*M_PI);
+    mModels[2].getRootNode()->getNodeTransform()->setScale(glm::vec3(0.059,0.059,0.059));
+    mModels[3].getRootNode()->getNodeTransform()->setScale(glm::vec3(0.005,0.005,0.005));
+
     mModels[0].getRootNode()->getNodeTransform()->setPosition(glm::vec3(-0.5,0,0));
     mModels[1].getRootNode()->getNodeTransform()->setPosition(glm::vec3(0.5,0,0));
+    mModels[3].getRootNode()->getNodeTransform()->setPosition(glm::vec3(0,0,-1));
 }
 
 void Core::mainLoop()
@@ -126,7 +136,7 @@ void Core::mainLoop()
         while ((glfwGetTime()>nextGameTick) && (loops<MAX_FRAMESKIP))
         {
             mInput->processKeyboard(mWindow->getWindow(), mUI, mCamera);
-            mInput->processMouse(mWindow->getWindow(), mScene, &mModels, mCamera);
+            mInput->processMouse(mWindow->getWindow(), mUI, mScene, &mModels, mCamera);
             updateObjectsPositions();
             nextGameTick+=SKIP_TICKS;
             loops++;

@@ -24,6 +24,7 @@
 #include "Shader.hpp"
 
 #include <glm/gtx/matrix_decompose.hpp>
+#include <assimp/scene.h>
 
 Transform::Transform() { recalculateCacheVectors(); }
 Transform::Transform(Transform* const pParent): Transform() { mParentTransform=pParent; }
@@ -119,9 +120,42 @@ Transform* const Transform::getChildren(const int& pChildNumber)
 
 void Transform::setPosition(const glm::vec3& pPosition) { if (mPosition!=pPosition) { mPosition=pPosition; setNeedsUpdateCache(this); } }
 void Transform::setRotation(const glm::vec3& pRotationAxis, const float& pRotationAngle) { if (mRotationAxis!=pRotationAxis || mRotationAngle!=pRotationAngle) { mRotationAxis=pRotationAxis; mRotationAngle=pRotationAngle; setNeedsUpdateCache(this); } }
+const glm::vec3 & Transform::getScale()
+{
+	return mScale;
+}
 void Transform::setScale(const glm::vec3& pScale) { if (mScale!=pScale) { mScale=pScale; setNeedsUpdateCache(this); } }
 
+const glm::vec3 & Transform::getPosition()
+{
+	return mPosition;
+}
+
+const std::pair<glm::vec3, float> Transform::getRotation()
+{
+	return std::pair<glm::vec3, float>(mRotationAxis, mRotationAngle);
+}
+
 const bool& Transform::getNeedsUpdateCache() { return mNeedsUpdateCache; }
+
+void Transform::importAiTransform(aiMatrix4x4 pMatrix)
+{
+    aiVector3t<float> scale, position;
+    aiQuaterniont<float> rotation;
+    
+    glm::quat gRotation;
+    
+    pMatrix.Decompose(scale, rotation, position);
+    
+    gRotation.w=rotation.w;
+    gRotation.x=rotation.x;
+    gRotation.y=rotation.y;
+    gRotation.z=rotation.z;
+    
+    setPosition(glm::vec3(position.x, position.y, position.z));
+    setScale(glm::vec3(scale.x, scale.y, scale.z));
+    setRotation(glm::axis(gRotation), glm::angle(gRotation));
+}
 
 void Transform::updateCache()
 {
@@ -172,6 +206,11 @@ const int Transform::getAllChildrensCount()
             sum+=mChildrensTransform[i].first.getAllChildrensCount();
             return sum;
     }
+}
+
+const int Transform::getChildrensCount()
+{
+	return (int)mChildrensTransform.size();
 }
 
 const glm::mat4 Transform::getChildCombinedTransformRotatedTowardsCamera(const glm::vec3& pCameraPosition, const int& pChildNumber)

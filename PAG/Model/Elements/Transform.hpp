@@ -28,6 +28,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <assimp/matrix4x4.h>
 
 class Shader;
 
@@ -65,14 +66,20 @@ public:
     
     void setPosition(const glm::vec3& pPosition);
     void setRotation(const glm::vec3& pRotationAxis, const float& pRotationAngle);
-    void setScale(const glm::vec3& pScale);
+	void setScale(const glm::vec3& pScale);
+	const glm::vec3&  getPosition();
+	const std::pair<glm::vec3,float> getRotation();
+	const glm::vec3& getScale();
     
     const bool& getNeedsUpdateCache();
+    
+    void importAiTransform(aiMatrix4x4 pMatrix);
     
     void updateCache();
     
     //W tym kontekście dzieci oznaczają koniec drzewa
     const int getAllChildrensCount();
+	const int getChildrensCount();
     const glm::mat4 getChildCombinedTransformRotatedTowardsCamera(const glm::vec3& pCameraPosition, const int& pChildNumber);
     const glm::mat4& getChildCombinedTransform(const int& pChildNumber);
 };

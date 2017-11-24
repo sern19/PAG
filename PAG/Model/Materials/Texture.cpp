@@ -54,16 +54,16 @@ void Texture::loadTexture(const std::string& pTexturePath)
     unsigned char* textureData=stbi_load(pTexturePath.c_str(), &width, &height, &numberOfChannels, 0);
     if (textureData)
     {
+        if (numberOfChannels==4) imageDepth=GL_RGBA; //W przypadku gdy obrazek jest 4 kanałowy, tekstura będzie RGBA
+        else if (numberOfChannels==3) imageDepth=GL_RGB;
+        else imageDepth=GL_RED;
+        glBindTexture(GL_TEXTURE_2D, mTexture);
         //Parametry dla wczytanej tekstury
         glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_NEAREST ); //Pomniejszenie tekstury, bierze najbliższą mipmapę i interpoluje liniowo
         glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,GL_LINEAR ); //Powiększenie tekstury, interpoluje liniowo
         
         glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_REPEAT ); //Tekstura S - zawija
         glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_REPEAT ); //Tekstura T - zawija
-        
-        if (numberOfChannels==4) imageDepth=GL_RGBA; //W przypadku gdy obrazek jest 4 kanałowy, tekstura będzie RGBA
-        else imageDepth=GL_RGB;
-        glBindTexture(GL_TEXTURE_2D, mTexture);
         glTexImage2D(GL_TEXTURE_2D,
                      0, //Stopnie mipmappingu
                      imageDepth, //Wewnętrzny format teksela

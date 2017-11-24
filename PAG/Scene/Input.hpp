@@ -44,14 +44,14 @@ private:
     bool mIsEditMode=false;
     bool mIsKeyTPressed=0;
     bool mIsMouseMiddlePressed=0;
-    bool mIsMouseLeftPressed=0;
-    
+    bool mIsMouseRightPressed=0;
+
     void toggleEditMode(GLFWwindow* const pWindow, UserInterface* const pUI);
 public:
     Input(GLFWwindow* const pWindow);
     ~Input();
     void processKeyboard(GLFWwindow* const pWindow, UserInterface* const pUI, Camera* const pCamera);
-    void processMouse(GLFWwindow* const pWindow, Scene* const pScene, std::vector<Model>* const pModels, Camera* const pCamera);
+    void processMouse(GLFWwindow* const pWindow, UserInterface* const pUI, Scene* const pScene, std::vector<Model>* const pModels, Camera* const pCamera);
 };
 
 #endif /* Input_hpp */
