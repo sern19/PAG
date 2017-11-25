@@ -43,6 +43,7 @@ private:
     std::string mModelFilename;
     
     void loadModel(const std::string& pModelPath, Shader *const pShader);
+    const std::pair<glm::vec4, glm::vec4> calculateModelOBB();
 public:
     Model(const std::string& pModelPath, Shader *const pShader);
     Model(const Model& pSourceModel);

@@ -42,10 +42,12 @@ private:
     const aiMatrix4x4 mOriginalTransform;
     std::vector<Node> mChildNodes;
     std::vector<Mesh> mMeshes;
+    std::pair<glm::vec4, glm::vec4> mOBB=std::pair<glm::vec4, glm::vec4>(0, 0);
     
     Node(const aiNode* const pNode, const aiScene* const pScene, Node* const pParentNode, Textures* const pTextures);
     void processNode(const aiNode* const pNode, const aiScene* const pScene, Textures* const pTextures);
     Mesh processMesh(const aiMesh* const pMesh, const aiScene* const pScene, Textures* const pTextures);
+    void generateOBB();
     void updateCache(); //Uaktualnia jedynie gdy istnieje cache
     void updateChildrenPointers(Node* const pParent);
     const glm::mat4& getTransform(); //Zwraca cache bądź niezmodyfikowane cache rodzica
@@ -59,6 +61,7 @@ public:
     
     void resetNodeTransform();
     
+    const std::vector<std::pair<glm::vec4, glm::vec4>> getOBBs();
     const unsigned int getChildrensCount();
     const unsigned int getNodeLevel();
     Transform* const getNodeTransform();

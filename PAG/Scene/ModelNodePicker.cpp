@@ -25,6 +25,149 @@
 #include "Scene.hpp"
 #include "Model.hpp"
 
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/matrix_decompose.hpp>
+
+const bool ModelNodePicker::checkRayIntersectionTriangle(const glm::vec3& pRaySource, const glm::vec3& pRayDirection, const glm::vec3 triangle[3], float& pDistanceOutput)
+{
+    const float epsilon = 0.00000001;
+    glm::vec3 edge1, edge2, h, s, q;
+    float a,f,u,v,t;
+    
+    //Obliczanie krawędzi
+    edge1=triangle[1]-triangle[0];
+    edge2=triangle[2]-triangle[0];
+    h=glm::cross(pRayDirection, edge2);
+    a=glm::dot(edge1, h);
+    if (fabs(a)< epsilon)
+        return false;
+    f=1/a;
+    s=pRaySource-triangle[0];
+    u=f*glm::dot(s,h);
+    if (u<0.0||u>1.0)
+        return false;
+    q=glm::cross(s, edge1);
+    v=f*glm::dot(pRayDirection, q);
+    if (v<0.0||(u+v)>1.0)
+        return false;
+    t=f*glm::dot(edge2,q);
+    if (t>epsilon)
+    {
+        pDistanceOutput=glm::distance(pRaySource, pRaySource+(pRayDirection*t));
+        return true;
+    }
+    else
+        return false;
+}
+
+const bool ModelNodePicker::checkRayIntersectionOBB(const glm::vec3& pRaySource, const glm::vec3& pRayDirection, const std::pair<glm::vec4,glm::vec4>& pOBB, const glm::mat4& pTransform, float& pDistanceOutput)
+{
+    //Brudny fix dla braku wsparcia dla skalowania w algorytmie
+    glm::vec3 scale;
+    glm::quat rotation;
+    glm::vec3 translation;
+    glm::vec3 skew;
+    glm::vec4 perspective;
+    
+    glm::decompose(pTransform, scale, rotation, translation, skew, perspective);
+    
+    glm::mat4 correctedTransform;
+    correctedTransform=glm::translate(correctedTransform, translation);
+    correctedTransform=glm::rotate(correctedTransform, glm::angle(rotation), glm::axis(rotation));
+    
+    std::pair<glm::vec4, glm::vec4> transformedOBB=pOBB;
+    transformedOBB.first.x*=scale.x;
+    transformedOBB.first.y*=scale.y;
+    transformedOBB.first.z*=scale.z;
+    transformedOBB.second.x*=scale.x;
+    transformedOBB.second.y*=scale.y;
+    transformedOBB.second.z*=scale.z;
+    
+    
+    //Inicjalizacja zmiennych
+    float f,e,t1,t2;
+    float tMin=0.0f;
+    float tMax=FLT_MAX;
+    
+    //Używana do przeliczania przecięć z płaszczyznami
+    glm::vec3 delta=glm::vec3(correctedTransform[3].x, correctedTransform[3].y, correctedTransform[3].z)-pRaySource;
+    
+    //Sprawdzanie z dwiema płaszczyznami równoległymi do osi x
+    glm::vec3 axisX(correctedTransform[0].x, correctedTransform[0].y, correctedTransform[0].z);
+    f=glm::dot(pRayDirection, axisX);
+    e=glm::dot(axisX, delta);
+    
+    if (fabs(f) > 0.001f)
+    {
+        //Odległości między źródłem, a przecięciami płaszczyzn
+        t1=(e+transformedOBB.first.x)/f; //Przecięcie z lewą płaszczyzną
+        t2=(e+transformedOBB.second.x)/f; //Przecięcie z prawą płaszczyzną
+        
+        if (t1>t2)
+            std::swap(t1,t2);
+        
+        if (t2<tMax) tMax=t2; //Najbliższe(bliższa płaszczyzna) dalekie przecięcie
+        if (t1>tMin) tMin=t1; //Najdalsze(dalsza płaszczyzna) bliskie przecięcie
+        
+        //Z rysunku - jeżeli dalekie przecięcie jest bliżej niż bliskie, to nie ma przecięcia
+        if (tMin>tMax)
+            return false;
+    } else //Gdy promień jest prawie równoległy do płaszczyzny
+        if (-e+transformedOBB.first.x>0.0f || -e+transformedOBB.second.x<0.0f)
+            return false;
+    
+    //Sprawdzanie z dwiema płaszczyznami równoległymi do osi y
+    glm::vec3 axisY(correctedTransform[0][1], correctedTransform[1][1], correctedTransform[2][1]);
+    f=glm::dot(pRayDirection, axisY);
+    e=glm::dot(axisY, delta);
+    
+    if (fabs(f) > 0.001f)
+    {
+        //Odległości między źródłem, a przecięciami płaszczyzn
+        t1=(e+transformedOBB.first.y)/f; //Przecięcie z lewą płaszczyzną
+        t2=(e+transformedOBB.second.y)/f; //Przecięcie z prawą płaszczyzną
+        
+        if (t1>t2)
+            std::swap(t1,t2);
+        
+        if (t2<tMax) tMax=t2; //Najbliższe(bliższa płaszczyzna) dalekie przecięcie
+        if (t1>tMin) tMin=t1; //Najdalsze(dalsza płaszczyzna) bliskie przecięcie
+        
+        //Z rysunku - jeżeli dalekie przecięcie jest bliżej niż bliskie, to nie ma przecięcia
+        if (tMin>tMax)
+            return false;
+    } else //Gdy promień jest prawie równoległy do płaszczyzny
+        if (-e+transformedOBB.first.y>0.0f || -e+transformedOBB.second.y<0.0f)
+            return false;
+    
+    //Sprawdzanie z dwiema płaszczyznami równoległymi do osi z
+    glm::vec3 axisZ(correctedTransform[0][2], correctedTransform[1][2], correctedTransform[2][2]);
+    f=glm::dot(pRayDirection, axisZ);
+    e=glm::dot(axisZ, delta);
+    
+    if (fabs(f) > 0.001f)
+    {
+        //Odległości między źródłem, a przecięciami płaszczyzn
+        t1=(e+transformedOBB.first.z)/f; //Przecięcie z lewą płaszczyzną
+        t2=(e+transformedOBB.second.z)/f; //Przecięcie z prawą płaszczyzną
+        
+        if (t1>t2)
+            std::swap(t1,t2);
+        
+        if (t2<tMax) tMax=t2; //Najbliższe(bliższa płaszczyzna) dalekie przecięcie
+        if (t1>tMin) tMin=t1; //Najdalsze(dalsza płaszczyzna) bliskie przecięcie
+        
+        //Z rysunku - jeżeli dalekie przecięcie jest bliżej niż bliskie, to nie ma przecięcia
+        if (tMin>tMax)
+            return false;
+    } else //Gdy promień jest prawie równoległy do płaszczyzny
+        if (-e+transformedOBB.first.z>0.0f || -e+transformedOBB.second.z<0.0f)
+            return false;
+    
+    pDistanceOutput=tMin;
+    return true;
+}
+
 Node* const ModelNodePicker::pickNode(Scene *const pScene, std::vector<Model>* pModels, const std::pair<int, int>& pScreenSize, const std::pair<double, double>& pMousePos)
 {
     int i;

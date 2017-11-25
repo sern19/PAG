@@ -59,12 +59,12 @@ private:
     
     void clearData();
     void loadContent();
-    const bool checkRayIntersection(const glm::vec3& pRaySource, const glm::vec3& pRayDirection, const glm::vec3 triangle[3], const glm::mat4& pTransform, float& pDistanceOutput);
 public:
     Mesh(const std::vector<Vertex>& pVerticles, const std::vector<unsigned int>& pIndices);
     void setMaterial(const Material& pMaterial);
     void setIsSelected(const bool& pIsSelected);
     void drawContent(Shader* const pShader, Textures* const pTextures);
+    const std::pair<glm::vec4, glm::vec4> getMinMaxVerticles();
     const bool checkRayIntersections(const glm::vec3& pRaySource, const glm::vec3& pRayDirection, const glm::mat4& pTransform, float& pDistanceOutput);
 };
 

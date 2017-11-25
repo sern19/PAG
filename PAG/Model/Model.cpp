@@ -21,6 +21,7 @@
 // THE SOFTWARE.
 
 #include "Model.hpp"
+#include "ModelNodePicker.hpp"
 #include "Textures.hpp"
 #include "Texture.hpp"
 #include "Node.hpp"
@@ -30,12 +31,43 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
-Model::Model(const std::string& pModelPath, Shader *const pShader) { loadModel(pModelPath, pShader); }
+Model::Model(const std::string& pModelPath, Shader *const pShader)
+{
+    loadModel(pModelPath, pShader);
+}
 
 Model::Model(const Model& pSourceModel): mModelDirectory(pSourceModel.mModelDirectory)
 {
     mRootNode=new Node(*pSourceModel.mRootNode);
     mTextures=new Textures(*pSourceModel.mTextures);
+}
+
+const std::pair<glm::vec4, glm::vec4>  Model::calculateModelOBB()
+{
+    int i;
+    std::pair<glm::vec4, glm::vec4> output=std::pair<glm::vec4, glm::vec4>(0, 0);
+    
+    if (mRootNode==NULL) return output;
+    
+    std::vector<std::pair<glm::vec4,glm::vec4>> obbs=mRootNode->getOBBs();
+    
+    output=obbs[0];
+    
+    //Minimum
+    for (i=1;i<obbs.size();i++)
+    {
+        if (obbs[i].first.x<output.first.x) output.first.x=obbs[i].first.x;
+        if (obbs[i].first.y<output.first.y) output.first.y=obbs[i].first.y;
+        if (obbs[i].first.z<output.first.z) output.first.z=obbs[i].first.z;
+    }
+    //Maximum
+    for (i=1;i<obbs.size();i++)
+    {
+        if (obbs[i].second.x>output.second.x) output.second.x=obbs[i].second.x;
+        if (obbs[i].second.y>output.second.y) output.second.y=obbs[i].second.y;
+        if (obbs[i].second.z>output.second.z) output.second.z=obbs[i].second.z;
+    }
+    return output;
 }
 
 void Model::loadModel(const std::string &pModelPath, Shader *const pShader)
@@ -94,14 +126,18 @@ Model::~Model()
 
 const std::pair<Node*,float> Model::testRayOBBIntersection(const glm::vec3& pRaySource, const glm::vec3& pRayDirection)
 {
-    std::vector<std::pair<Node*,float>> intersectedNodes=mRootNode->testRayOBBIntersection(pRaySource, pRayDirection);
     int i;
-    
-    if (intersectedNodes.size()==0) return std::pair<Node*,float>(NULL,FLT_MAX);
-    
-    std::pair<Node*,float> closestNode=intersectedNodes[0];
-    for (i=1;i<intersectedNodes.size();i++)
-        if (intersectedNodes[i].second<closestNode.second) closestNode=intersectedNodes[i];
-    
-    return closestNode;
+    float distance;
+    if (mRootNode!=NULL && ModelNodePicker::checkRayIntersectionOBB(pRaySource, pRayDirection, calculateModelOBB(), glm::mat4(1.0f), distance))
+    {
+        std::vector<std::pair<Node*,float>> intersectedNodes=mRootNode->testRayOBBIntersection(pRaySource, pRayDirection);
+        
+        if (intersectedNodes.size()==0) return std::pair<Node*,float>(NULL,FLT_MAX);
+        
+        std::pair<Node*,float> closestNode=intersectedNodes[0];
+        for (i=1;i<intersectedNodes.size();i++)
+            if (intersectedNodes[i].second<closestNode.second) closestNode=intersectedNodes[i];
+        return closestNode;
+    }
+    return std::pair<Node*,float>(NULL,FLT_MAX);
 }

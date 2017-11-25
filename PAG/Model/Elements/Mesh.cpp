@@ -24,6 +24,7 @@
 
 #include "Shader.hpp"
 #include "Textures.hpp"
+#include "ModelNodePicker.hpp"
 #include <glad/glad.h>
 
 
@@ -77,36 +78,30 @@ void Mesh::drawContent(Shader* const pShader, Textures* const pTextures)
     glBindVertexArray(NULL);
 }
 
-const bool Mesh::checkRayIntersection(const glm::vec3& pRaySource, const glm::vec3& pRayDirection, const glm::vec3 triangle[3], const glm::mat4& pTransform, float& pDistanceOutput)
+const std::pair<glm::vec4, glm::vec4> Mesh::getMinMaxVerticles()
 {
-    const float epsilon = 0.00000001;
-    glm::vec3 edge1, edge2, h, s, q;
-    float a,f,u,v,t;
+    int i;
+    std::pair<glm::vec4, glm::vec4> output(FLT_MAX, FLT_MIN);
     
-    //Obliczanie krawędzi
-    edge1=triangle[1]-triangle[0];
-    edge2=triangle[2]-triangle[0];
-    h=glm::cross(pRayDirection, edge2);
-    a=glm::dot(edge1, h);
-    if (fabs(a)< epsilon)
-        return false;
-    f=1/a;
-    s=pRaySource-triangle[0];
-    u=f*glm::dot(s,h);
-    if (u<0.0||u>1.0)
-        return false;
-    q=glm::cross(s, edge1);
-    v=f*glm::dot(pRayDirection, q);
-    if (v<0.0||(u+v)>1.0)
-        return false;
-    t=f*glm::dot(edge2,q);
-    if (t>epsilon)
+    if (mVerticles.size()==0) return output;
+    
+    output.first=glm::vec4(mVerticles[0].mPosition, 1);
+    output.second=glm::vec4(mVerticles[0].mPosition, 1);
+    //Minimum
+    for (i=1;i<mVerticles.size();i++)
     {
-        pDistanceOutput=glm::distance(pRaySource, pRaySource+(pRayDirection*t));
-        return true;
+        if (mVerticles[i].mPosition.x<output.first.x) output.first.x=mVerticles[i].mPosition.x;
+        if (mVerticles[i].mPosition.y<output.first.y) output.first.y=mVerticles[i].mPosition.y;
+        if (mVerticles[i].mPosition.z<output.first.z) output.first.z=mVerticles[i].mPosition.z;
     }
-    else
-        return false;
+    //Maximum
+    for (i=1;i<mVerticles.size();i++)
+    {
+        if (mVerticles[i].mPosition.x>output.second.x) output.second.x=mVerticles[i].mPosition.x;
+        if (mVerticles[i].mPosition.y>output.second.y) output.second.y=mVerticles[i].mPosition.y;
+        if (mVerticles[i].mPosition.z>output.second.z) output.second.z=mVerticles[i].mPosition.z;
+    }
+    return output;
 }
 
 const bool Mesh::checkRayIntersections(const glm::vec3& pRaySource, const glm::vec3& pRayDirection, const glm::mat4& pTransform, float& pDistanceOutput)
@@ -122,7 +117,7 @@ const bool Mesh::checkRayIntersections(const glm::vec3& pRaySource, const glm::v
         triangle[0]=glm::vec3(pTransform*glm::vec4(mVerticles[mIndices[i]].mPosition,1.0f)); //PAMIĘTAĆ NA PRZYSZŁOŚĆ O KOLEJNOŚCI - NIE STRACISZ BEZ SENSU GODZINY
         triangle[1]=glm::vec3(pTransform*glm::vec4(mVerticles[mIndices[i+1]].mPosition,1.0f));
         triangle[2]=glm::vec3(pTransform*glm::vec4(mVerticles[mIndices[i+2]].mPosition,1.0f));
-        if (checkRayIntersection(pRaySource, pRayDirection, triangle, pTransform, distance)) distances.push_back(distance);
+        if (ModelNodePicker::checkRayIntersectionTriangle(pRaySource, pRayDirection, triangle, distance)) distances.push_back(distance);
     }
     if (distances.size()==0) return false;
     pDistanceOutput=*std::min_element(std::begin(distances), std::end(distances));
