@@ -95,20 +95,20 @@ void UserInterface::draw()
 			if (mSelectedNode->getParentNode()!=NULL && mSelectedNode->getNodeLevel()>0 && ImGui::Button("Select parent node"))setSelectedNode(mSelectedNode->getParentNode());
 			if (mSelectedTransform != NULL)
 			{
-				if (mSelectedTransform->getChildrensCount() == 0)
+				if (!mSelectedTransform->getChildren())
 				{
-					if (ImGui::Button("Add transform child")) mSelectedTransform->pushChildren();
+					if (ImGui::Button("Add transform child")) mSelectedTransform->addChildren();
 				}
 				else
 				{
                     if (ImGui::Button("Select transform child"))
                     {
-                        mSelectedTransform=mSelectedTransform->getChildren(0);
+                        mSelectedTransform=mSelectedTransform->getChildren();
                         updateUITransformData();
                     }
                     if (ImGui::Button("Delete transform child"))
                     {
-                        mSelectedTransform->popChildren();
+                        mSelectedTransform->removeChildren();
                     }
 				}
                 if (mSelectedTransform->getParent()!=NULL && ImGui::Button("Select parent transform"))

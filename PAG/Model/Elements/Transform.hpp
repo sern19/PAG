@@ -36,8 +36,8 @@ class Transform
 {
 private:
     Transform* mParentTransform=NULL;
-    std::vector<std::pair<Transform,bool>> mChildrensTransform; // <Transform, flaga update>
-    std::vector<glm::mat4> mCachedMatrix; //Liczba dzieci na końcu drzewa
+    std::pair<Transform,bool>* mChildTransform=NULL; // <Transform, flaga update>
+    glm::mat4 mCachedMatrix; //Liczba dzieci na końcu drzewa
     glm::vec3 mPosition = glm::vec3(0.0f);
     glm::vec3 mRotationAxis = glm::vec3(1.0f,0,0);
     glm::vec3 mScale=glm::vec3(1.0f);
@@ -45,24 +45,19 @@ private:
 	
     bool mNeedsUpdateCache=true;
     
-    
-    void updateChildrenPointers(Transform* const pParent);
     void setParentsCacheUpdate();
-    void setNeedsUpdateCache(const Transform* pThisTransform);
+    void setNeedsUpdateCache();
     
-    void recalculateCacheVectors();
-    
-    glm::mat4 combineTransformWithChildren(const int& pChildNumber, const int& pChildCombinedTransformNumber=0);
+    glm::mat4 combineTransformWithChildren();
     
     Transform(Transform* const pParent);
 public:
     Transform();
     Transform(const Transform& pSourceTransform);
     
-    void pushChildren();
-    void popChildren();
-    void removeChildren(const int& pChildNumber);
-    Transform* const getChildren(const int& pChildNumber);
+    void addChildren();
+    void removeChildren();
+    Transform* const getChildren();
     Transform* const getParent();
     
     void setPosition(const glm::vec3& pPosition);
@@ -82,10 +77,8 @@ public:
     
     const unsigned int getTransformLevel();
     //W tym kontekście dzieci oznaczają koniec drzewa
-    const int getAllChildrensCount();
-	const int getChildrensCount();
-    const glm::mat4 getChildCombinedTransformRotatedTowardsCamera(const glm::vec3& pCameraPosition, const int& pChildNumber);
-    const glm::mat4& getChildCombinedTransform(const int& pChildNumber);
+    const glm::mat4 getChildCombinedTransformRotatedTowardsCamera(const glm::vec3& pCameraPosition);
+    const glm::mat4& getChildCombinedTransform();
 };
 
 #endif /* Transform_hpp */

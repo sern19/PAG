@@ -26,117 +26,60 @@
 #include <glm/gtx/matrix_decompose.hpp>
 #include <assimp/scene.h>
 
-Transform::Transform() { recalculateCacheVectors(); }
+Transform::Transform() { }
 Transform::Transform(Transform* const pParent): Transform() { mParentTransform=pParent; }
-Transform::Transform(const Transform& pSourceTransform): mParentTransform(pSourceTransform.mParentTransform), mChildrensTransform(pSourceTransform.mChildrensTransform), mCachedMatrix(pSourceTransform.mCachedMatrix), mPosition(pSourceTransform.mPosition), mRotationAxis(pSourceTransform.mRotationAxis), mRotationAngle(pSourceTransform.mRotationAngle),  mScale(pSourceTransform.mScale), mNeedsUpdateCache(true) { }
-
-void Transform::updateChildrenPointers(Transform* const pParent)
-{
-    int i;
-    if (mParentTransform!=NULL && pParent!=this) mParentTransform=pParent;
-    for (i=0;i<mChildrensTransform.size();i++)
-    mChildrensTransform[i].first.updateChildrenPointers(this);
-}
+Transform::Transform(const Transform& pSourceTransform): mParentTransform(pSourceTransform.mParentTransform), mChildTransform(pSourceTransform.mChildTransform), mCachedMatrix(pSourceTransform.mCachedMatrix), mPosition(pSourceTransform.mPosition), mRotationAxis(pSourceTransform.mRotationAxis), mRotationAngle(pSourceTransform.mRotationAngle),  mScale(pSourceTransform.mScale), mNeedsUpdateCache(true) { }
 
 void Transform::setParentsCacheUpdate()
 {
-    if (mParentTransform!=NULL) mParentTransform->setNeedsUpdateCache(this);
-    mNeedsUpdateCache=true;
+    if (mParentTransform) {
+        mParentTransform->setNeedsUpdateCache();
+        mParentTransform->mChildTransform->second=true;
+    }
 }
 
-void Transform::setNeedsUpdateCache(const Transform* pThisTransform)
+void Transform::setNeedsUpdateCache()
 {
-    int i;
-    if (this!=pThisTransform)
-    {
-        for (i=0;i<mChildrensTransform.size();i++)
-            if (&mChildrensTransform[i].first==pThisTransform) mChildrensTransform[i].second=true;
-    }
-    else
-    {
-        for (i=0;i<mChildrensTransform.size();i++)
-            mChildrensTransform[i].second=true;
-    }
+    mNeedsUpdateCache=true;
     setParentsCacheUpdate();
 }
 
-void Transform::recalculateCacheVectors()
-{
-    int desiredCacheSize;
-    if (mChildrensTransform.size()!=0)
-    {
-        int i;
-        desiredCacheSize=getAllChildrensCount();
-        for (i=0;i<mChildrensTransform.size();i++)
-            mChildrensTransform[i].second=true;
-    }
-    else desiredCacheSize=1;
-    
-    mCachedMatrix.clear();
-    mCachedMatrix.resize(desiredCacheSize);
-
-    if (mParentTransform!=NULL) mParentTransform->recalculateCacheVectors();
-    setNeedsUpdateCache(this);
-}
-
-glm::mat4 Transform::combineTransformWithChildren(const int& pChildNumber, const int& pChildCombinedTransformNumber)
+glm::mat4 Transform::combineTransformWithChildren()
 {
     glm::mat4 output;
     output = glm::translate(output, mPosition);
     output = glm::rotate(output, mRotationAngle, mRotationAxis);
     output = glm::scale(output, mScale);
-    if (pChildNumber<mChildrensTransform.size() && pChildNumber>=0) return output*mChildrensTransform[pChildNumber].first.getChildCombinedTransform(pChildCombinedTransformNumber);
+    if (mChildTransform) return output*mChildTransform->first.getChildCombinedTransform();
     return output;
 }
 
-void Transform::pushChildren()
+void Transform::addChildren()
 {
-    mChildrensTransform.push_back(std::pair<Transform,bool>(Transform(this),true));
-    updateChildrenPointers(this);
-    recalculateCacheVectors();
+    if (!mChildTransform) mChildTransform=new std::pair<Transform,bool>(Transform(this), true);
 }
 
-void Transform::popChildren()
+void Transform::removeChildren()
 {
-    if (mChildrensTransform.size()>0)
-        mChildrensTransform.pop_back();
-    updateChildrenPointers(this);
-    recalculateCacheVectors();
+    if (mChildTransform)
+    {
+        mChildTransform->first.removeChildren();
+        delete mChildTransform;
+        setNeedsUpdateCache();
+    }
 }
 
-void Transform::removeChildren(const int& pChildNumber)
-{
-    if (mChildrensTransform.size()>0 && pChildNumber<mChildrensTransform.size())
-        mChildrensTransform.erase(mChildrensTransform.begin()+pChildNumber);
-    updateChildrenPointers(this);
-    recalculateCacheVectors();
-}
-
-Transform* const Transform::getChildren(const int& pChildNumber)
-{
-    if (pChildNumber>=mChildrensTransform.size()) throw std::runtime_error("(Transform::getChildren): Żądany numer dziecka jest większy od ilości dzieci");
-    return &mChildrensTransform[pChildNumber].first;
-}
+Transform* const Transform::getChildren() { return &mChildTransform->first; }
 
 Transform* const Transform::getParent() { return mParentTransform; }
 
-void Transform::setPosition(const glm::vec3& pPosition) { if (mPosition!=pPosition) { mPosition=pPosition; setNeedsUpdateCache(this); } }
-void Transform::setRotation(const glm::vec3& pRotationAxis, const float& pRotationAngle) { if (mRotationAxis!=pRotationAxis || mRotationAngle!=pRotationAngle) { mRotationAxis=pRotationAxis; mRotationAngle=pRotationAngle; setNeedsUpdateCache(this); } }
-const glm::vec3 & Transform::getScale()
-{
-	return mScale;
-}
-void Transform::setScale(const glm::vec3& pScale) { if (mScale!=pScale) { mScale=pScale; setNeedsUpdateCache(this); } }
+void Transform::setPosition(const glm::vec3& pPosition) { if (mPosition!=pPosition) { mPosition=pPosition; setNeedsUpdateCache(); } }
+void Transform::setRotation(const glm::vec3& pRotationAxis, const float& pRotationAngle) { if (mRotationAxis!=pRotationAxis || mRotationAngle!=pRotationAngle) { mRotationAxis=pRotationAxis; mRotationAngle=pRotationAngle; setNeedsUpdateCache(); } }
+void Transform::setScale(const glm::vec3& pScale) { if (mScale!=pScale) { mScale=pScale; setNeedsUpdateCache(); } }
 
-const glm::vec3 & Transform::getPosition()
-{
-	return mPosition;
-}
-
-const std::pair<glm::vec3, float> Transform::getRotation()
-{
-	return std::pair<glm::vec3, float>(mRotationAxis, mRotationAngle);
-}
+const glm::vec3& Transform::getScale() { return mScale; }
+const glm::vec3& Transform::getPosition() { return mPosition; }
+const std::pair<glm::vec3, float> Transform::getRotation() { return std::pair<glm::vec3, float>(mRotationAxis, mRotationAngle); }
 
 const bool& Transform::getNeedsUpdateCache() { return mNeedsUpdateCache; }
 
@@ -168,40 +111,27 @@ void Transform::resetTransform()
 
 void Transform::updateCache()
 {
-    int i,j, cacheIndex=0;
     //Najpierw uaktualniamy cache na końcach drzewa
-    if (mChildrensTransform.size()!=0)
+    if (mChildTransform!=NULL)
     {
-        for (i=0;i<mChildrensTransform.size();i++)
+        if (mChildTransform->second)
         {
-            if (mChildrensTransform[i].second)
-            {
-                mChildrensTransform[i].first.updateCache();
-            }
+            mChildTransform->first.updateCache();
+            mChildTransform->second=false;
         }
     }
     else
     {
-        if (mNeedsUpdateCache) mCachedMatrix[0]=combineTransformWithChildren(-1);
+        if (mNeedsUpdateCache) mCachedMatrix=combineTransformWithChildren();
         mNeedsUpdateCache=false;
         return;
     }
     
     //Teraz uaktualniamy nasze cache
-    for (i=0;i<mChildrensTransform.size();i++)
+    if (mChildTransform!=NULL)
     {
-        if (mChildrensTransform[i].second)
-        {
-            for (j=0;j<mChildrensTransform[i].first.getAllChildrensCount();j++)
-            {
-                mCachedMatrix[cacheIndex]=combineTransformWithChildren(i,j);
-                cacheIndex++;
-            }
-            mChildrensTransform[i].second=false;
-        }
-        else cacheIndex+=mChildrensTransform[i].first.getAllChildrensCount();
+        mCachedMatrix=combineTransformWithChildren();
     }
-    
     mNeedsUpdateCache=false;
 }
 
@@ -211,32 +141,9 @@ const unsigned int Transform::getTransformLevel()
     else return mParentTransform->getTransformLevel()+1;
 }
 
-const int Transform::getAllChildrensCount()
-{
-    if (mChildrensTransform.size()==0) return 1;
-    else
-    {
-        int sum=0,i;
-        for (i=0;i<mChildrensTransform.size();i++)
-            sum+=mChildrensTransform[i].first.getAllChildrensCount();
-            return sum;
-    }
-}
-
-const int Transform::getChildrensCount()
-{
-	return (int)mChildrensTransform.size();
-}
-
-const glm::mat4 Transform::getChildCombinedTransformRotatedTowardsCamera(const glm::vec3& pCameraPosition, const int& pChildNumber)
+const glm::mat4 Transform::getChildCombinedTransformRotatedTowardsCamera(const glm::vec3& pCameraPosition)
 {
     glm::mat4 output;
-    
-    try {
-        output=getChildCombinedTransform(pChildNumber);
-    } catch (std::runtime_error err) {
-        throw err;
-    }
     
     if (mParentTransform==NULL)
     {
@@ -260,9 +167,8 @@ const glm::mat4 Transform::getChildCombinedTransformRotatedTowardsCamera(const g
     return output;
 }
 
-const glm::mat4& Transform::getChildCombinedTransform(const int& pChildNumber)
+const glm::mat4& Transform::getChildCombinedTransform()
 {
-    if (pChildNumber>mCachedMatrix.size()) throw std::runtime_error("(Transform::getChildCombinedTransform): Żądany numer dziecka jest większy od ilości dzieci");
     if (mNeedsUpdateCache) updateCache();
-    return mCachedMatrix[pChildNumber];
+    return mCachedMatrix;
 }

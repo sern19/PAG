@@ -134,8 +134,8 @@ Mesh Node::processMesh(const aiMesh* const pMesh, const aiScene* const pScene, T
 void Node::updateCache()
 {
     int i;
-    if (mParentNode==NULL) mCachedTransform=mElementTransform->getChildCombinedTransform(0);
-    else mCachedTransform=mParentNode->mCachedTransform*mElementTransform->getChildCombinedTransform(0);
+    if (mParentNode==NULL) mCachedTransform=mElementTransform->getChildCombinedTransform();
+    else mCachedTransform=mParentNode->mCachedTransform*mElementTransform->getChildCombinedTransform();
     for (i=0;i<mChildNodes.size();i++)
         mChildNodes[i].updateCache();
 }
