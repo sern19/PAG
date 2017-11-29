@@ -45,10 +45,9 @@ void UserInterface::updateUITransformData()
         mScaleX=mSelectedTransform->getScale().x;
         mScaleY=mSelectedTransform->getScale().y;
         mScaleZ=mSelectedTransform->getScale().z;
-        mRotationAngle=mSelectedTransform->getRotation().second;
-        mRotationAxisX=mSelectedTransform->getRotation().first.x;
-        mRotationAxisY=mSelectedTransform->getRotation().first.y;
-        mRotationAxisZ=mSelectedTransform->getRotation().first.z;
+        mRotationX=mSelectedTransform->getRotation().x;
+        mRotationY=mSelectedTransform->getRotation().y;
+        mRotationZ=mSelectedTransform->getRotation().z;
     }
 }
 
@@ -66,10 +65,10 @@ void UserInterface::updateTransform()
 	temporaryValues.z=mScaleZ;
 	mSelectedTransform->setScale(temporaryValues);
 	//Rotation
-	temporaryValues.x=mRotationAxisX;
-	temporaryValues.y=mRotationAxisY;
-	temporaryValues.z=mRotationAxisZ;
-	mSelectedTransform->setRotation(temporaryValues, mRotationAngle);
+	temporaryValues.x=mRotationX;
+	temporaryValues.y=mRotationY;
+	temporaryValues.z=mRotationZ;
+	mSelectedTransform->setRotation(temporaryValues);
 }
 
 void UserInterface::draw()
@@ -121,9 +120,9 @@ void UserInterface::draw()
             //Pola z danymi
 			ImGui::Text("Position");
             ImGui::PushID(0); //Imgui używa nazw pól jako id
-			ImGui::InputFloat(":x", &mTranslateX, 0.01f, 1, 2, ImGuiInputTextFlags_CharsDecimal);
-			ImGui::InputFloat(":y", &mTranslateY, 0.01f, 1, 2, ImGuiInputTextFlags_CharsDecimal);
-			ImGui::InputFloat(":z", &mTranslateZ, 0.01f, 1, 2, ImGuiInputTextFlags_CharsDecimal);
+			ImGui::InputFloat(":x", &mTranslateX, 0.01f, 1, 3, ImGuiInputTextFlags_CharsDecimal);
+			ImGui::InputFloat(":y", &mTranslateY, 0.01f, 1, 3, ImGuiInputTextFlags_CharsDecimal);
+			ImGui::InputFloat(":z", &mTranslateZ, 0.01f, 1, 3, ImGuiInputTextFlags_CharsDecimal);
             ImGui::PopID();
 			ImGui::Text("Scale");
             ImGui::PushID(1); //Więc aby dalsze przyciski były responsywne
@@ -132,11 +131,10 @@ void UserInterface::draw()
 			ImGui::InputFloat(":z", &mScaleZ, 0.001f, 0.1f, 3, ImGuiInputTextFlags_CharsDecimal);
             ImGui::PopID();
 			ImGui::Text("Rotate");
-			ImGui::InputFloat(":angle", &mRotationAngle, 0.001f, 0.1f, 3, ImGuiInputTextFlags_CharsDecimal);
             ImGui::PushID(2); //Używamy PushID
-			ImGui::InputFloat(":x", &mRotationAxisX, 1.0f, 1.0f, 1, ImGuiInputTextFlags_CharsDecimal);
-			ImGui::InputFloat(":y", &mRotationAxisY, 1.0f, 1.0f, 1, ImGuiInputTextFlags_CharsDecimal);
-			ImGui::InputFloat(":z", &mRotationAxisZ, 1.0f, 1.0f, 1, ImGuiInputTextFlags_CharsDecimal);
+			ImGui::InputFloat(":x", &mRotationX, 0.1f, 1.0f, 3, ImGuiInputTextFlags_CharsDecimal);
+			ImGui::InputFloat(":y", &mRotationY, 0.1f, 1.0f, 3, ImGuiInputTextFlags_CharsDecimal);
+			ImGui::InputFloat(":z", &mRotationZ, 0.1f, 1.0f, 3, ImGuiInputTextFlags_CharsDecimal);
             ImGui::PopID();
             
             //Przyciski aktualizacji transforma

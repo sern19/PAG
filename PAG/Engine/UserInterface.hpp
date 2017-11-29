@@ -39,7 +39,7 @@ private:
 	Transform* mSelectedTransform=NULL;
 
 	//Stringi do wyświetlania
-	float mTranslateX, mTranslateY, mTranslateZ, mScaleX, mScaleY, mScaleZ, mRotationAngle, mRotationAxisX, mRotationAxisY, mRotationAxisZ;
+	float mTranslateX, mTranslateY, mTranslateZ, mScaleX, mScaleY, mScaleZ, mRotationX, mRotationY, mRotationZ;
     
     void updateUITransformData();
 	void updateTransform();

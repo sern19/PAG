@@ -39,9 +39,9 @@ private:
     std::pair<Transform,bool>* mChildTransform=NULL; // <Transform, flaga update>
     glm::mat4 mCachedMatrix; //Liczba dzieci na końcu drzewa
     glm::vec3 mPosition = glm::vec3(0.0f);
-    glm::vec3 mRotationAxis = glm::vec3(1.0f,0,0);
+    glm::quat mRotation = glm::quat();
+    glm::vec3 mRotationEuler = glm::vec3(1.0f,0,0);
     glm::vec3 mScale=glm::vec3(1.0f);
-    float mRotationAngle=0.0f;
 	
     bool mNeedsUpdateCache=true;
     
@@ -61,10 +61,10 @@ public:
     Transform* const getParent();
     
     void setPosition(const glm::vec3& pPosition);
-    void setRotation(const glm::vec3& pRotationAxis, const float& pRotationAngle);
+    void setRotation(const glm::vec3& pRotationEuler);
 	void setScale(const glm::vec3& pScale);
-	const glm::vec3&  getPosition();
-	const std::pair<glm::vec3,float> getRotation();
+	const glm::vec3& getPosition();
+	const glm::vec3& getRotation();
 	const glm::vec3& getScale();
     
     const bool& getNeedsUpdateCache();
@@ -76,7 +76,7 @@ public:
     void resetTransform();
     
     const unsigned int getTransformLevel();
-    //W tym kontekście dzieci oznaczają koniec drzewa
+    
     const glm::mat4 getChildCombinedTransformRotatedTowardsCamera(const glm::vec3& pCameraPosition);
     const glm::mat4& getChildCombinedTransform();
 };

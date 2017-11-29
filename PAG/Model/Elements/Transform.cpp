@@ -20,6 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#define GLM_FORCE_RADIANS
+
 #include "Transform.hpp"
 #include "Shader.hpp"
 
@@ -28,7 +30,7 @@
 
 Transform::Transform() { }
 Transform::Transform(Transform* const pParent): Transform() { mParentTransform=pParent; }
-Transform::Transform(const Transform& pSourceTransform): mParentTransform(pSourceTransform.mParentTransform), mChildTransform(pSourceTransform.mChildTransform), mCachedMatrix(pSourceTransform.mCachedMatrix), mPosition(pSourceTransform.mPosition), mRotationAxis(pSourceTransform.mRotationAxis), mRotationAngle(pSourceTransform.mRotationAngle),  mScale(pSourceTransform.mScale), mNeedsUpdateCache(true) { }
+Transform::Transform(const Transform& pSourceTransform): mParentTransform(pSourceTransform.mParentTransform), mChildTransform(pSourceTransform.mChildTransform), mCachedMatrix(pSourceTransform.mCachedMatrix), mPosition(pSourceTransform.mPosition), mRotationEuler(pSourceTransform.mRotationEuler), mRotation(pSourceTransform.mRotation),  mScale(pSourceTransform.mScale), mNeedsUpdateCache(true) { }
 
 void Transform::setParentsCacheUpdate()
 {
@@ -48,7 +50,7 @@ glm::mat4 Transform::combineTransformWithChildren()
 {
     glm::mat4 output;
     output = glm::translate(output, mPosition);
-    output = glm::rotate(output, mRotationAngle, mRotationAxis);
+    output *= glm::mat4_cast(mRotation);
     output = glm::scale(output, mScale);
     if (mChildTransform) return output*mChildTransform->first.getChildCombinedTransform();
     return output;
@@ -74,12 +76,20 @@ Transform* const Transform::getChildren() { return &mChildTransform->first; }
 Transform* const Transform::getParent() { return mParentTransform; }
 
 void Transform::setPosition(const glm::vec3& pPosition) { if (mPosition!=pPosition) { mPosition=pPosition; setNeedsUpdateCache(); } }
-void Transform::setRotation(const glm::vec3& pRotationAxis, const float& pRotationAngle) { if (mRotationAxis!=pRotationAxis || mRotationAngle!=pRotationAngle) { mRotationAxis=pRotationAxis; mRotationAngle=pRotationAngle; setNeedsUpdateCache(); } }
+void Transform::setRotation(const glm::vec3& pRotationEuler)
+{
+    if (mRotationEuler!=pRotationEuler)
+    {
+        mRotationEuler=pRotationEuler;
+        mRotation=glm::quat(glm::radians(pRotationEuler));
+        setNeedsUpdateCache();
+    }
+}
 void Transform::setScale(const glm::vec3& pScale) { if (mScale!=pScale) { mScale=pScale; setNeedsUpdateCache(); } }
 
 const glm::vec3& Transform::getScale() { return mScale; }
 const glm::vec3& Transform::getPosition() { return mPosition; }
-const std::pair<glm::vec3, float> Transform::getRotation() { return std::pair<glm::vec3, float>(mRotationAxis, mRotationAngle); }
+const glm::vec3& Transform::getRotation() { return mRotationEuler; }
 
 const bool& Transform::getNeedsUpdateCache() { return mNeedsUpdateCache; }
 
@@ -99,14 +109,14 @@ void Transform::importAiTransform(aiMatrix4x4 pMatrix)
     
     setPosition(glm::vec3(position.x, position.y, position.z));
     setScale(glm::vec3(scale.x, scale.y, scale.z));
-    setRotation(glm::axis(gRotation), glm::angle(gRotation));
+    setRotation(glm::degrees(glm::eulerAngles(gRotation)));
 }
 
 void Transform::resetTransform()
 {
     setPosition(glm::vec3(0));
     setScale(mScale=glm::vec3(1));
-    setRotation(glm::vec3(1.0f,0,0), 0);
+    setRotation(glm::vec3(0,0,0));
 }
 
 void Transform::updateCache()
