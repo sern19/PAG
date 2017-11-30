@@ -67,6 +67,7 @@ void Transform::removeChildren()
     {
         mChildTransform->first.removeChildren();
         delete mChildTransform;
+        mChildTransform=NULL;
         setNeedsUpdateCache();
     }
 }
@@ -122,7 +123,7 @@ void Transform::resetTransform()
 void Transform::updateCache()
 {
     //Najpierw uaktualniamy cache na końcach drzewa
-    if (mChildTransform!=NULL)
+    if (mChildTransform)
     {
         if (mChildTransform->second)
         {
@@ -138,7 +139,7 @@ void Transform::updateCache()
     }
     
     //Teraz uaktualniamy nasze cache
-    if (mChildTransform!=NULL)
+    if (mChildTransform)
     {
         mCachedMatrix=combineTransformWithChildren();
     }
