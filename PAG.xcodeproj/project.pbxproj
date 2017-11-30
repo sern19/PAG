@@ -75,6 +75,7 @@
 		DD7002A31FC4F4E200B198C5 /* Textures.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Textures.hpp; sourceTree = "<group>"; };
 		DD79D2BF1FBF8DE200558940 /* basic.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = basic.vert; sourceTree = "<group>"; };
 		DD79D2C21FBF8DE200558940 /* basic.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = basic.frag; sourceTree = "<group>"; };
+		DD7A8D721FD099B000400CC2 /* Cubes.fbx */ = {isa = PBXFileReference; lastKnownFileType = file; path = Cubes.fbx; sourceTree = "<group>"; };
 		DD9E910E1FC64988009C0AE3 /* ModelNodePicker.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ModelNodePicker.cpp; sourceTree = "<group>"; };
 		DD9E910F1FC64988009C0AE3 /* ModelNodePicker.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ModelNodePicker.hpp; sourceTree = "<group>"; };
 		DD9E91111FC6AEA2009C0AE3 /* UserInterface.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = UserInterface.cpp; sourceTree = "<group>"; };
@@ -260,6 +261,7 @@
 		DD041AEC1FC4C44D00AC2AF7 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				DD7A8D701FD099B000400CC2 /* Cubes */,
 				DDFEED781FC84EDF00DD1AFF /* Nanosuit */,
 				DDC8406B1FC5143E0079E919 /* Chopper */,
 				DD2F98151FC512D100D2A445 /* 2B */,
@@ -376,6 +378,22 @@
 				DD79D2C21FBF8DE200558940 /* basic.frag */,
 			);
 			path = Shaders;
+			sourceTree = "<group>";
+		};
+		DD7A8D701FD099B000400CC2 /* Cubes */ = {
+			isa = PBXGroup;
+			children = (
+				DD7A8D711FD099B000400CC2 /* source */,
+			);
+			path = Cubes;
+			sourceTree = "<group>";
+		};
+		DD7A8D711FD099B000400CC2 /* source */ = {
+			isa = PBXGroup;
+			children = (
+				DD7A8D721FD099B000400CC2 /* Cubes.fbx */,
+			);
+			path = source;
 			sourceTree = "<group>";
 		};
 		DD9E911B1FC6B081009C0AE3 /* ImGui */ = {
