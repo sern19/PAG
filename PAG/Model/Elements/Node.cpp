@@ -25,6 +25,7 @@
 #include "Mesh.hpp"
 #include "Transform.hpp"
 #include "Shader.hpp"
+#include "Scene.hpp"
 #include "ModelNodePicker.hpp"
 #include "Materials.hpp"
 
@@ -148,15 +149,21 @@ void Node::updateChildrenPointers(Node* const pParent)
         mChildNodes[i].updateChildrenPointers(this);
 }
 
-void Node::drawContent(Shader *const pShader, Materials* const pTextures)
+void Node::drawContent(Shader *const pShader, Scene* const pScene, Materials* const pTextures)
 {
     int i;
     if (mElementTransform&&mElementTransform->getNeedsUpdateCache()) updateCache();
-    pShader->setMat4("model", &mCachedTransform);
+    
+    glm::mat4 modelMatrix=pScene->getWVP()*mCachedTransform;
+    glm::mat4 normalMatrix=glm::transpose(glm::inverse(modelMatrix));
+    
+    pShader->setMat4("modelMatrix", &modelMatrix);
+    pShader->setMat4("normalMatrix", &normalMatrix);
+    
     for (i=0;i<mMeshes.size();i++)
         mMeshes[i].drawContent(pShader, pTextures);
     for (i=0;i<mChildNodes.size();i++)
-        mChildNodes[i].drawContent(pShader, pTextures);
+        mChildNodes[i].drawContent(pShader, pScene, pTextures);
 }
 
 void Node::setIsSelected(const bool& pIsSelected)

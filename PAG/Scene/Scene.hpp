@@ -37,15 +37,17 @@ private:
     glm::mat4 mWorldSpace;
     glm::mat4 mViewSpace;
     glm::mat4 mProjectionSpace;
-    glm::mat4 WVP; //World View Projection
+    glm::mat4 mWVP; //World View Projection
+    
+    void updateWVP();
 public:
     Scene(GLFWwindow* const pWindow);
     const glm::mat4& getWorldSpace();
     const glm::mat4& getViewSpace();
     const glm::mat4& getProjectionSpace();
+    const glm::mat4& getWVP();
     void updateWorldSpace(const glm::mat4& pWorldSpace);
     void updateViewSpace(const glm::mat4& pViewSpace);
-    void updateWVP(Shader* const pShader);
     ~Scene();
 };
 

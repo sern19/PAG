@@ -127,25 +127,29 @@ void Shader::useProgram()
     glUseProgram(mProgramHandle);
 }
 
-void Shader::setBool(const std::string& pUniformName, const bool* const pValue)
+void Shader::setBool(const std::string& pUniformName, const bool* const pValue, const int& pArraySize)
 {
-    glUniform1iv(glGetUniformLocation(mProgramHandle, pUniformName.c_str()), 1, (int*)pValue);
+    glUniform1iv(glGetUniformLocation(mProgramHandle, pUniformName.c_str()), pArraySize, (int*)pValue);
 }
-void Shader::setInt(const std::string& pUniformName, const int* const pValue)
+void Shader::setInt(const std::string& pUniformName, const int* const pValue, const int& pArraySize)
 {
-    glUniform1iv(glGetUniformLocation(mProgramHandle, pUniformName.c_str()), 1, (int*)pValue);
+    glUniform1iv(glGetUniformLocation(mProgramHandle, pUniformName.c_str()), pArraySize, (int*)pValue);
 }
-void Shader::setFloat(const std::string& pUniformName, const float* const pValue)
+void Shader::setFloat(const std::string& pUniformName, const float* const pValue, const int& pArraySize)
 {
-    glUniform1fv(glGetUniformLocation(mProgramHandle, pUniformName.c_str()), 1, (float*)pValue);
+    glUniform1fv(glGetUniformLocation(mProgramHandle, pUniformName.c_str()), pArraySize, (float*)pValue);
 }
-void Shader::setVec3(const std::string& pUniformName, const glm::vec3* const pValue)
+void Shader::setVec3(const std::string& pUniformName, const glm::vec3* const pValue, const int& pArraySize)
 {
-    glUniform3fv(glGetUniformLocation(mProgramHandle, pUniformName.c_str()), 1, (float*)pValue);
+    glUniform3fv(glGetUniformLocation(mProgramHandle, pUniformName.c_str()), pArraySize, (float*)pValue);
 }
-void Shader::setMat4(const std::string& pUniformName, const glm::mat4* const pValue)
+void Shader::setMat3(const std::string& pUniformName, const glm::mat3* const pValue, const int& pArraySize)
 {
-    glUniformMatrix4fv(glGetUniformLocation(mProgramHandle, pUniformName.c_str()), 1, GL_FALSE, (float*)pValue); //Lokacja uniformu, ilość macierzy, czy transportować, wskażnik początku macierzy
+    glUniformMatrix3fv(glGetUniformLocation(mProgramHandle, pUniformName.c_str()), pArraySize, GL_FALSE, (float*)pValue); //Lokacja uniformu, ilość macierzy, czy transportować, wskażnik początku macierzy
+}
+void Shader::setMat4(const std::string& pUniformName, const glm::mat4* const pValue, const int& pArraySize)
+{
+    glUniformMatrix4fv(glGetUniformLocation(mProgramHandle, pUniformName.c_str()), pArraySize, GL_FALSE, (float*)pValue); //Lokacja uniformu, ilość macierzy, czy transportować, wskażnik początku macierzy
 }
 void Shader::setBool(const std::string& pUniformName, const bool& pValue)
 {

@@ -91,9 +91,8 @@ void Core::display()
     glClearColor(BACKGROUND_COLOR);
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT); //Czyszczenie sceny
     mScene->updateViewSpace(mCamera->generateViewSpace());
-    mScene->updateWVP(mShader);
     for (i=0;i<mModels.size();i++)
-        mModels[i].draw(mShader);
+        mModels[i].draw(mShader, mScene);
     mUI->draw();
     glfwSwapBuffers(mWindow->getWindow()); //Swap front- i backbuffer
     glfwPollEvents(); //Poll dla eventów

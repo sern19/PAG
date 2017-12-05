@@ -89,14 +89,14 @@ void Model::loadModel(const std::string &pModelPath, Shader *const pShader)
     mRootNode=new Node(scene->mRootNode, scene, mMaterials);
 }
 
-void Model::draw(Shader *const pShader)
+void Model::draw(Shader* const pShader, Scene* const pScene)
 {
     int i;
     if (mRootNode)
     {
         for (i=0;i<mAdditionalGLSettings.size();i++)
             glEnable(mAdditionalGLSettings[i]);
-        mRootNode->drawContent(pShader, mMaterials);
+        mRootNode->drawContent(pShader, pScene, mMaterials);
         for (i=0;i<mAdditionalGLSettings.size();i++)
             glDisable(mAdditionalGLSettings[i]);
     }

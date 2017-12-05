@@ -32,6 +32,7 @@ class Transform;
 class Mesh;
 class Shader;
 class Materials;
+class Scene;
 
 class Node
 {
@@ -56,7 +57,7 @@ public:
     Node(const Node& pSourceNode);
     ~Node();
     
-    void drawContent(Shader *const pShader, Materials* const pTextures);
+    void drawContent(Shader *const pShader, Scene* const pScene, Materials* const pTextures);
     void setIsSelected(const bool& pIsSelected);
     
     void resetNodeTransform();

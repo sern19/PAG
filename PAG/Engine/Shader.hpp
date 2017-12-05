@@ -42,11 +42,12 @@ public:
     void unlinkAndDeleteProgram();
     void useProgram();
     //Uniformy
-    void setBool(const std::string& pUniformName, const bool* const pValue);
-    void setInt(const std::string& pUniformName, const int* const pValue);
-    void setFloat(const std::string& pUniformName, const float* const pValue);
-    void setVec3(const std::string& pUniformName, const glm::vec3* const pValue);
-    void setMat4(const std::string& pUniformName, const glm::mat4* const pValue);
+    void setBool(const std::string& pUniformName, const bool* const pValue, const int& pArraySize=1);
+    void setInt(const std::string& pUniformName, const int* const pValue, const int& pArraySize=1);
+    void setFloat(const std::string& pUniformName, const float* const pValue, const int& pArraySize=1);
+    void setVec3(const std::string& pUniformName, const glm::vec3* const pValue, const int& pArraySize=1);
+    void setMat3(const std::string& pUniformName, const glm::mat3* const pValue, const int& pArraySize=1);
+    void setMat4(const std::string& pUniformName, const glm::mat4* const pValue, const int& pArraySize=1);
     void setBool(const std::string& pUniformName, const bool& pValue);
     void setInt(const std::string& pUniformName, const int& pValue);
     void setFloat(const std::string& pUniformName, const float& pValue);

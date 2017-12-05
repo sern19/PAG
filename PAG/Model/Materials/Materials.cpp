@@ -128,7 +128,7 @@ const Material Materials::fillMaterialData(aiMaterial* const pMaterial)
     }
     //Specular
     pMaterial->Get(AI_MATKEY_COLOR_SPECULAR, temporaryColor);
-    output.mSpecularLevel=glm::vec4(temporaryColor.r, temporaryColor.g, temporaryColor.b, 1);
+    output.mSpecularColor=glm::vec4(temporaryColor.r, temporaryColor.g, temporaryColor.b, 1);
     for (i=0;i<pMaterial->GetTextureCount(aiTextureType_SPECULAR);i++)
     {
         aiString textureName;
@@ -138,6 +138,9 @@ const Material Materials::fillMaterialData(aiMaterial* const pMaterial)
         for (j=0;j<mSpecularTextures.size();j++)
             if (mSpecularTextures[j].getTexturePath().compare(texturePath)==0) output.mSpecularTextureID.push_back(j);
     }
+    //Ambient
+    pMaterial->Get(AI_MATKEY_COLOR_AMBIENT, temporaryColor);
+    output.mAmbientColor=glm::vec4(temporaryColor.r, temporaryColor.g, temporaryColor.b, 1);
     //Normal
     for (i=0;i<pMaterial->GetTextureCount(aiTextureType_NORMALS);i++)
     {
@@ -148,10 +151,13 @@ const Material Materials::fillMaterialData(aiMaterial* const pMaterial)
         for (j=0;j<mNormalTextures.size();j++)
             if (mNormalTextures[j].getTexturePath().compare(texturePath)==0) output.mNomralTextureID.push_back(j);
     }
+    //Shininess
+    pMaterial->Get(AI_MATKEY_SHININESS, output.mShininess);
+    pMaterial->Get(AI_MATKEY_SHININESS_STRENGTH, output.mShininessStrength);
     
+    //Shading mode
     if (pMaterial->Get(AI_MATKEY_SHADING_MODEL, output.mShadingMode)!=AI_SUCCESS)
         output.mShadingMode=aiShadingMode_NoShading; //Domyślne cieniowanie w przypadku niepowodzenia
-    pMaterial->Get(AI_MATKEY_SHININESS, output.mShininess);
     
     return output;
 }

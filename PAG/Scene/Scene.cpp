@@ -38,18 +38,19 @@ Scene::Scene(GLFWwindow* const pWindow)
     mProjectionSpace=glm::perspective(45.0f, (float)screenWidth / (float)screenHeight, 0.001f, 50.0f); //FOV, Aspect Ratio, zNear, zFar
 }
 
+void Scene::updateWVP()
+{
+    //Ustawinie macierzy WVP
+    mWVP = mProjectionSpace * mViewSpace * mWorldSpace; //Musi być w odwrotnej kolejności
+}
+
 const glm::mat4& Scene::getWorldSpace() { return mWorldSpace; }
 const glm::mat4& Scene::getViewSpace() { return mViewSpace; }
 const glm::mat4& Scene::getProjectionSpace() { return mProjectionSpace; }
+const glm::mat4& Scene::getWVP() { updateWVP(); return mWVP; }
 void Scene::updateWorldSpace(const glm::mat4& pWorldSpace) { mWorldSpace=pWorldSpace; }
 void Scene::updateViewSpace(const glm::mat4& pViewSpace) { mViewSpace=pViewSpace; }
 
-void Scene::updateWVP(Shader* const pShader)
-{
-    //Ustawinie macierzy WVP
-    glm::mat4 WVP = mProjectionSpace * mViewSpace * mWorldSpace; //Musi być w odwrotnej kolejności
-    //Ustawianie wartości uniformu
-    pShader->setMat4("wvp", &WVP);
-}
+
 
 Scene::~Scene() {}

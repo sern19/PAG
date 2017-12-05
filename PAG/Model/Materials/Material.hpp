@@ -28,13 +28,18 @@
 
 struct Material
 {
-    std::vector<int> mDiffuseTextureID;
     glm::vec3 mDiffuseColor=glm::vec3(1,0,0);
+    glm::vec3 mSpecularColor=glm::vec3(0,0,0);
+    glm::vec3 mAmbientColor=glm::vec3(0,0,0);
+    
+    float mShininess=0.0f;
+    float mShininessStrength=1.0f;
+    
+    std::vector<int> mDiffuseTextureID;
     std::vector<int> mSpecularTextureID;
-    glm::vec3 mSpecularLevel=glm::vec3(1,1,1);
     std::vector<int> mNomralTextureID;
+    
     int mShadingMode=0x9; //Bez cieniowania
-    float mShininess=1.0f;
     Material() {};
 };
 

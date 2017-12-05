@@ -32,6 +32,7 @@
 class Materials;
 class Node;
 class Shader;
+class Scene;
 
 class Model
 {
@@ -48,7 +49,7 @@ public:
     Model(const std::string& pModelPath, Shader *const pShader);
     Model(const Model& pSourceModel);
     ~Model();
-    void draw(Shader *const pShader);
+    void draw(Shader* const pShader, Scene* const pScene);
     void addGLSetting(const GLenum& pSetting);
     void removeGLSetting(const GLenum& pSetting);
     Node* const getRootNode();
