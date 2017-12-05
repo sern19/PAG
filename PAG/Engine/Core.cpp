@@ -32,6 +32,7 @@
 #include "Model.hpp"
 #include "Node.hpp"
 #include "UserInterface.hpp"
+#include "PointLight.hpp"
 
 #define _USE_MATH_DEFINES
 
@@ -86,7 +87,6 @@ Core::~Core()
 }
 void Core::display()
 {
-    glm::mat4 transform;
     int i;
     glClearColor(BACKGROUND_COLOR);
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT); //Czyszczenie sceny
@@ -126,6 +126,13 @@ void Core::mainLoop()
 {
     double nextGameTick=glfwGetTime();
     int loops;
+    
+    //
+    PointLight test(glm::vec4(0,0.1,0,0), glm::vec3(1,1,1), 0.9, 0.14);
+    test.setLight(mShader, 0);
+    mShader->setInt("numberOfActiveLights", 1);
+    //
+    
     
     loadModels();
     

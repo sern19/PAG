@@ -28,8 +28,22 @@
 Materials::Materials(const aiScene* const pScene, const std::string& pTexturesPath, Shader *const pShader): mTexturesPath(pTexturesPath)
 {
     loadTextures(pScene);
+    
+    int textureNumber[10], i;
+    
     //Przypisywanie tekstur
-    pShader->setInt("diffuse0", 0); //Docelowo przy normalnych i specularach, w jakiejś pętli
+    //Docelowo obsługa wielu tekstur
+    for (i=0;i<10;i++)
+        textureNumber[i]=i;
+    pShader->setInt("diffuseTexture", textureNumber, 10);
+    
+    for (i=0;i<10;i++)
+        textureNumber[i]=i+10;
+    pShader->setInt("specularTexture", textureNumber, 10);
+    
+    for (i=0;i<10;i++)
+        textureNumber[i]=i+20;
+    pShader->setInt("normalTexture", textureNumber, 10);
 }
 
 void Materials::loadTextures(const aiScene* const pScene)
@@ -170,18 +184,20 @@ void Materials::setActiveMaterial(const unsigned int& pMaterialID, Shader *const
     
     //Sprawdzanie czy materiał używa tekstur
     pShader->setVec3("diffuseColor", &mMaterials[pMaterialID].mDiffuseColor);
+    pShader->setVec3("specularColor", &mMaterials[pMaterialID].mSpecularColor);
+    pShader->setVec3("ambientColor", &mMaterials[pMaterialID].mAmbientColor);
     if (mMaterials[pMaterialID].mDiffuseTextureID.size()==0) pShader->setBool("shouldUseDiffuseTexture", false);
     else pShader->setBool("shouldUseDiffuseTexture", true);
-//    if (mMaterials[pMaterialID].mSpecularTextureID.size()==0)
-//    {
-//        pShader->setBool("shouldUseSpecularTexture", false);
-//    }
-//    else pShader->setBool("shouldUseSpecularTexture", true);
-//    if (mMaterials[pMaterialID].mNomralTextureID.size()==0)
-//    {
-//        pShader->setBool("shouldUseNormalTexture", false);
-//    }
-//    else pShader->setBool("shouldUseNormalTexture", true);
+    if (mMaterials[pMaterialID].mSpecularTextureID.size()==0)
+    {
+        pShader->setBool("shouldUseSpecularTexture", false);
+    }
+    else pShader->setBool("shouldUseSpecularTexture", true);
+    if (mMaterials[pMaterialID].mNomralTextureID.size()==0)
+    {
+        pShader->setBool("shouldUseNormalTexture", false);
+    }
+    else pShader->setBool("shouldUseNormalTexture", true);
     
     //Przypisywanie tekstur
     Texture::deselectAllTextures();

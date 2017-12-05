@@ -22,6 +22,8 @@
 
 #include "Scene.hpp"
 #include "Shader.hpp"
+#include "Config.hpp"
+
 #include <glm/gtc/matrix_transform.hpp>
 
 Scene::Scene(GLFWwindow* const pWindow)
@@ -29,28 +31,27 @@ Scene::Scene(GLFWwindow* const pWindow)
     int screenWidth, screenHeight;
     //Inicjalizacja macierzy świata oraz widoku
     mWorldSpace=glm::mat4(1.0f);
-    mViewSpace=glm::lookAt(glm::vec3(-1.5f, 0.5f, 2.5f),  // camera position in world space
+    mViewSpace=glm::lookAt(CAMERA_STARTING_POS,  // camera position in world space
                            glm::vec3(0.0f, 0.0f, 0.0f),  // at this point camera is looking
                            glm::vec3(0.0f, 1.0f, 0.0f));
     
     //Inicjalizacja macierzy projekcji
     glfwGetWindowSize(pWindow, &screenWidth, &screenHeight);
     mProjectionSpace=glm::perspective(45.0f, (float)screenWidth / (float)screenHeight, 0.001f, 50.0f); //FOV, Aspect Ratio, zNear, zFar
+    updateWVP();
 }
 
 void Scene::updateWVP()
 {
     //Ustawinie macierzy WVP
-    mWVP = mProjectionSpace * mViewSpace * mWorldSpace; //Musi być w odwrotnej kolejności
+    if (mNeedsUpdateWVP) mWVP = mProjectionSpace * mViewSpace * mWorldSpace; //Musi być w odwrotnej kolejności
 }
 
 const glm::mat4& Scene::getWorldSpace() { return mWorldSpace; }
 const glm::mat4& Scene::getViewSpace() { return mViewSpace; }
 const glm::mat4& Scene::getProjectionSpace() { return mProjectionSpace; }
 const glm::mat4& Scene::getWVP() { updateWVP(); return mWVP; }
-void Scene::updateWorldSpace(const glm::mat4& pWorldSpace) { mWorldSpace=pWorldSpace; }
-void Scene::updateViewSpace(const glm::mat4& pViewSpace) { mViewSpace=pViewSpace; }
-
-
+void Scene::updateWorldSpace(const glm::mat4& pWorldSpace) { mWorldSpace=pWorldSpace; mNeedsUpdateWVP=true; }
+void Scene::updateViewSpace(const glm::mat4& pViewSpace) { mViewSpace=pViewSpace; mNeedsUpdateWVP=true; }
 
 Scene::~Scene() {}

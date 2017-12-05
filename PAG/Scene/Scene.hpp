@@ -39,6 +39,8 @@ private:
     glm::mat4 mProjectionSpace;
     glm::mat4 mWVP; //World View Projection
     
+    bool mNeedsUpdateWVP=true;
+    
     void updateWVP();
 public:
     Scene(GLFWwindow* const pWindow);

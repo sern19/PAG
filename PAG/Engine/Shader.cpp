@@ -143,6 +143,10 @@ void Shader::setVec3(const std::string& pUniformName, const glm::vec3* const pVa
 {
     glUniform3fv(glGetUniformLocation(mProgramHandle, pUniformName.c_str()), pArraySize, (float*)pValue);
 }
+void Shader::setVec4(const std::string& pUniformName, const glm::vec4* const pValue, const int& pArraySize)
+{
+    glUniform4fv(glGetUniformLocation(mProgramHandle, pUniformName.c_str()), pArraySize, (float*)pValue);
+}
 void Shader::setMat3(const std::string& pUniformName, const glm::mat3* const pValue, const int& pArraySize)
 {
     glUniformMatrix3fv(glGetUniformLocation(mProgramHandle, pUniformName.c_str()), pArraySize, GL_FALSE, (float*)pValue); //Lokacja uniformu, ilość macierzy, czy transportować, wskażnik początku macierzy

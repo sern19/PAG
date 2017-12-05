@@ -1,4 +1,4 @@
-// BaseLight.cpp
+// PointLight.cpp
 //
 // Copyright (c) 2017 Krystian Owoc
 //
@@ -20,17 +20,31 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "BaseLight.hpp"
+#include "PointLight.hpp"
 
-BaseLight::BaseLight(const glm::vec4& pLightPos, const glm::vec3& pLightColor, const float& pLightAttenuation, const float& pLightAmbientCoefficient):mLightPos(pLightPos), mLightColor(pLightColor), mLightAttenuation(pLightAttenuation), mLightAmbientCoefficient(pLightAmbientCoefficient) { }
-BaseLight::~BaseLight() { }
+#include "Shader.hpp"
 
-const glm::vec4& BaseLight::getLightPos() { return mLightPos; }
-const glm::vec3& BaseLight::getLightColor() { return mLightColor; }
-const float& BaseLight::getLightAttenuation() { return mLightAttenuation; }
-const float& BaseLight::getLightAmbientCoefficient() { return mLightAmbientCoefficient; }
+#include <sstream>
 
-void BaseLight::setLightPos(const glm::vec4& pLightPos) { mLightPos=pLightPos; }
-void BaseLight::setLightColor(const glm::vec3& pLightColor) { mLightColor=pLightColor; }
-void BaseLight::setLightAttenuation(const float& pLightAttenuation) { mLightAttenuation=pLightAttenuation; }
-void BaseLight::setLightAmbientCoefficient(const float& pLightAmbientCoefficient) { mLightAmbientCoefficient=pLightAmbientCoefficient; }
+PointLight::PointLight(const glm::vec4& pLightPos, const glm::vec3& pLightColor, const float& pLightAttenuation, const float& pLightAmbientCoefficient):BaseLight(pLightPos, pLightColor, pLightAttenuation, pLightAmbientCoefficient) { }
+PointLight::~PointLight() { }
+
+void PointLight::setLight(Shader *const pShader, const unsigned int &pLightNumber) //Trochę rakowe, do przepisania będzie, ale jest 6 rano
+{
+    std::stringstream output;
+    output << "lights[" << pLightNumber << "].position";
+    pShader->setVec4(output.str().c_str(), &mLightPos);
+    output.str("");
+    
+    output << "lights[" << pLightNumber << "].color";
+    pShader->setVec3(output.str().c_str(), &mLightColor);
+    output.str("");
+    
+    output << "lights[" << pLightNumber << "].attenuation";
+    pShader->setFloat(output.str().c_str(), &mLightAttenuation);
+    output.str("");
+    
+    output << "lights[" << pLightNumber << "].ambientCoefficient";
+    pShader->setFloat(output.str().c_str(), &mLightAmbientCoefficient);
+    output.str("");
+}

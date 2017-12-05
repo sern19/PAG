@@ -31,6 +31,7 @@
 		DDD878381FBF8C9A00109AC6 /* Scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DDD8782D1FBF8C9A00109AC6 /* Scene.cpp */; };
 		DDD878391FBF8C9A00109AC6 /* Shader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DDD8782E1FBF8C9A00109AC6 /* Shader.cpp */; };
 		DDFBF2A71FD61D1500EC76B3 /* BaseLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DDFBF2A51FD61D1500EC76B3 /* BaseLight.cpp */; };
+		DDFBF2AA1FD65D4A00EC76B3 /* PointLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DDFBF2A81FD65D4A00EC76B3 /* PointLight.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -165,6 +166,8 @@
 		DDD8782F1FBF8C9A00109AC6 /* Config.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Config.hpp; path = PAG/Config.hpp; sourceTree = "<group>"; };
 		DDFBF2A51FD61D1500EC76B3 /* BaseLight.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BaseLight.cpp; sourceTree = "<group>"; };
 		DDFBF2A61FD61D1500EC76B3 /* BaseLight.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BaseLight.hpp; sourceTree = "<group>"; };
+		DDFBF2A81FD65D4A00EC76B3 /* PointLight.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PointLight.cpp; sourceTree = "<group>"; };
+		DDFBF2A91FD65D4A00EC76B3 /* PointLight.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PointLight.hpp; sourceTree = "<group>"; };
 		DDFEED7A1FC84EDF00DD1AFF /* body_showroom_ddn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = body_showroom_ddn.png; sourceTree = "<group>"; };
 		DDFEED7B1FC84EDF00DD1AFF /* helmet_showroom_ddn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = helmet_showroom_ddn.png; sourceTree = "<group>"; };
 		DDFEED7C1FC84EDF00DD1AFF /* arm_showroom_ddn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arm_showroom_ddn.png; sourceTree = "<group>"; };
@@ -497,6 +500,8 @@
 			children = (
 				DDFBF2A51FD61D1500EC76B3 /* BaseLight.cpp */,
 				DDFBF2A61FD61D1500EC76B3 /* BaseLight.hpp */,
+				DDFBF2A81FD65D4A00EC76B3 /* PointLight.cpp */,
+				DDFBF2A91FD65D4A00EC76B3 /* PointLight.hpp */,
 			);
 			path = Lightning;
 			sourceTree = "<group>";
@@ -626,6 +631,7 @@
 				DDD878311FBF8C9A00109AC6 /* Transform.cpp in Sources */,
 				DDD878351FBF8C9A00109AC6 /* Mesh.cpp in Sources */,
 				DDD878391FBF8C9A00109AC6 /* Shader.cpp in Sources */,
+				DDFBF2AA1FD65D4A00EC76B3 /* PointLight.cpp in Sources */,
 				DD3B1AE31FBF8518005E9485 /* glad.c in Sources */,
 				DD9E91191FC6AF90009C0AE3 /* imgui.cpp in Sources */,
 			);
