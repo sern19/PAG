@@ -1,4 +1,4 @@
-// Model.hpp
+// BaseLight.hpp
 //
 // Copyright (c) 2017 Krystian Owoc
 //
@@ -20,39 +20,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef Model_hpp
-#define Model_hpp
+#ifndef BaseLight_hpp
+#define BaseLight_hpp
 
 #include <stdio.h>
-#include <glad/glad.h>
-#include <glm/glm.hpp>
-#include <vector>
-#include <string>
 
-class Materials;
-class Node;
-class Shader;
-
-class Model
-{
-private:
-    Node* mRootNode=NULL;
-    Materials* mMaterials=NULL;
-    std::vector<GLenum> mAdditionalGLSettings;
-    std::string mModelDirectory;
-    std::string mModelFilename;
-    
-    void loadModel(const std::string& pModelPath, Shader *const pShader);
-    const std::pair<glm::vec4, glm::vec4> calculateModelOBB();
-public:
-    Model(const std::string& pModelPath, Shader *const pShader);
-    Model(const Model& pSourceModel);
-    ~Model();
-    void draw(Shader *const pShader);
-    void addGLSetting(const GLenum& pSetting);
-    void removeGLSetting(const GLenum& pSetting);
-    Node* const getRootNode();
-    const std::pair<Node*,float> testRayOBBIntersection(const glm::vec3& pRaySource, const glm::vec3& pRayDirection); //To samo co w Node, OBB dla optymalizacji
-};
-
-#endif /* Model_hpp */
+#endif /* BaseLight_hpp */

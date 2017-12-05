@@ -23,7 +23,7 @@
 #include "Mesh.hpp"
 
 #include "Shader.hpp"
-#include "Textures.hpp"
+#include "Materials.hpp"
 #include "ModelNodePicker.hpp"
 #include <glad/glad.h>
 
@@ -64,14 +64,15 @@ void Mesh::loadContent()
     glEnableVertexAttribArray(2);
 }
 
-void Mesh::setMaterial(const Material& pMaterial) { mMaterial=pMaterial; }
+void Mesh::setMaterial(const unsigned int& pMaterialID) { mMaterialID=pMaterialID; }
+void Mesh::disableMaterialUsage() { mShouldUseMaterial=false; }
 void Mesh::setIsSelected(const bool& pIsSelected) { mIsSelected=pIsSelected; }
 
-void Mesh::drawContent(Shader* const pShader, Textures* const pTextures)
+void Mesh::drawContent(Shader* const pShader, Materials* const pMaterials)
 {
-    Material temporaryMaterial;
-    if (!mIsSelected) temporaryMaterial=mMaterial;
-    pTextures->setActiveTextures(temporaryMaterial, pShader);
+    if (!mIsSelected&&mShouldUseMaterial) pMaterials->setActiveMaterial(mMaterialID, pShader);
+    else pMaterials->setDefaultMaterial(pShader);
+    
     //Bindowanie tablicy obiektów
     glBindVertexArray(mVertexArrayObject);
     glDrawElements(GL_TRIANGLES, mIndices.size(), GL_UNSIGNED_INT, 0);
@@ -81,7 +82,7 @@ void Mesh::drawContent(Shader* const pShader, Textures* const pTextures)
 const std::pair<glm::vec4, glm::vec4> Mesh::getMinMaxVerticles()
 {
     int i;
-    std::pair<glm::vec4, glm::vec4> output(FLT_MAX, FLT_MIN);
+    std::pair<glm::vec4, glm::vec4> output(glm::vec4(FLT_MAX), glm::vec4(FLT_MIN));
     
     if (mVerticles.size()==0) return output;
     

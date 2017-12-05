@@ -1,4 +1,4 @@
-// Model.hpp
+// Materials.hpp
 //
 // Copyright (c) 2017 Krystian Owoc
 //
@@ -20,39 +20,37 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef Model_hpp
-#define Model_hpp
+#ifndef Materials_hpp
+#define Materials_hpp
 
 #include <stdio.h>
-#include <glad/glad.h>
-#include <glm/glm.hpp>
 #include <vector>
-#include <string>
+#include <assimp/scene.h>
 
-class Materials;
-class Node;
+#include "Material.hpp"
+
+class Texture;
 class Shader;
 
-class Model
+class Materials
 {
 private:
-    Node* mRootNode=NULL;
-    Materials* mMaterials=NULL;
-    std::vector<GLenum> mAdditionalGLSettings;
-    std::string mModelDirectory;
-    std::string mModelFilename;
+    std::vector<Texture> mDiffuseTextures;
+    std::vector<Texture> mSpecularTextures;
+    std::vector<Texture> mNormalTextures;
     
-    void loadModel(const std::string& pModelPath, Shader *const pShader);
-    const std::pair<glm::vec4, glm::vec4> calculateModelOBB();
+    std::vector<Material> mMaterials;
+    
+    std::string mTexturesPath;
+    
+    void loadTextures(const aiScene* const pScene);
+    const bool chcekIfIsLoaded(const std::string& pTexturePath, const std::string& pTextureType);
 public:
-    Model(const std::string& pModelPath, Shader *const pShader);
-    Model(const Model& pSourceModel);
-    ~Model();
-    void draw(Shader *const pShader);
-    void addGLSetting(const GLenum& pSetting);
-    void removeGLSetting(const GLenum& pSetting);
-    Node* const getRootNode();
-    const std::pair<Node*,float> testRayOBBIntersection(const glm::vec3& pRaySource, const glm::vec3& pRayDirection); //To samo co w Node, OBB dla optymalizacji
+    Materials(const aiScene* const pScene, const std::string& pTexturesPath, Shader *const pShader);
+    const Material fillMaterialData(aiMaterial* const pMaterial);
+    void setActiveMaterial(const unsigned int& pMaterialID, Shader *const pShader);
+    void setDefaultMaterial(Shader *const pShader);
 };
 
-#endif /* Model_hpp */
+
+#endif /* Materials_hpp */

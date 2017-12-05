@@ -136,7 +136,7 @@ void UserInterface::draw()
 			ImGui::InputFloat(":y", &mRotationY, 0.1f, 1.0f, 3, ImGuiInputTextFlags_CharsDecimal);
 			ImGui::InputFloat(":z", &mRotationZ, 0.1f, 1.0f, 3, ImGuiInputTextFlags_CharsDecimal);
             ImGui::PopID();
-            
+
             //Przyciski aktualizacji transforma
             if (mSelectedTransform!=NULL && ImGui::Button("Reset transform"))
             {

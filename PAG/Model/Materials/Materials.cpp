@@ -1,4 +1,4 @@
-// Textures.cpp
+// Materials.cpp
 //
 // Copyright (c) 2017 Krystian Owoc
 //
@@ -20,20 +20,19 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "Textures.hpp"
+#include "Materials.hpp"
 #include "Texture.hpp"
 #include "Shader.hpp"
-#include "Material.hpp"
 #include "Config.hpp"
 
-Textures::Textures(const aiScene* const pScene, const std::string& pTexturesPath, Shader *const pShader): mTexturesPath(pTexturesPath)
+Materials::Materials(const aiScene* const pScene, const std::string& pTexturesPath, Shader *const pShader): mTexturesPath(pTexturesPath)
 {
     loadTextures(pScene);
     //Przypisywanie tekstur
     pShader->setInt("diffuse0", 0); //Docelowo przy normalnych i specularach, w jakiejś pętli
 }
 
-void Textures::loadTextures(const aiScene* const pScene)
+void Materials::loadTextures(const aiScene* const pScene)
 {
     int i,j;
     for (i=0;i<pScene->mNumMaterials;i++)
@@ -85,11 +84,12 @@ void Textures::loadTextures(const aiScene* const pScene)
                     } catch (std::runtime_error err) { throw err; }
                 }
             }
+            mMaterials.push_back(fillMaterialData(pScene->mMaterials[i]));
         }
     }
 }
 
-const bool Textures::chcekIfIsLoaded(const std::string& pTexturePath, const std::string& pTextureType)
+const bool Materials::chcekIfIsLoaded(const std::string& pTexturePath, const std::string& pTextureType)
 {
     int i;
     if (pTextureType.compare(DIFFUSE_NAME)==0)
@@ -109,7 +109,7 @@ const bool Textures::chcekIfIsLoaded(const std::string& pTexturePath, const std:
     return false;
 }
 
-const Material Textures::findTexturesForMaterial(aiMaterial* const pMaterial)
+const Material Materials::fillMaterialData(aiMaterial* const pMaterial)
 {
     Material output;
     aiColor3D temporaryColor;
@@ -148,22 +148,30 @@ const Material Textures::findTexturesForMaterial(aiMaterial* const pMaterial)
         for (j=0;j<mNormalTextures.size();j++)
             if (mNormalTextures[j].getTexturePath().compare(texturePath)==0) output.mNomralTextureID.push_back(j);
     }
+    
+    if (pMaterial->Get(AI_MATKEY_SHADING_MODEL, output.mShadingMode)!=AI_SUCCESS)
+        output.mShadingMode=aiShadingMode_NoShading; //Domyślne cieniowanie w przypadku niepowodzenia
+    pMaterial->Get(AI_MATKEY_SHININESS, output.mShininess);
+    
     return output;
 }
 
-void Textures::setActiveTextures(const Material& pMaterial, Shader *const pShader)
+void Materials::setActiveMaterial(const unsigned int& pMaterialID, Shader *const pShader)
 {
     int i;
+    
+    pShader->setInt("shadingMode", mMaterials[pMaterialID].mShadingMode);
+    
     //Sprawdzanie czy materiał używa tekstur
-    pShader->setVec3("diffuseColor", &pMaterial.mDiffuseColor);
-    if (pMaterial.mDiffuseTextureID.size()==0) pShader->setBool("shouldUseDiffuseTexture", false);
+    pShader->setVec3("diffuseColor", &mMaterials[pMaterialID].mDiffuseColor);
+    if (mMaterials[pMaterialID].mDiffuseTextureID.size()==0) pShader->setBool("shouldUseDiffuseTexture", false);
     else pShader->setBool("shouldUseDiffuseTexture", true);
-//    if (pMaterial.mSpecularTextureID.size()==0)
+//    if (mMaterials[pMaterialID].mSpecularTextureID.size()==0)
 //    {
 //        pShader->setBool("shouldUseSpecularTexture", false);
 //    }
 //    else pShader->setBool("shouldUseSpecularTexture", true);
-//    if (pMaterial.mNomralTextureID.size()==0)
+//    if (mMaterials[pMaterialID].mNomralTextureID.size()==0)
 //    {
 //        pShader->setBool("shouldUseNormalTexture", false);
 //    }
@@ -171,10 +179,22 @@ void Textures::setActiveTextures(const Material& pMaterial, Shader *const pShade
     
     //Przypisywanie tekstur
     Texture::deselectAllTextures();
-    for (i=0;i<pMaterial.mDiffuseTextureID.size();i++)
-        mDiffuseTextures[pMaterial.mDiffuseTextureID[i]].selectActiveTexture(DIFFUSE_NAME, i);
-    for (i=0;i<pMaterial.mSpecularTextureID.size();i++)
-        mSpecularTextures[pMaterial.mSpecularTextureID[i]].selectActiveTexture(SPECULAR_NAME, i);
-    for (i=0;i<pMaterial.mNomralTextureID.size();i++)
-        mNormalTextures[pMaterial.mNomralTextureID[i]].selectActiveTexture(NORMAL_NAME, i);
+    for (i=0;i<mMaterials[pMaterialID].mDiffuseTextureID.size();i++)
+        mDiffuseTextures[mMaterials[pMaterialID].mDiffuseTextureID[i]].selectActiveTexture(DIFFUSE_NAME, i);
+    for (i=0;i<mMaterials[pMaterialID].mSpecularTextureID.size();i++)
+        mSpecularTextures[mMaterials[pMaterialID].mSpecularTextureID[i]].selectActiveTexture(SPECULAR_NAME, i);
+    for (i=0;i<mMaterials[pMaterialID].mNomralTextureID.size();i++)
+        mNormalTextures[mMaterials[pMaterialID].mNomralTextureID[i]].selectActiveTexture(NORMAL_NAME, i);
 }
+
+void Materials::setDefaultMaterial(Shader *const pShader)
+{
+    Material temporaryMaterial;
+    
+    pShader->setInt("shadingMode", temporaryMaterial.mShadingMode);
+    pShader->setVec3("diffuseColor", &temporaryMaterial.mDiffuseColor);
+    pShader->setBool("shouldUseDiffuseTexture", false);
+    
+    Texture::deselectAllTextures();
+}
+

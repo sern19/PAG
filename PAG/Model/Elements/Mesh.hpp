@@ -31,7 +31,7 @@
 #include "Material.hpp"
 
 class Shader;
-class Textures;
+class Materials;
 
 struct Vertex
 {
@@ -53,17 +53,22 @@ private:
     GLuint mElementObjectBuffer=NULL;
     std::vector<Vertex> mVerticles;
     std::vector<unsigned int> mIndices;
-    Material mMaterial;
+    unsigned int mMaterialID;
     
     bool mIsSelected=false;
+    bool mShouldUseMaterial=true;
     
     void clearData();
     void loadContent();
 public:
     Mesh(const std::vector<Vertex>& pVerticles, const std::vector<unsigned int>& pIndices);
-    void setMaterial(const Material& pMaterial);
+    
+    void setMaterial(const unsigned int& pMaterialID);
+    void disableMaterialUsage();
     void setIsSelected(const bool& pIsSelected);
-    void drawContent(Shader* const pShader, Textures* const pTextures);
+    
+    void drawContent(Shader* const pShader, Materials* const pTextures);
+    
     const std::pair<glm::vec4, glm::vec4> getMinMaxVerticles();
     const bool checkRayIntersections(const glm::vec3& pRaySource, const glm::vec3& pRayDirection, const glm::mat4& pTransform, float& pDistanceOutput);
 };

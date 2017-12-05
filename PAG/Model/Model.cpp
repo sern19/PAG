@@ -22,7 +22,7 @@
 
 #include "Model.hpp"
 #include "ModelNodePicker.hpp"
-#include "Textures.hpp"
+#include "Materials.hpp"
 #include "Texture.hpp"
 #include "Node.hpp"
 #include "Config.hpp"
@@ -39,7 +39,7 @@ Model::Model(const std::string& pModelPath, Shader *const pShader)
 Model::Model(const Model& pSourceModel): mModelDirectory(pSourceModel.mModelDirectory)
 {
     mRootNode=new Node(*pSourceModel.mRootNode);
-    mTextures=new Textures(*pSourceModel.mTextures);
+    mMaterials=new Materials(*pSourceModel.mMaterials);
 }
 
 const std::pair<glm::vec4, glm::vec4>  Model::calculateModelOBB()
@@ -73,7 +73,7 @@ const std::pair<glm::vec4, glm::vec4>  Model::calculateModelOBB()
 void Model::loadModel(const std::string &pModelPath, Shader *const pShader)
 {
     Assimp::Importer importer;
-    const aiScene *scene = importer.ReadFile(pModelPath, aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices);
+    const aiScene *scene = importer.ReadFile(pModelPath, aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices | aiProcess_RemoveRedundantMaterials | aiProcess_OptimizeMeshes | aiProcess_SplitLargeMeshes | aiProcess_SortByPType);
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
     {
         std::string outputMessage="(Model::loadModel): Błąd wczytywania modelu\n\t(ASSIMP): ";
@@ -85,8 +85,8 @@ void Model::loadModel(const std::string &pModelPath, Shader *const pShader)
     mModelDirectory.erase(mModelDirectory.find(MODEL_SOURCE_FOLDER));
     mModelFilename=pModelPath.substr(pModelPath.rfind(MODEL_SOURCE_FOLDER)+std::string(MODEL_SOURCE_FOLDER).length());
     
-    mTextures=new Textures(scene, mModelDirectory.append(MODEL_TEXTURE_FOLDER), pShader);
-    mRootNode=new Node(scene->mRootNode, scene, mTextures);
+    mMaterials=new Materials(scene, mModelDirectory.append(MODEL_TEXTURE_FOLDER), pShader);
+    mRootNode=new Node(scene->mRootNode, scene, mMaterials);
 }
 
 void Model::draw(Shader *const pShader)
@@ -96,7 +96,7 @@ void Model::draw(Shader *const pShader)
     {
         for (i=0;i<mAdditionalGLSettings.size();i++)
             glEnable(mAdditionalGLSettings[i]);
-        mRootNode->drawContent(pShader, mTextures);
+        mRootNode->drawContent(pShader, mMaterials);
         for (i=0;i<mAdditionalGLSettings.size();i++)
             glDisable(mAdditionalGLSettings[i]);
     }
@@ -121,7 +121,7 @@ Node* const Model::getRootNode() { return mRootNode; }
 Model::~Model()
 {
     if (mRootNode) delete mRootNode;
-    if (mTextures) delete mTextures;
+    if (mMaterials) delete mMaterials;
 }
 
 const std::pair<Node*,float> Model::testRayOBBIntersection(const glm::vec3& pRaySource, const glm::vec3& pRayDirection)

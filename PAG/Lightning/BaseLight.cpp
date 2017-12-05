@@ -1,4 +1,4 @@
-// Textures.hpp
+// BaseLight.cpp
 //
 // Copyright (c) 2017 Krystian Owoc
 //
@@ -20,33 +20,4 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef Textures_hpp
-#define Textures_hpp
-
-#include <stdio.h>
-#include <vector>
-#include <assimp/scene.h>
-
-class Texture;
-class Shader;
-struct Material;
-
-class Textures
-{
-private:
-    std::vector<Texture> mDiffuseTextures;
-    std::vector<Texture> mSpecularTextures;
-    std::vector<Texture> mNormalTextures;
-    
-    std::string mTexturesPath;
-    
-    void loadTextures(const aiScene* const pScene);
-    const bool chcekIfIsLoaded(const std::string& pTexturePath, const std::string& pTextureType);
-public:
-    Textures(const aiScene* const pScene, const std::string& pTexturesPath, Shader *const pShader);
-    const Material findTexturesForMaterial(aiMaterial* const pMaterial);
-    void setActiveTextures(const Material& pMaterial, Shader *const pShader);
-};
-
-
-#endif /* Textures_hpp */
+#include "BaseLight.hpp"

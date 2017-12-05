@@ -28,21 +28,21 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/matrix_decompose.hpp>
 
-const bool ModelNodePicker::checkRayIntersectionTriangle(const glm::vec3& pRaySource, const glm::vec3& pRayDirection, const glm::vec3 triangle[3], float& pDistanceOutput)
+const bool ModelNodePicker::checkRayIntersectionTriangle(const glm::vec3& pRaySource, const glm::vec3& pRayDirection, const glm::vec3 pTriangle[3], float& pDistanceOutput)
 {
     const float epsilon = 0.00000001;
     glm::vec3 edge1, edge2, h, s, q;
     float a,f,u,v,t;
     
     //Obliczanie krawędzi
-    edge1=triangle[1]-triangle[0];
-    edge2=triangle[2]-triangle[0];
+    edge1=pTriangle[1]-pTriangle[0];
+    edge2=pTriangle[2]-pTriangle[0];
     h=glm::cross(pRayDirection, edge2);
     a=glm::dot(edge1, h);
     if (fabs(a)< epsilon)
         return false;
     f=1/a;
-    s=pRaySource-triangle[0];
+    s=pRaySource-pTriangle[0];
     u=f*glm::dot(s,h);
     if (u<0.0||u>1.0)
         return false;

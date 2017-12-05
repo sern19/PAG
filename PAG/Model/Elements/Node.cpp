@@ -26,18 +26,18 @@
 #include "Transform.hpp"
 #include "Shader.hpp"
 #include "ModelNodePicker.hpp"
-#include "Textures.hpp"
+#include "Materials.hpp"
 
 #include <iostream>
 #include <algorithm>
 
-Node::Node(const aiNode* const pNode, const aiScene* const pScene, Node* pParentNode, Textures* const pTextures): Node(pNode, pScene, pTextures) { mParentNode=pParentNode; }
+Node::Node(const aiNode* const pNode, const aiScene* const pScene, Node* pParentNode, Materials* const pTextures): Node(pNode, pScene, pTextures) { mParentNode=pParentNode; }
 
-Node::Node(const aiNode* const pNode, const aiScene* const pScene, Textures* const pTextures): mOriginalTransform(pNode->mTransformation)
+Node::Node(const aiNode* const pNode, const aiScene* const pScene, Materials* const pTextures): mOriginalTransform(pNode->mTransformation)
 {
     mElementTransform=new Transform();
     processNode(pNode, pScene, pTextures);
-    updateChildrenPointers(this); //Może nie będzie potrzebne, ale przy vectorach lepiej dać
+    updateChildrenPointers(this);
     updateCache();
     generateOBB();
 }
@@ -48,7 +48,7 @@ Node::Node(const Node& pSourceNode): mParentNode(pSourceNode.mParentNode), mCach
     updateChildrenPointers(this);
 }
 
-void Node::processNode(const aiNode* const pNode, const aiScene* const pScene, Textures* const pTextures)
+void Node::processNode(const aiNode* const pNode, const aiScene* const pScene, Materials* const pTextures)
 {
     int i;
     //Przetwarzanie własnych meshy
@@ -90,7 +90,7 @@ void Node::generateOBB()
     }
 }
 
-Mesh Node::processMesh(const aiMesh* const pMesh, const aiScene* const pScene, Textures* const pTextures)
+Mesh Node::processMesh(const aiMesh* const pMesh, const aiScene* const pScene, Materials* const pMaterials)
 {
     std::vector<Vertex> verticles;
     std::vector<unsigned int> indices;
@@ -126,8 +126,8 @@ Mesh Node::processMesh(const aiMesh* const pMesh, const aiScene* const pScene, T
     }
     
     Mesh output(verticles,indices);
-    if (pScene->mMaterials[pMesh->mMaterialIndex]!=NULL) output.setMaterial(pTextures->findTexturesForMaterial(pScene->mMaterials[pMesh->mMaterialIndex]));
-    else output.setMaterial(Material());
+    if (pScene->mMaterials[pMesh->mMaterialIndex]!=NULL) output.setMaterial(pMesh->mMaterialIndex);
+    else output.disableMaterialUsage();
     return output;
 }
 
@@ -148,7 +148,7 @@ void Node::updateChildrenPointers(Node* const pParent)
         mChildNodes[i].updateChildrenPointers(this);
 }
 
-void Node::drawContent(Shader *const pShader, Textures* const pTextures)
+void Node::drawContent(Shader *const pShader, Materials* const pTextures)
 {
     int i;
     if (mElementTransform&&mElementTransform->getNeedsUpdateCache()) updateCache();

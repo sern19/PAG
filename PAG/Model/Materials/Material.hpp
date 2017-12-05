@@ -24,6 +24,7 @@
 #define Material_hpp
 
 #include <stdio.h>
+#include <glm/glm.hpp>
 
 struct Material
 {
@@ -32,6 +33,8 @@ struct Material
     std::vector<int> mSpecularTextureID;
     glm::vec3 mSpecularLevel=glm::vec3(1,1,1);
     std::vector<int> mNomralTextureID;
+    int mShadingMode=0x9; //Bez cieniowania
+    float mShininess=1.0f;
     Material() {};
 };
 
