@@ -38,8 +38,9 @@ uniform bool shouldUseDiffuseTexture;
 uniform bool shouldUseSpecularTexture;
 uniform bool shouldUseNormalTexture;
 
-uniform mat3 normalMatrix;
+uniform vec3 cameraPos;
 
+uniform mat3 normalMatrix;
 
 out vec4 fragColor;
 
@@ -75,7 +76,7 @@ vec3 applyPhongLight(Light light, const in vec4 inputColor, const vec3 specularC
         specularCoefficient=pow(max(0.0, dot(inputToCamera, reflect(-inputToLight, transformedNormal))), shininess*shininessStrength);
     specular=specularCoefficient*specularColor*light.color;
     
-    return ambient+attenuation*(diffuse);
+    return ambient+attenuation*(diffuse+specular);
 }
 
 vec4 shadeColor(const in vec4 inputColor, const vec3 specularColor, const in vec3 transformedNormal)
@@ -89,9 +90,9 @@ vec4 shadeColor(const in vec4 inputColor, const vec3 specularColor, const in vec
     //else //if (shadingMode==SHADING_PHONG)
     //{
         int i;
-        vec3 inputToCamera=normalize(vec3(0,0,0)-fragVertex);
+        vec3 inputToCamera=normalize(cameraPos-fragVertex);
         for (i=0;i<numberOfActiveLights;i++)
-            outputColor+=vec4(applyPhongLight(lights[i], inputColor, specularColor, transformedNormal, fragVertex, inputToCamera),1);
+            outputColor+=vec4(applyPhongLight(lights[i], inputColor, specularColor, transformedNormal,fragVertex, inputToCamera),1);
     //}
     
     return vec4(outputColor.rgb, inputColor.a);
@@ -126,11 +127,12 @@ void main()
     //Wybór normalnych - tu docelowo mieszanie tekstur
     if (shouldUseNormalTexture)
     {
-        mat3tbn=mat3(normalize(normalMatrix*fragVertexTangent),normalize(normalMatrix*fragVertexBitangent),normalize(normalMatrix*fragVertexNormal));
+        mat3 tbn=mat3(normalize(normalMatrix*fragVertexTangent),normalize(normalMatrix*fragVertexBitangent),normalize(normalMatrix*fragVertexNormal));
         normal=normalize(tbn*texelNormal.xyz);
     }
     else
         normal=normalize(normalMatrix*fragVertexNormal);
     
     fragColor=shadeColor(diffuse, specular, normal);
+    //fragColor=vec4(normal* vec3(0.5) + vec3(0.5),1);//shadeColor(diffuse, specular, normal);
 }

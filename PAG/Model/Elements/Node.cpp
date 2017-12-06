@@ -164,12 +164,11 @@ void Node::drawContent(Shader *const pShader, Scene* const pScene, Materials* co
     int i;
     if (mElementTransform&&mElementTransform->getNeedsUpdateCache()) updateCache();
     
-    glm::mat4 wvpModelMatrix=pScene->getWVP()*mCachedTransform;
-    glm::mat4 wvModelMatrix=pScene->getViewSpace()*pScene->getWorldSpace()*mCachedTransform;
-    glm::mat3 normalMatrix=glm::transpose(glm::inverse(glm::mat3(wvModelMatrix)));
+    glm::mat4 MVPMatrix=pScene->getWVP()*mCachedTransform;
+    glm::mat3 normalMatrix=glm::transpose(glm::inverse(glm::mat3(mCachedTransform)));
     
-    pShader->setMat4("wvpModelMatrix", &wvpModelMatrix);
-    pShader->setMat4("wvModelMatrix", &wvModelMatrix);
+    pShader->setMat4("MVPMatrix", &MVPMatrix);
+    pShader->setMat4("modelMatrix", &mCachedTransform);
     pShader->setMat3("normalMatrix", &normalMatrix);
     
     for (i=0;i<mMeshes.size();i++)

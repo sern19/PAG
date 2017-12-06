@@ -13,12 +13,11 @@ out Data
     mat4 mvp;
 } vdata;
 
-uniform mat4 wvpModelMatrix;
-uniform mat4 wvModelMatrix;
+uniform mat4 MVPMatrix;
 
 void main()
 {
-    vdata.mvp=wvpModelMatrix;
+    vdata.mvp=MVPMatrix;
     vdata.position=vertexPosition;
     vdata.normal=normalize(vertexNormal);
 }

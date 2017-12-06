@@ -12,16 +12,16 @@ smooth out vec3 fragVertexTangent;
 smooth out vec3 fragVertexBitangent;
 smooth out vec2 fragVertexTexture;
 
-uniform mat4 wvpModelMatrix;
-uniform mat4 wvModelMatrix;
+uniform mat4 MVPMatrix;
+uniform mat4 modelMatrix;
 
 void main()
 {
-    fragVertex=vec3(wvModelMatrix*vec4(vertexPosition, 1.0f)); //Potrzebne potem do operacji na normalnych
+    fragVertex=vec3(modelMatrix*vec4(vertexPosition,1)); //Potrzebne potem do operacji na normalnych
     fragVertexNormal=vertexNormal;
     fragVertexTangent=vertexTangent;
     fragVertexBitangent=vertexBitangent;
     fragVertexTexture=vertexTexture;
     
-    gl_Position=wvpModelMatrix*vec4(vertexPosition, 1.0f); //(vec3,float) lub (float,float,float,float) 1-pozycja w przestrzeni, 0-kierunek w przestrzeni
+    gl_Position=MVPMatrix*vec4(vertexPosition, 1.0f); //(vec3,float) lub (float,float,float,float) 1-pozycja w przestrzeni, 0-kierunek w przestrzeni
 }

@@ -98,6 +98,7 @@ void Core::display()
     
     //Zaraz po swap, żeby nie było efektu ducha
     mScene->updateViewSpace(mCamera->generateViewSpace());
+    mShader->setVec3("cameraPos", mCamera->getCameraPos());
     
     glfwPollEvents(); //Poll dla eventów
 }

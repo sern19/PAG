@@ -182,10 +182,12 @@ void Materials::setActiveMaterial(const unsigned int& pMaterialID, Shader *const
     
     pShader->setInt("shadingMode", mMaterials[pMaterialID].mShadingMode);
     
-    //Sprawdzanie czy materiał używa tekstur
     pShader->setVec3("diffuseColor", &mMaterials[pMaterialID].mDiffuseColor);
     pShader->setVec3("specularColor", &mMaterials[pMaterialID].mSpecularColor);
     pShader->setVec3("ambientColor", &mMaterials[pMaterialID].mAmbientColor);
+    pShader->setFloat("shininess", &mMaterials[pMaterialID].mShininess);
+    pShader->setFloat("shininessStrength", &mMaterials[pMaterialID].mShininessStrength);
+    //Sprawdzanie czy materiał używa tekstur
     if (mMaterials[pMaterialID].mDiffuseTextureID.size()==0) pShader->setBool("shouldUseDiffuseTexture", false);
     else pShader->setBool("shouldUseDiffuseTexture", true);
     if (mMaterials[pMaterialID].mSpecularTextureID.size()==0)
