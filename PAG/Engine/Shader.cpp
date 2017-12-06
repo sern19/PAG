@@ -110,6 +110,9 @@ void Shader::linkAndReloadProgram()
     } else mProgramHandle=glCreateProgram();
     try
     {
+//        compileShaderFromFile(GL_VERTEX_SHADER, "Shaders/debug.vert");
+//        compileShaderFromFile(GL_GEOMETRY_SHADER, "Shaders/debug.geom");
+//        compileShaderFromFile(GL_FRAGMENT_SHADER, "Shaders/debug.frag");
         compileShaderFromFile(GL_VERTEX_SHADER, VERTEX_SHADER_LOCATION);
         compileShaderFromFile(GL_FRAGMENT_SHADER, FRAGMENT_SHADER_LOCATION);
     } catch (std::runtime_error err)
@@ -166,4 +169,8 @@ void Shader::setInt(const std::string& pUniformName, const int& pValue)
 void Shader::setFloat(const std::string& pUniformName, const float& pValue)
 {
     glUniform1f(glGetUniformLocation(mProgramHandle, pUniformName.c_str()),pValue);
+}
+void Shader::setVec3(const std::string& pUniformName, const glm::vec3& pValue)
+{
+    glUniform3f(glGetUniformLocation(mProgramHandle, pUniformName.c_str()),pValue[0],pValue[1],pValue[2]);
 }

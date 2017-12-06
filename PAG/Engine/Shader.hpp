@@ -52,6 +52,7 @@ public:
     void setBool(const std::string& pUniformName, const bool& pValue);
     void setInt(const std::string& pUniformName, const int& pValue);
     void setFloat(const std::string& pUniformName, const float& pValue);
+    void setVec3(const std::string& pUniformName, const glm::vec3& pValue);
 };
 
 #endif /* Shader_hpp */

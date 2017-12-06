@@ -84,17 +84,21 @@ Core::~Core()
     if (mCamera) delete mCamera;
     if (mInput) delete mInput;
     if (mUI) delete mUI;
+    if (mTemporaryLight) delete mTemporaryLight;
 }
 void Core::display()
 {
     int i;
     glClearColor(BACKGROUND_COLOR);
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT); //Czyszczenie sceny
-    mScene->updateViewSpace(mCamera->generateViewSpace());
     for (i=0;i<mModels.size();i++)
         mModels[i].draw(mShader, mScene);
     mUI->draw();
     glfwSwapBuffers(mWindow->getWindow()); //Swap front- i backbuffer
+    
+    //Zaraz po swap, żeby nie było efektu ducha
+    mScene->updateViewSpace(mCamera->generateViewSpace());
+    
     glfwPollEvents(); //Poll dla eventów
 }
 
@@ -128,8 +132,8 @@ void Core::mainLoop()
     int loops;
     
     //
-    PointLight test(glm::vec4(0,0.1,0,0), glm::vec3(1,1,1), 0.9, 0.14);
-    test.setLight(mShader, 0);
+    mTemporaryLight=new PointLight(glm::vec3(0,1,1), glm::vec3(1,1,1), 0.9, 0.14);
+    mTemporaryLight->setLight(mShader, mScene, 0);
     mShader->setInt("numberOfActiveLights", 1);
     //
     
@@ -147,6 +151,7 @@ void Core::mainLoop()
             nextGameTick+=SKIP_TICKS;
             loops++;
         }
+        mTemporaryLight->setLight(mShader, mScene, 0);
         display();
     }
 }

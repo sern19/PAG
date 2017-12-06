@@ -51,6 +51,8 @@ const std::pair<glm::vec4, glm::vec4>  Model::calculateModelOBB()
     
     std::vector<std::pair<glm::vec4,glm::vec4>> obbs=mRootNode->getOBBs();
     
+    if (obbs.size()==0) return output;
+    
     output=obbs[0];
     
     //Minimum
@@ -73,7 +75,7 @@ const std::pair<glm::vec4, glm::vec4>  Model::calculateModelOBB()
 void Model::loadModel(const std::string &pModelPath, Shader *const pShader)
 {
     Assimp::Importer importer;
-    const aiScene *scene = importer.ReadFile(pModelPath, aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices | aiProcess_RemoveRedundantMaterials | aiProcess_OptimizeMeshes | aiProcess_SplitLargeMeshes | aiProcess_SortByPType);
+    const aiScene *scene = importer.ReadFile(pModelPath, aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_ImproveCacheLocality | aiProcess_FixInfacingNormals |  aiProcess_FindInvalidData | aiProcess_FlipUVs | aiProcess_CalcTangentSpace | aiProcess_JoinIdenticalVertices | aiProcess_RemoveRedundantMaterials | aiProcess_OptimizeMeshes | aiProcess_SplitLargeMeshes | aiProcess_SortByPType);
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
     {
         std::string outputMessage="(Model::loadModel): Błąd wczytywania modelu\n\t(ASSIMP): ";

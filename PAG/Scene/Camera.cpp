@@ -22,6 +22,7 @@
 
 #include "Camera.hpp"
 #include "Config.hpp"
+#include "Scene.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 
 Camera::Camera(): mCameraSpeed(CAMERA_MOVE_SPEED)
@@ -71,6 +72,7 @@ void Camera::rotateByOffset(const float& pOffsetX, const float& pOffsetY)
 }
 
 const glm::vec3& Camera::getCameraPos() { return mCameraPos; }
+const glm::vec3 Camera::getCameraPosInWV(Scene* const pScene) { return glm::vec3(pScene->getViewSpace()*pScene->getWorldSpace()*glm::vec4(mCameraPos,1)); }
 
 const glm::mat4 Camera::generateViewSpace()  { return glm::lookAt(mCameraPos, mCameraPos + mCameraFront, mCameraUp); }
 

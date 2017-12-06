@@ -49,9 +49,9 @@ void Transform::setNeedsUpdateCache()
 glm::mat4 Transform::combineTransformWithChildren()
 {
     glm::mat4 output;
-    output = glm::translate(output, mPosition);
-    output *= glm::mat4_cast(mRotation);
-    output = glm::scale(output, mScale);
+    output=glm::translate(output, mPosition);
+    output*=glm::mat4_cast(mRotation);
+    output=glm::scale(output, mScale);
     if (mChildTransform) return output*mChildTransform->first.getChildCombinedTransform();
     return output;
 }

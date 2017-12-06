@@ -27,29 +27,31 @@
 #include <glm/glm.hpp>
 
 class Shader;
+class Scene;
 
 class BaseLight
 {
 protected:
-    glm::vec4 mLightPos;
+    glm::vec3 mLightPos;
     glm::vec3 mLightColor;
     float mLightAttenuation; //Tłumienie
     float mLightAmbientCoefficient; //"Jasność" ambienta
+protected:
+    BaseLight(const glm::vec3& pLightPos, const glm::vec3& pLightColor, const float& pLightAttenuation, const float& pLightAmbientCoefficient);
 public:
-    BaseLight(const glm::vec4& pLightPos, const glm::vec3& pLightColor, const float& pLightAttenuation, const float& pLightAmbientCoefficient);
     virtual ~BaseLight();
     
-    const glm::vec4& getLightPos();
+    const glm::vec3& getLightPos();
     const glm::vec3& getLightColor();
     const float& getLightAttenuation();
     const float& getLightAmbientCoefficient();
     
-    void setLightPos(const glm::vec4& pLightPos);
+    void setLightPos(const glm::vec3& pLightPos);
     void setLightColor(const glm::vec3& pLightColor);
     void setLightAttenuation(const float& pLightAttenuation);
     void setLightAmbientCoefficient(const float& pLightAmbientCoefficient);
     
-    virtual void setLight(Shader* const pShader, const unsigned int& pLightNumber)=0;
+    virtual void setLight(Shader* const pShader, Scene* const pScene, const unsigned int& pLightNumber)=0;
 };
 
 #endif /* BaseLight_hpp */

@@ -22,15 +22,15 @@
 
 #include "BaseLight.hpp"
 
-BaseLight::BaseLight(const glm::vec4& pLightPos, const glm::vec3& pLightColor, const float& pLightAttenuation, const float& pLightAmbientCoefficient):mLightPos(pLightPos), mLightColor(pLightColor), mLightAttenuation(pLightAttenuation), mLightAmbientCoefficient(pLightAmbientCoefficient) { }
+BaseLight::BaseLight(const glm::vec3& pLightPos, const glm::vec3& pLightColor, const float& pLightAttenuation, const float& pLightAmbientCoefficient):mLightPos(pLightPos), mLightColor(pLightColor), mLightAttenuation(pLightAttenuation), mLightAmbientCoefficient(pLightAmbientCoefficient) { }
 BaseLight::~BaseLight() { }
 
-const glm::vec4& BaseLight::getLightPos() { return mLightPos; }
+const glm::vec3& BaseLight::getLightPos() { return mLightPos; }
 const glm::vec3& BaseLight::getLightColor() { return mLightColor; }
 const float& BaseLight::getLightAttenuation() { return mLightAttenuation; }
 const float& BaseLight::getLightAmbientCoefficient() { return mLightAmbientCoefficient; }
 
-void BaseLight::setLightPos(const glm::vec4& pLightPos) { mLightPos=pLightPos; }
+void BaseLight::setLightPos(const glm::vec3& pLightPos) { mLightPos=pLightPos; }
 void BaseLight::setLightColor(const glm::vec3& pLightColor) { mLightColor=pLightColor; }
 void BaseLight::setLightAttenuation(const float& pLightAttenuation) { mLightAttenuation=pLightAttenuation; }
 void BaseLight::setLightAmbientCoefficient(const float& pLightAmbientCoefficient) { mLightAmbientCoefficient=pLightAmbientCoefficient; }

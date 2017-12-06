@@ -23,17 +23,20 @@
 #include "PointLight.hpp"
 
 #include "Shader.hpp"
+#include "Scene.hpp"
 
 #include <sstream>
 
-PointLight::PointLight(const glm::vec4& pLightPos, const glm::vec3& pLightColor, const float& pLightAttenuation, const float& pLightAmbientCoefficient):BaseLight(pLightPos, pLightColor, pLightAttenuation, pLightAmbientCoefficient) { }
+PointLight::PointLight(const glm::vec3& pLightPos, const glm::vec3& pLightColor, const float& pLightAttenuation, const float& pLightAmbientCoefficient):BaseLight(pLightPos, pLightColor, pLightAttenuation, pLightAmbientCoefficient) { }
 PointLight::~PointLight() { }
 
-void PointLight::setLight(Shader *const pShader, const unsigned int &pLightNumber) //Trochę rakowe, do przepisania będzie, ale jest 6 rano
+void PointLight::setLight(Shader* const pShader, Scene* const pScene, const unsigned int& pLightNumber) //Trochę rakowe, do przepisania będzie, ale jest 6 rano
 {
+    glm::vec4 transformedPosition=glm::vec4(glm::vec3(pScene->getViewSpace()*pScene->getWorldSpace()*glm::vec4(mLightPos,1)), 0);
+    
     std::stringstream output;
     output << "lights[" << pLightNumber << "].position";
-    pShader->setVec4(output.str().c_str(), &mLightPos);
+    pShader->setVec4(output.str().c_str(), &transformedPosition);
     output.str("");
     
     output << "lights[" << pLightNumber << "].color";

@@ -104,6 +104,16 @@ Mesh Node::processMesh(const aiMesh* const pMesh, const aiScene* const pScene, M
         temporaryVertex.mPosition.x=pMesh->mVertices[i].x;
         temporaryVertex.mPosition.y=pMesh->mVertices[i].y;
         temporaryVertex.mPosition.z=pMesh->mVertices[i].z;
+        if (pMesh->HasTangentsAndBitangents())
+        {
+            temporaryVertex.mTangent.x=pMesh->mTangents[i].x;
+            temporaryVertex.mTangent.y=pMesh->mTangents[i].y;
+            temporaryVertex.mTangent.z=pMesh->mTangents[i].z;
+            
+            temporaryVertex.mBitangent.x=pMesh->mBitangents[i].x;
+            temporaryVertex.mBitangent.y=pMesh->mBitangents[i].y;
+            temporaryVertex.mBitangent.z=pMesh->mBitangents[i].z;
+        }
         //Normalne
         if (pMesh->mNormals)
         {
@@ -154,11 +164,13 @@ void Node::drawContent(Shader *const pShader, Scene* const pScene, Materials* co
     int i;
     if (mElementTransform&&mElementTransform->getNeedsUpdateCache()) updateCache();
     
-    glm::mat4 modelMatrix=pScene->getWVP()*mCachedTransform;
-    glm::mat4 normalMatrix=glm::transpose(glm::inverse(modelMatrix));
+    glm::mat4 wvpModelMatrix=pScene->getWVP()*mCachedTransform;
+    glm::mat4 wvModelMatrix=pScene->getViewSpace()*pScene->getWorldSpace()*mCachedTransform;
+    glm::mat3 normalMatrix=glm::transpose(glm::inverse(glm::mat3(wvModelMatrix)));
     
-    pShader->setMat4("modelMatrix", &modelMatrix);
-    pShader->setMat4("normalMatrix", &normalMatrix);
+    pShader->setMat4("wvpModelMatrix", &wvpModelMatrix);
+    pShader->setMat4("wvModelMatrix", &wvModelMatrix);
+    pShader->setMat3("normalMatrix", &normalMatrix);
     
     for (i=0;i<mMeshes.size();i++)
         mMeshes[i].drawContent(pShader, pTextures);

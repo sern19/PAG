@@ -26,6 +26,8 @@
 #include <stdio.h>
 #include <glm/glm.hpp>
 
+class Scene;
+
 class Camera
 {
 private:
@@ -42,6 +44,7 @@ public:
     void moveInDirection(const glm::vec3& pDirection);
     void rotateByOffset(const float& pOffsetX, const float& pOffsetY);
 	const glm::vec3& getCameraPos();
+    const glm::vec3 getCameraPosInWV(Scene* const pScene);
     const glm::mat4 generateViewSpace();
     ~Camera();
 };

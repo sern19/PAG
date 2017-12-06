@@ -37,6 +37,8 @@ struct Vertex
 {
     glm::vec3 mPosition={0,0,0};
     glm::vec3 mNormal={0,0,0};
+    glm::vec3 mTangent={0,0,0};
+    glm::vec3 mBitangent={0,0,0};
     glm::vec2 mTexture={0,0};
     Vertex() { };
     Vertex(const glm::vec3& pPosition) {mPosition=pPosition;};

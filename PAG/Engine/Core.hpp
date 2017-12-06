@@ -37,6 +37,7 @@ class Scene;
 class Camera;
 class Input;
 class Model;
+class BaseLight;
 class UserInterface;
 
 class Core
@@ -49,6 +50,7 @@ private:
     Input* mInput=NULL;
     UserInterface* mUI=NULL;
     std::vector<Model> mModels;
+    BaseLight* mTemporaryLight;
     
     void display();
 	void updateObjectsPositions();
