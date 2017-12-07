@@ -49,6 +49,8 @@ private:
     Camera* mCamera=NULL;
     Input* mInput=NULL;
     UserInterface* mUI=NULL;
+    
+    Model* mLightModel=NULL;
     std::vector<Model> mModels;
     std::vector<BaseLight*> mLights;
     

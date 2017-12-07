@@ -48,6 +48,7 @@ private:
 public:
     Materials(const aiScene* const pScene, const std::string& pTexturesPath, Shader *const pShader);
     const Material fillMaterialData(aiMaterial* const pMaterial);
+    Material* getMaterial(const unsigned int& pMaterialID);
     void setActiveMaterial(const unsigned int& pMaterialID, Shader *const pShader);
     void setDefaultMaterial(Shader *const pShader);
 };

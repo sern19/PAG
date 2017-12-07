@@ -53,6 +53,7 @@ public:
     void addGLSetting(const GLenum& pSetting);
     void removeGLSetting(const GLenum& pSetting);
     Node* const getRootNode();
+    Materials* const getMaterials();
     const std::pair<Node*,float> testRayOBBIntersection(const glm::vec3& pRaySource, const glm::vec3& pRayDirection); //To samo co w Node, OBB dla optymalizacji
 };
 

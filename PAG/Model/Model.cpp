@@ -122,6 +122,7 @@ void Model::removeGLSetting(const GLenum& pSetting)
 }
 
 Node* const Model::getRootNode() { return mRootNode; }
+Materials* const Model::getMaterials() { return mMaterials; }
 
 Model::~Model()
 {

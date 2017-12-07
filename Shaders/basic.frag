@@ -121,6 +121,8 @@ vec4 shadeColor(const in vec4 inputColor, const vec3 specularColor, const in vec
         for (i=0;i<numberOfActiveLights;i++)
             outputColor+=vec4(applyPhongLight(lights[i], inputColor, specularColor, transformedNormal,fragVertex, inputToCamera),1);
     }
+    else
+        outputColor=inputColor;
     
     return vec4(outputColor.rgb, inputColor.a);
 }

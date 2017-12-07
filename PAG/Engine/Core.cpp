@@ -89,6 +89,7 @@ Core::~Core()
         for (i=0;i<mLights.size();i++)
             if (mLights[i]) delete mLights[i];
     }
+    if (mLightModel) delete mLightModel;
     if (mWindow) delete mWindow;
     if (mShader) delete mShader;
     if (mScene) delete mScene;
@@ -103,6 +104,8 @@ void Core::display()
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT); //Czyszczenie sceny
     for (i=0;i<mModels.size();i++)
         mModels[i].draw(mShader, mScene);
+    for (i=0;i<mLights.size();i++)
+        mLights[i]->drawModel(mLightModel, mShader, mScene);
     mUI->draw();
     glfwSwapBuffers(mWindow->getWindow()); //Swap front- i backbuffer
     
@@ -128,6 +131,8 @@ void Core::loadModels()
     mModels[1].getRootNode()->getNodeTransform()->setScale(glm::vec3(0.3,0.3,0.3));
     
     mModels[1].getRootNode()->getNodeTransform()->setPosition(glm::vec3(0,0.3,0));
+    
+    mLightModel=new Model("Models/LightSphere/source/LightSphere.obj", mShader);
 }
 
 void Core::loadLights()

@@ -22,6 +22,13 @@
 
 #include "BaseLight.hpp"
 
+#include "Model.hpp"
+#include "Node.hpp"
+#include "Transform.hpp"
+
+#include "Materials.hpp"
+#include "Material.hpp"
+
 BaseLight::BaseLight(const glm::vec3& pLightPos, const glm::vec3& pLightColor, const float& pLightAttenuation, const float& pLightAmbientCoefficient):mLightPos(pLightPos), mLightColor(pLightColor), mLightAttenuation(pLightAttenuation), mLightAmbientCoefficient(pLightAmbientCoefficient) { }
 BaseLight::~BaseLight() { }
 
@@ -34,3 +41,10 @@ void BaseLight::setLightPos(const glm::vec3& pLightPos) { mLightPos=pLightPos; }
 void BaseLight::setLightColor(const glm::vec3& pLightColor) { mLightColor=pLightColor; }
 void BaseLight::setLightAttenuation(const float& pLightAttenuation) { mLightAttenuation=pLightAttenuation; }
 void BaseLight::setLightAmbientCoefficient(const float& pLightAmbientCoefficient) { mLightAmbientCoefficient=pLightAmbientCoefficient; }
+
+void BaseLight::drawModel(Model* pModel, Shader* const pShader, Scene* const pScene)
+{
+    pModel->getRootNode()->getNodeTransform()->setPosition(mLightPos);
+    pModel->getMaterials()->getMaterial(0)->mDiffuseColor=glm::vec4(mLightColor,1);
+    pModel->draw(pShader, pScene);
+}

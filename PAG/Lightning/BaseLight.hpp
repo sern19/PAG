@@ -26,6 +26,7 @@
 #include <stdio.h>
 #include <glm/glm.hpp>
 
+class Model;
 class Shader;
 class Scene;
 
@@ -50,6 +51,8 @@ public:
     void setLightColor(const glm::vec3& pLightColor);
     void setLightAttenuation(const float& pLightAttenuation);
     void setLightAmbientCoefficient(const float& pLightAmbientCoefficient);
+    
+    virtual void drawModel(Model* pModel, Shader* const pShader, Scene* const pScene);
     
     virtual void setLight(Shader* const pShader, Scene* const pScene, const unsigned int& pLightNumber)=0;
 };

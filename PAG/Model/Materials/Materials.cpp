@@ -217,6 +217,8 @@ const Material Materials::fillMaterialData(aiMaterial* const pMaterial)
     return output;
 }
 
+Material* Materials::getMaterial(const unsigned int& pMaterialID) { return &mMaterials[pMaterialID]; }
+
 void Materials::setActiveMaterial(const unsigned int& pMaterialID, Shader *const pShader)
 {
     int i;
