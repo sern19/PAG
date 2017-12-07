@@ -23,7 +23,7 @@
 #include "Core.hpp"
 
 #include <stdexcept>
-#include <ctime>
+#include <chrono>
 
 #include "Window.hpp"
 #include "Shader.hpp"
@@ -100,6 +100,8 @@ Core::~Core()
 void Core::display()
 {
     int i;
+    std::chrono::high_resolution_clock::time_point time=std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double, std::ratio<1, 1000>> timePoint=time.time_since_epoch(); //W ms
     glClearColor(BACKGROUND_COLOR);
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT); //Czyszczenie sceny
     for (i=0;i<mModels.size();i++)
@@ -113,7 +115,7 @@ void Core::display()
     mScene->updateViewSpace(mCamera->generateViewSpace());
     mShader->setVec3("cameraPos", mCamera->getCameraPos());
     //To samo z ruchomym światełkiem
-    mLights[3]->setLightPos(glm::vec3(sin(clock()/100000.f)*2, 0.5, cos(clock()/100000.f)*2));
+    mLights[3]->setLightPos(glm::vec3(sin(timePoint.count()/1000.0)*2, 0.5, cos(timePoint.count()/1000.0)*2));
     mLights[3]->setLight(mShader, mScene, 3);
     
     glfwPollEvents(); //Poll dla eventów
