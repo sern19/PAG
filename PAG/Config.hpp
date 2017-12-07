@@ -49,6 +49,7 @@
 #define MODEL_TEXTURE_FOLDER "textures/"
 
 //Material stuff
+#define DEFAULT_SHADING_MODE aiShadingMode_Blinn
 #define DIFFUSE_NAME "diffuse"
 #define SPECULAR_NAME "specular"
 #define NORMAL_NAME "normal"

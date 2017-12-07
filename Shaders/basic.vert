@@ -8,9 +8,9 @@ layout (location = 4) in vec2 vertexTexture; //Gdzie ma szukać współrzędnych
 
 smooth out vec3 fragVertex;
 smooth out vec3 fragVertexNormal;
-smooth out vec3 fragVertexTangent;
-smooth out vec3 fragVertexBitangent;
-smooth out vec2 fragVertexTexture;
+out vec3 fragVertexTangent;
+out vec3 fragVertexBitangent;
+out vec2 fragVertexTexture;
 
 uniform mat4 MVPMatrix;
 uniform mat4 modelMatrix;

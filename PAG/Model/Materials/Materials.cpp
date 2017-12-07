@@ -56,10 +56,12 @@ void Materials::loadTextures(const aiScene* const pScene)
             //Diffuse
             for (j=0;j<pScene->mMaterials[i]->GetTextureCount(aiTextureType_DIFFUSE);j++)
             {
-                aiString textureName;
-                std::string texturePath=mTexturesPath;
-                pScene->mMaterials[i]->GetTexture(aiTextureType_DIFFUSE, j, &textureName);
-                texturePath.append(textureName.C_Str());
+                aiString texture;
+                std::string texturePath=mTexturesPath, textureName;
+                pScene->mMaterials[i]->GetTexture(aiTextureType_DIFFUSE, j, &texture);
+                textureName=texture.C_Str();
+                textureName=textureName.substr(textureName.rfind("/")+1);
+                texturePath.append(textureName);
                 if (!chcekIfIsLoaded(texturePath, DIFFUSE_NAME))
                 {
                     try
@@ -71,10 +73,12 @@ void Materials::loadTextures(const aiScene* const pScene)
             //Specular
             for (j=0;j<pScene->mMaterials[i]->GetTextureCount(aiTextureType_SPECULAR);j++)
             {
-                aiString textureName;
-                std::string texturePath=mTexturesPath;
-                pScene->mMaterials[i]->GetTexture(aiTextureType_SPECULAR, j, &textureName);
-                texturePath.append(textureName.C_Str());
+                aiString texture;
+                std::string texturePath=mTexturesPath, textureName;
+                pScene->mMaterials[i]->GetTexture(aiTextureType_SPECULAR, j, &texture);
+                textureName=texture.C_Str();
+                textureName=textureName.substr(textureName.rfind("/")+1);
+                texturePath.append(textureName);
                 if (!chcekIfIsLoaded(texturePath, SPECULAR_NAME))
                 {
                     try
@@ -86,10 +90,12 @@ void Materials::loadTextures(const aiScene* const pScene)
             //Normal
             for (j=0;j<pScene->mMaterials[i]->GetTextureCount(aiTextureType_NORMALS);j++)
             {
-                aiString textureName;
-                std::string texturePath=mTexturesPath;
-                pScene->mMaterials[i]->GetTexture(aiTextureType_NORMALS, j, &textureName);
-                texturePath.append(textureName.C_Str());
+                aiString texture;
+                std::string texturePath=mTexturesPath, textureName;
+                pScene->mMaterials[i]->GetTexture(aiTextureType_NORMALS, j, &texture);
+                textureName=texture.C_Str();
+                textureName=textureName.substr(textureName.rfind("/")+1);
+                texturePath.append(textureName);
                 if (!chcekIfIsLoaded(texturePath, NORMAL_NAME))
                 {
                     try
@@ -98,6 +104,23 @@ void Materials::loadTextures(const aiScene* const pScene)
                     } catch (std::runtime_error err) { throw err; }
                 }
             }
+            for (j=0;j<pScene->mMaterials[i]->GetTextureCount(aiTextureType_HEIGHT);j++) //Czasem normalne wykrywane przez assimpa są jako wysokości
+            {
+                aiString texture;
+                std::string texturePath=mTexturesPath, textureName;
+                pScene->mMaterials[i]->GetTexture(aiTextureType_HEIGHT, j, &texture);
+                textureName=texture.C_Str();
+                textureName=textureName.substr(textureName.rfind("/")+1);
+                texturePath.append(textureName);
+                if (!chcekIfIsLoaded(texturePath, NORMAL_NAME))
+                {
+                    try
+                    {
+                        mNormalTextures.push_back(Texture(texturePath));
+                    } catch (std::runtime_error err) { throw err; }
+                }
+            }
+            
             mMaterials.push_back(fillMaterialData(pScene->mMaterials[i]));
         }
     }
@@ -133,10 +156,12 @@ const Material Materials::fillMaterialData(aiMaterial* const pMaterial)
     output.mDiffuseColor=glm::vec4(temporaryColor.r, temporaryColor.g, temporaryColor.b, 1);
     for (i=0;i<pMaterial->GetTextureCount(aiTextureType_DIFFUSE);i++)
     {
-        aiString textureName;
-        std::string texturePath=mTexturesPath;
-        pMaterial->GetTexture(aiTextureType_DIFFUSE, i, &textureName);
-        texturePath.append(textureName.C_Str());
+        aiString texture;
+        std::string texturePath=mTexturesPath, textureName;
+        pMaterial->GetTexture(aiTextureType_DIFFUSE, i, &texture);
+        textureName=texture.C_Str();
+        textureName=textureName.substr(textureName.rfind("/")+1);
+        texturePath.append(textureName);
         for (j=0;j<mDiffuseTextures.size();j++)
             if (mDiffuseTextures[j].getTexturePath().compare(texturePath)==0) output.mDiffuseTextureID.push_back(j);
     }
@@ -145,10 +170,12 @@ const Material Materials::fillMaterialData(aiMaterial* const pMaterial)
     output.mSpecularColor=glm::vec4(temporaryColor.r, temporaryColor.g, temporaryColor.b, 1);
     for (i=0;i<pMaterial->GetTextureCount(aiTextureType_SPECULAR);i++)
     {
-        aiString textureName;
-        std::string texturePath=mTexturesPath;
-        pMaterial->GetTexture(aiTextureType_SPECULAR, i, &textureName);
-        texturePath.append(textureName.C_Str());
+        aiString texture;
+        std::string texturePath=mTexturesPath, textureName;
+        pMaterial->GetTexture(aiTextureType_SPECULAR, i, &texture);
+        textureName=texture.C_Str();
+        textureName=textureName.substr(textureName.rfind("/")+1);
+        texturePath.append(textureName);
         for (j=0;j<mSpecularTextures.size();j++)
             if (mSpecularTextures[j].getTexturePath().compare(texturePath)==0) output.mSpecularTextureID.push_back(j);
     }
@@ -158,20 +185,34 @@ const Material Materials::fillMaterialData(aiMaterial* const pMaterial)
     //Normal
     for (i=0;i<pMaterial->GetTextureCount(aiTextureType_NORMALS);i++)
     {
-        aiString textureName;
-        std::string texturePath=mTexturesPath;
-        pMaterial->GetTexture(aiTextureType_NORMALS, i, &textureName);
-        texturePath.append(textureName.C_Str());
+        aiString texture;
+        std::string texturePath=mTexturesPath, textureName;
+        pMaterial->GetTexture(aiTextureType_NORMALS, i, &texture);
+        textureName=texture.C_Str();
+        textureName=textureName.substr(textureName.rfind("/")+1);
+        texturePath.append(textureName);
         for (j=0;j<mNormalTextures.size();j++)
             if (mNormalTextures[j].getTexturePath().compare(texturePath)==0) output.mNomralTextureID.push_back(j);
     }
+    for (i=0;i<pMaterial->GetTextureCount(aiTextureType_HEIGHT);i++) //Czasem normalne wykrywane przez assimpa są jako wysokości
+    {
+        aiString texture;
+        std::string texturePath=mTexturesPath, textureName;
+        pMaterial->GetTexture(aiTextureType_HEIGHT, i, &texture);
+        textureName=texture.C_Str();
+        textureName=textureName.substr(textureName.rfind("/")+1);
+        texturePath.append(textureName);
+        for (j=0;j<mNormalTextures.size();j++)
+            if (mNormalTextures[j].getTexturePath().compare(texturePath)==0) output.mNomralTextureID.push_back(j);
+    }
+    
     //Shininess
-    pMaterial->Get(AI_MATKEY_SHININESS, output.mShininess);
-    pMaterial->Get(AI_MATKEY_SHININESS_STRENGTH, output.mShininessStrength);
+    pMaterial->Get(AI_MATKEY_SHININESS, output.mShininess); //Assimp nie normalizuje tych wartości, każdy format może mieć inne
+    pMaterial->Get(AI_MATKEY_SHININESS_STRENGTH, output.mShininessStrength); //Np fbx ma tu taką samą wartość co w shininess, obj ma zazwyczaj 1
     
     //Shading mode
     if (pMaterial->Get(AI_MATKEY_SHADING_MODEL, output.mShadingMode)!=AI_SUCCESS)
-        output.mShadingMode=aiShadingMode_NoShading; //Domyślne cieniowanie w przypadku niepowodzenia
+        output.mShadingMode=DEFAULT_SHADING_MODE; //Domyślne cieniowanie w przypadku niepowodzenia
     
     return output;
 }

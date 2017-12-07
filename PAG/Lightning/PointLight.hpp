@@ -30,7 +30,7 @@
 class PointLight:public BaseLight
 {
 public:
-    PointLight(const glm::vec3& pLightPos, const glm::vec3& pLightColor, const float& pLightAttenuation, const float& pLightAmbientCoefficient);
+    PointLight(const glm::vec3& pLightPos, const glm::vec3& pLightColor, const float& pLightAttenuation, const float& pLightAmbientCoefficient=0.14f);
     virtual ~PointLight();
     
     virtual void setLight(Shader* const pShader, Scene* const pScene, const unsigned int& pLightNumber);

@@ -62,8 +62,8 @@ void Texture::loadTexture(const std::string& pTexturePath)
         glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_NEAREST ); //Pomniejszenie tekstury, bierze najbliższą mipmapę i interpoluje liniowo
         glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,GL_LINEAR ); //Powiększenie tekstury, interpoluje liniowo
         
-        glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_REPEAT ); //Tekstura S - zawija
-        glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_REPEAT ); //Tekstura T - zawija
+        glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT ); //Tekstura S - zawija
+        glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT ); //Tekstura T - zawija
         glTexImage2D(GL_TEXTURE_2D,
                      0, //Stopnie mipmappingu
                      imageDepth, //Wewnętrzny format teksela

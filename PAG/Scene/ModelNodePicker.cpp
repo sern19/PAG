@@ -75,7 +75,9 @@ const bool ModelNodePicker::checkRayIntersectionOBB(const glm::vec3& pRaySource,
     correctedTransform=glm::translate(correctedTransform, translation);
     correctedTransform=glm::rotate(correctedTransform, glm::angle(rotation), glm::axis(rotation));
     
-    std::pair<glm::vec4, glm::vec4> transformedOBB=pOBB;
+    std::pair<glm::vec3, glm::vec3> transformedOBB;
+    transformedOBB.first=glm::vec3(pOBB.first);
+    transformedOBB.second=glm::vec3(pOBB.second);
     transformedOBB.first.x*=scale.x;
     transformedOBB.first.y*=scale.y;
     transformedOBB.first.z*=scale.z;

@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		DD041AE71FC3902900AC2AF7 /* Model.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD041AE51FC3902900AC2AF7 /* Model.cpp */; };
 		DD041AEB1FC3AF6500AC2AF7 /* Node.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD041AE91FC3AF6500AC2AF7 /* Node.cpp */; };
+		DD3705CE1FD916ED000DE9C4 /* DirectionalLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD3705CC1FD916ED000DE9C4 /* DirectionalLight.cpp */; };
+		DD3705D11FD91A58000DE9C4 /* SpotLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD3705CF1FD91A58000DE9C4 /* SpotLight.cpp */; };
 		DD3B1AD01FBF7E74005E9485 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD3B1ACF1FBF7E6B005E9485 /* OpenGL.framework */; };
 		DD3B1ADD1FBF830E005E9485 /* libassimp.4.0.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DD3B1ACB1FBF7E48005E9485 /* libassimp.4.0.1.dylib */; };
 		DD3B1ADE1FBF8318005E9485 /* libglfw.3.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DD3B1ACD1FBF7E64005E9485 /* libglfw.3.3.dylib */; };
@@ -63,6 +65,14 @@
 		DD3705C51FD791CB000DE9C4 /* debug.geom */ = {isa = PBXFileReference; explicitFileType = sourcecode.glsl; path = debug.geom; sourceTree = "<group>"; };
 		DD3705C61FD7927F000DE9C4 /* basic.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = basic.vert; sourceTree = "<group>"; };
 		DD3705C71FD7932C000DE9C4 /* debug.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = debug.frag; sourceTree = "<group>"; };
+		DD3705C81FD88FB7000DE9C4 /* 2b_suit_spc.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 2b_suit_spc.png; sourceTree = "<group>"; };
+		DD3705C91FD88FB7000DE9C4 /* 2b_hair2_spc.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 2b_hair2_spc.png; sourceTree = "<group>"; };
+		DD3705CA1FD88FB7000DE9C4 /* 2b_head_spc.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 2b_head_spc.png; sourceTree = "<group>"; };
+		DD3705CB1FD88FB7000DE9C4 /* 2b_hair1_spc.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 2b_hair1_spc.png; sourceTree = "<group>"; };
+		DD3705CC1FD916ED000DE9C4 /* DirectionalLight.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DirectionalLight.cpp; sourceTree = "<group>"; };
+		DD3705CD1FD916ED000DE9C4 /* DirectionalLight.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DirectionalLight.hpp; sourceTree = "<group>"; };
+		DD3705CF1FD91A58000DE9C4 /* SpotLight.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SpotLight.cpp; sourceTree = "<group>"; };
+		DD3705D01FD91A58000DE9C4 /* SpotLight.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SpotLight.hpp; sourceTree = "<group>"; };
 		DD3B1AC01FBF7D90005E9485 /* PAG */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = PAG; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD3B1ACB1FBF7E48005E9485 /* libassimp.4.0.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libassimp.4.0.1.dylib; path = ../../../../../../../../usr/local/Cellar/assimp/4.0.1/lib/libassimp.4.0.1.dylib; sourceTree = "<group>"; };
 		DD3B1ACD1FBF7E64005E9485 /* libglfw.3.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libglfw.3.3.dylib; path = ../../../../../../../../usr/local/lib/libglfw.3.3.dylib; sourceTree = "<group>"; };
@@ -290,14 +300,18 @@
 		DD2F98161FC512D100D2A445 /* textures */ = {
 			isa = PBXGroup;
 			children = (
-				DD2F98171FC512D100D2A445 /* 2b_head_dif.png */,
 				DD2F98191FC512D100D2A445 /* 2b_hair1_dif.png */,
-				DD2F981B1FC512D100D2A445 /* 2b_suit_nrm.png */,
-				DD2F981C1FC512D100D2A445 /* 2b_hair2_dif.png */,
-				DD2F981E1FC512D100D2A445 /* 2b_suit_dif.png */,
-				DD2F981F1FC512D100D2A445 /* 2b_hair2_nrm.png */,
-				DD2F98211FC512D100D2A445 /* 2b_head_nrm.png */,
+				DD3705CB1FD88FB7000DE9C4 /* 2b_hair1_spc.png */,
 				DD2F98241FC512D100D2A445 /* 2b_hair1_nrm.png */,
+				DD2F981C1FC512D100D2A445 /* 2b_hair2_dif.png */,
+				DD3705C91FD88FB7000DE9C4 /* 2b_hair2_spc.png */,
+				DD2F981F1FC512D100D2A445 /* 2b_hair2_nrm.png */,
+				DD2F981E1FC512D100D2A445 /* 2b_suit_dif.png */,
+				DD3705C81FD88FB7000DE9C4 /* 2b_suit_spc.png */,
+				DD2F981B1FC512D100D2A445 /* 2b_suit_nrm.png */,
+				DD2F98171FC512D100D2A445 /* 2b_head_dif.png */,
+				DD3705CA1FD88FB7000DE9C4 /* 2b_head_spc.png */,
+				DD2F98211FC512D100D2A445 /* 2b_head_nrm.png */,
 			);
 			path = textures;
 			sourceTree = "<group>";
@@ -508,6 +522,10 @@
 				DDFBF2A61FD61D1500EC76B3 /* BaseLight.hpp */,
 				DDFBF2A81FD65D4A00EC76B3 /* PointLight.cpp */,
 				DDFBF2A91FD65D4A00EC76B3 /* PointLight.hpp */,
+				DD3705CC1FD916ED000DE9C4 /* DirectionalLight.cpp */,
+				DD3705CD1FD916ED000DE9C4 /* DirectionalLight.hpp */,
+				DD3705CF1FD91A58000DE9C4 /* SpotLight.cpp */,
+				DD3705D01FD91A58000DE9C4 /* SpotLight.hpp */,
 			);
 			path = Lightning;
 			sourceTree = "<group>";
@@ -621,6 +639,7 @@
 				DDD878301FBF8C9A00109AC6 /* Core.cpp in Sources */,
 				DD7002A41FC4F4E200B198C5 /* Materials.cpp in Sources */,
 				DD041AEB1FC3AF6500AC2AF7 /* Node.cpp in Sources */,
+				DD3705CE1FD916ED000DE9C4 /* DirectionalLight.cpp in Sources */,
 				DD041AE71FC3902900AC2AF7 /* Model.cpp in Sources */,
 				DDD878321FBF8C9A00109AC6 /* Window.cpp in Sources */,
 				DD3B1AE41FBF8518005E9485 /* stb_image.cpp in Sources */,
@@ -629,6 +648,7 @@
 				DD9E91211FC6B45C009C0AE3 /* imgui_impl_glfw_gl3.cpp in Sources */,
 				DDD878361FBF8C9A00109AC6 /* Camera.cpp in Sources */,
 				DD9E91101FC64988009C0AE3 /* ModelNodePicker.cpp in Sources */,
+				DD3705D11FD91A58000DE9C4 /* SpotLight.cpp in Sources */,
 				DDD878381FBF8C9A00109AC6 /* Scene.cpp in Sources */,
 				DDFBF2A71FD61D1500EC76B3 /* BaseLight.cpp in Sources */,
 				DDD878341FBF8C9A00109AC6 /* main.cpp in Sources */,

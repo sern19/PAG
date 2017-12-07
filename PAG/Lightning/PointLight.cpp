@@ -32,7 +32,7 @@ PointLight::~PointLight() { }
 
 void PointLight::setLight(Shader* const pShader, Scene* const pScene, const unsigned int& pLightNumber) //Trochę rakowe, do przepisania będzie, ale jest 6 rano
 {
-    glm::vec4 transformedPosition=glm::vec4(glm::vec3(glm::vec4(mLightPos,1)), 0);
+    glm::vec4 transformedPosition=glm::vec4(glm::vec3(glm::vec4(mLightPos,1)), 1);
     
     std::stringstream output;
     output << "lights[" << pLightNumber << "].position";
@@ -49,5 +49,9 @@ void PointLight::setLight(Shader* const pShader, Scene* const pScene, const unsi
     
     output << "lights[" << pLightNumber << "].ambientCoefficient";
     pShader->setFloat(output.str().c_str(), &mLightAmbientCoefficient);
+    output.str("");
+    
+    output << "lights[" << pLightNumber << "].coneDirection";
+    pShader->setVec3(output.str().c_str(), glm::vec3(0));
     output.str("");
 }

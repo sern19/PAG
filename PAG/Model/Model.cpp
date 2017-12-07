@@ -36,7 +36,7 @@ Model::Model(const std::string& pModelPath, Shader *const pShader)
     loadModel(pModelPath, pShader);
 }
 
-Model::Model(const Model& pSourceModel): mModelDirectory(pSourceModel.mModelDirectory)
+Model::Model(const Model& pSourceModel): mModelDirectory(pSourceModel.mModelDirectory), mModelFilename(pSourceModel.mModelFilename), mAdditionalGLSettings(pSourceModel.mAdditionalGLSettings)
 {
     mRootNode=new Node(*pSourceModel.mRootNode);
     mMaterials=new Materials(*pSourceModel.mMaterials);
@@ -75,13 +75,16 @@ const std::pair<glm::vec4, glm::vec4>  Model::calculateModelOBB()
 void Model::loadModel(const std::string &pModelPath, Shader *const pShader)
 {
     Assimp::Importer importer;
-    const aiScene *scene = importer.ReadFile(pModelPath, aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_ImproveCacheLocality | aiProcess_FixInfacingNormals |  aiProcess_FindInvalidData | aiProcess_FlipUVs | aiProcess_CalcTangentSpace | aiProcess_JoinIdenticalVertices | aiProcess_RemoveRedundantMaterials | aiProcess_OptimizeMeshes | aiProcess_SplitLargeMeshes | aiProcess_SortByPType);
+    importer.SetPropertyFloat(AI_CONFIG_PP_GSN_MAX_SMOOTHING_ANGLE,80.0f);
+    importer.SetPropertyInteger(AI_CONFIG_PP_RVC_FLAGS, aiComponent_TANGENTS_AND_BITANGENTS | aiComponent_NORMALS);
+    const aiScene *scene = importer.ReadFile(pModelPath, aiProcess_RemoveComponent | aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_CalcTangentSpace | aiProcess_FixInfacingNormals | aiProcess_FindInvalidData | aiProcess_RemoveRedundantMaterials | aiProcess_OptimizeMeshes| aiProcess_JoinIdenticalVertices |  aiProcess_SplitLargeMeshes |  aiProcess_SortByPType | aiProcess_ImproveCacheLocality);
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
     {
         std::string outputMessage="(Model::loadModel): Błąd wczytywania modelu\n\t(ASSIMP): ";
         outputMessage+=importer.GetErrorString();
         throw std::runtime_error(outputMessage);
     }
+    
     
     mModelDirectory=pModelPath;
     mModelDirectory.erase(mModelDirectory.find(MODEL_SOURCE_FOLDER));
@@ -130,7 +133,7 @@ const std::pair<Node*,float> Model::testRayOBBIntersection(const glm::vec3& pRay
 {
     int i;
     float distance;
-    if (mRootNode!=NULL && ModelNodePicker::checkRayIntersectionOBB(pRaySource, pRayDirection, calculateModelOBB(), glm::mat4(1.0f), distance))
+    if (mRootNode!=NULL) //&& ModelNodePicker::checkRayIntersectionOBB(pRaySource, pRayDirection, calculateModelOBB(), glm::mat4(1.0f), distance) - wyłączone do momentu naprawienia
     {
         std::vector<std::pair<Node*,float>> intersectedNodes=mRootNode->testRayOBBIntersection(pRaySource, pRayDirection);
         

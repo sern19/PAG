@@ -50,11 +50,11 @@ private:
     Input* mInput=NULL;
     UserInterface* mUI=NULL;
     std::vector<Model> mModels;
-    BaseLight* mTemporaryLight;
+    std::vector<BaseLight*> mLights;
     
     void display();
-	void updateObjectsPositions();
     void loadModels();
+    void loadLights();
 public:
     Core();
     ~Core();
