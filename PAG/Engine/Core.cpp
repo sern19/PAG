@@ -27,11 +27,13 @@
 
 #include "Window.hpp"
 #include "Shader.hpp"
+#include "GBuffer.hpp"
 #include "Scene.hpp"
 #include "Camera.hpp"
 #include "Input.hpp"
 #include "Transform.hpp"
 #include "Model.hpp"
+#include "Materials.hpp"
 #include "Node.hpp"
 #include "UserInterface.hpp"
 
@@ -54,7 +56,6 @@ Core::Core()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_SAMPLES, 16);
 
 #ifdef __APPLE__
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); //Fix na MacOS
@@ -62,10 +63,14 @@ Core::Core()
     
     try
     {
-        mWindow=new Window();
+        mWindow=new Window(SCREEN_WIDTH, SCREEN_HEIGHT);
         //Inicjalizacja GLAD
         if (!gladLoadGL()) throw std::runtime_error("(Core::Core): Nie można zainicjalizować biblioteki GLAD");
-        mShader=new Shader();
+        mGeometryPassShader=new Shader({{"Shaders/geometryPass.vert", GL_VERTEX_SHADER}, {"Shaders/geometryPass.frag", GL_FRAGMENT_SHADER}});
+        //mGeometryPassShader=new Shader();
+        mLightPassShader=new Shader();
+        mGBuffer=new GBuffer(SCREEN_WIDTH, SCREEN_HEIGHT);
+        //mShader=new Shader({ {"Shaders/debug.vert", GL_VERTEX_SHADER}, {"Shaders/debug.geom", GL_GEOMETRY_SHADER}, {"Shaders/debug.frag", GL_FRAGMENT_SHADER} });
         mScene=new Scene(mWindow->getWindow());
         mCamera=new Camera();
         mInput=new Input(mWindow->getWindow());
@@ -79,7 +84,8 @@ Core::Core()
     glEnable(GL_DEPTH_TEST);
     //glEnable(GL_CULL_FACE); //Psuje piórka
     glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-    mShader->useProgram();
+    mGeometryPassShader->useProgram();
+    Materials::prepareTextureUnits(mGeometryPassShader);
 }
 Core::~Core()
 {
@@ -91,61 +97,103 @@ Core::~Core()
     }
     if (mLightModel) delete mLightModel;
     if (mWindow) delete mWindow;
-    if (mShader) delete mShader;
+    if (mGeometryPassShader) delete mGeometryPassShader;
+    if (mLightPassShader) delete mLightPassShader;
     if (mScene) delete mScene;
     if (mCamera) delete mCamera;
     if (mInput) delete mInput;
     if (mUI) delete mUI;
 }
+
+void Core::geometryPass()
+{
+    mGeometryPassShader->useProgram();
+    mGBuffer->bindForWriting();
+    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+
+    for (Model& model: mModels)
+        model.draw(mGeometryPassShader, mScene);
+    if (mInput->isEditMode())
+        for (BaseLight* light: mLights)
+            light->drawModel(mLightModel, mGeometryPassShader, mScene);
+    
+}
+
+void Core::lightPass()
+{
+    //mLightPassShader->useProgram();
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    
+    mGBuffer->bindForReading();
+    
+    GLsizei halfWidth = (GLsizei)(SCREEN_WIDTH / 2.0f);
+    GLsizei halfHeight = (GLsizei)(SCREEN_HEIGHT / 2.0f);
+    
+    mGBuffer->setReadBuffer(GBUFFER_TEXTURE_DIFFUSE);
+    glBlitFramebuffer(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT,
+                      0, 0, halfWidth, halfHeight, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+    
+    mGBuffer->setReadBuffer(GBUFFER_TEXTURE_NORMAL);
+    glBlitFramebuffer(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT,
+                      0, halfHeight, halfWidth, SCREEN_HEIGHT, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+    
+    mGBuffer->setReadBuffer(GBUFFER_TEXTURE_POSITION);
+    glBlitFramebuffer(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT,
+                      halfWidth, halfHeight, SCREEN_WIDTH, SCREEN_HEIGHT, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+    
+    mGBuffer->setReadBuffer(GBUFFER_TEXTURE_TEXTURECOORD);
+    glBlitFramebuffer(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT,
+                      halfWidth, 0, SCREEN_WIDTH, halfHeight, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+//
+//    mLightPassShader->setVec3("cameraPos", mCamera->getCameraPos());
+//
+//    for (i=0; i<mLights.size(); i++)
+//        if (mLights[i]) mLights[i]->setLight(mLightPassShader, mScene, i);
+    
+}
+
 void Core::display()
 {
     int i;
     std::chrono::high_resolution_clock::time_point time=std::chrono::high_resolution_clock::now();
     std::chrono::duration<double, std::ratio<1, 1000>> timePoint=time.time_since_epoch(); //W ms
-    glClearColor(BACKGROUND_COLOR);
-    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT); //Czyszczenie sceny
-    for (Model& model: mModels)
-        model.draw(mShader, mScene);
-    if (mInput->isEditMode())
-        for (BaseLight* light: mLights)
-            light->drawModel(mLightModel, mShader, mScene);
     
-    mUI->draw();
-    glfwSwapBuffers(mWindow->getWindow()); //Swap front- i backbuffer
-    
-    //Zaraz po swap, żeby nie było efektu ducha
     mScene->updateViewSpace(mCamera->generateViewSpace());
-    mShader->setVec3("cameraPos", mCamera->getCameraPos());
-    //To samo z ruchomym światełkiem
     mLights[3]->setLightPos(glm::vec3(sin(timePoint.count()/1000.0)*2, 0.5, cos(timePoint.count()/1000.0)*2));
-    for (i=0; i<mLights.size(); i++)
-        if (mLights[i]) mLights[i]->setLight(mShader, mScene, i);
     
+    geometryPass();
+    lightPass();
+    
+    //mUI->draw();
+    glfwSwapBuffers(mWindow->getWindow()); //Swap front- i backbuffer
     glfwPollEvents(); //Poll dla eventów
 }
 
 void Core::loadModels()
 {
-//    mModels.push_back(Model("Models/2B/source/2B.fbx", mShader));
-//    mModels.push_back(Model("Models/Spheres/source/Spheres.obj", mShader));
-//    mModels.push_back(Model("Models/Plane/source/plane.obj", mShader));
-//
-//    mModels[0].addGLSetting(GL_BLEND);
-//    mModels[0].addGLSetting(GL_SAMPLE_ALPHA_TO_COVERAGE);
-//
-//    mModels[0].getRootNode()->getNodeTransform()->setScale(glm::vec3(0.004,0.004,0.004));
-//    mModels[1].getRootNode()->getNodeTransform()->setScale(glm::vec3(0.3,0.3,0.3));
-//
-//    mModels[1].getRootNode()->getNodeTransform()->setPosition(glm::vec3(0,0.3,0));
-//
-//    mModels[2].getRootNode()->getNodeTransform()->setRotation(glm::vec3(-90, 0, 0));
+    mModels.push_back(Model("Models/2B/source/2B.fbx"));
+    //mModels.push_back(Model("Models/Spheres/source/Spheres.obj", mShader));
+    //mModels.push_back(Model("Models/Plane/source/plane.obj", mShader));
+
+    mModels[0].addGLSetting(GL_BLEND);
+    mModels[0].addGLSetting(GL_SAMPLE_ALPHA_TO_COVERAGE);
+
+    mModels[0].getRootNode()->getNodeTransform()->setScale(glm::vec3(0.004,0.004,0.004));
+    mModels[0].getRootNode()->getNodeTransform()->setRotation(glm::vec3(0,-90,0));
+    mModels[0].getRootNode()->getNodeTransform()->setPosition(glm::vec3(0,0,-0.2));
+    //mModels[1].getRootNode()->getNodeTransform()->setScale(glm::vec3(0.3,0.3,0.3));
+
+    //mModels[1].getRootNode()->getNodeTransform()->setPosition(glm::vec3(0,0.3,0));
+
+    //mModels[2].getRootNode()->getNodeTransform()->setRotation(glm::vec3(-90, 0, 0));
     
     Transform sponzaScaler;
-    sponzaScaler.setScale(glm::vec3(0.01,0.01,0.01));
+    sponzaScaler.setScale(glm::vec3(0.005,0.005,0.005));
+
+    mModels.push_back(Model("Models/Sponza/source/sponza.obj", &sponzaScaler));
     
-    mModels.push_back(Model("Models/Sponza/source/sponza.obj", mShader, &sponzaScaler));
-    
-    mLightModel=new Model("Models/LightSphere/source/LightSphere.obj", mShader);
+    mLightModel=new Model("Models/LightSphere/source/LightSphere.obj");
 }
 
 void Core::loadLights()
@@ -160,23 +208,15 @@ void Core::loadLights()
     mLights.push_back(new PointLight(glm::vec3(2,0.5,2), glm::vec3(1.2,1.2,1.2), 0.5));
     
     for (i=0; i<mLights.size(); i++)
-        if (mLights[i]) mLights[i]->setLight(mShader, mScene, i);
+        if (mLights[i]) mLights[i]->setLight(mLightPassShader, mScene, i);
     
-    mShader->setInt("numberOfActiveLights", mLights.size());
+    mLightPassShader->setInt("numberOfActiveLights", mLights.size());
 }
 
 void Core::mainLoop()
 {
     double nextGameTick=glfwGetTime();
     int loops;
-    
-    //
-    //mTemporaryLight=new PointLight(glm::vec3(0,1,1), glm::vec3(1.2,1.2,1.2), 0.5);
-    //mTemporaryLight=new SpotLight(glm::vec3(-1,1,1), glm::vec3(0,0.7,0)-glm::vec3(-1,1,1), glm::vec3(1.2,0,0), 8, 0.5, 0); //Aka lewe
-    //mTemporaryLight=new DirectionalLight(glm::vec3(0,-1,-0.5), glm::vec3(0.8,0.8,0.8), 0);
-    //mTemporaryLight->setLight(mShader, mScene, 0);
-    //mShader->setInt("numberOfActiveLights", 2);
-    //
     
     loadModels();
     loadLights();

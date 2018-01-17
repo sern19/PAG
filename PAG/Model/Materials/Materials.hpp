@@ -47,9 +47,12 @@ private:
     std::string getTextureName(const aiString& pTexturePath);
     const bool chcekIfIsLoaded(const std::string& pTexturePath, const std::string& pTextureType);
 public:
-    Materials(const aiScene* const pScene, const std::string& pTexturesPath, Shader *const pShader);
+    Materials(const aiScene* const pScene, const std::string& pTexturesPath);
     const Material fillMaterialData(aiMaterial* const pMaterial);
     Material* getMaterial(const unsigned int& pMaterialID);
+    
+    static void prepareTextureUnits(Shader* pShader);
+    
     void setActiveMaterial(const unsigned int& pMaterialID, Shader *const pShader);
     void setDefaultMaterial(Shader *const pShader);
 };

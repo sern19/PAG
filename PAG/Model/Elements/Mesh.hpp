@@ -61,7 +61,7 @@ private:
     bool mShouldUseMaterial=true;
     
     void clearData();
-    void calculateTanBitan();
+    void fixMirroredTan();
     void loadContent();
 public:
     Mesh(const std::vector<Vertex>& pVerticles, const std::vector<unsigned int>& pIndices);

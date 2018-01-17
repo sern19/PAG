@@ -33,6 +33,7 @@
 
 class Window;
 class Shader;
+class GBuffer;
 class Scene;
 class Camera;
 class Input;
@@ -44,7 +45,9 @@ class Core
 {
 private:
     Window* mWindow=NULL;
-    Shader* mShader=NULL;
+    Shader* mGeometryPassShader=NULL;
+    Shader* mLightPassShader=NULL;
+    GBuffer* mGBuffer=NULL;
     Scene* mScene=NULL;
     Camera* mCamera=NULL;
     Input* mInput=NULL;
@@ -54,6 +57,8 @@ private:
     std::vector<Model> mModels;
     std::vector<BaseLight*> mLights;
     
+    void geometryPass();
+    void lightPass();
     void display();
     void loadModels();
     void loadLights();

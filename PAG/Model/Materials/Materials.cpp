@@ -26,25 +26,9 @@
 #include "Config.hpp"
 #include <iostream>
 
-Materials::Materials(const aiScene* const pScene, const std::string& pTexturesPath, Shader *const pShader): mTexturesPath(pTexturesPath)
+Materials::Materials(const aiScene* const pScene, const std::string& pTexturesPath): mTexturesPath(pTexturesPath)
 {
     loadTextures(pScene);
-    
-    int textureNumber[10], i;
-    
-    //Przypisywanie tekstur
-    //Docelowo obsługa wielu tekstur
-    for (i=0;i<10;i++)
-        textureNumber[i]=i;
-    pShader->setInt("diffuseTexture", textureNumber, 10);
-    
-    for (i=0;i<10;i++)
-        textureNumber[i]=i+10;
-    pShader->setInt("specularTexture", textureNumber, 10);
-    
-    for (i=0;i<10;i++)
-        textureNumber[i]=i+20;
-    pShader->setInt("normalTexture", textureNumber, 10);
 }
 
 std::string Materials::getTextureName(const aiString& pTexturePath)
@@ -222,6 +206,25 @@ const Material Materials::fillMaterialData(aiMaterial* const pMaterial)
 
 Material* Materials::getMaterial(const unsigned int& pMaterialID) { return &mMaterials[pMaterialID]; }
 
+void Materials::prepareTextureUnits(Shader *pShader)
+{
+    int textureNumber[(SPECULAR_STARTING_INDEX-DIFFUSE_STARTING_INDEX)], i;
+    
+    //Przypisywanie tekstur
+    //Docelowo obsługa wielu tekstur
+    for (i=0;i<(SPECULAR_STARTING_INDEX-DIFFUSE_STARTING_INDEX);i++) 
+        textureNumber[i]=i;
+    pShader->setInt("diffuseTexture", textureNumber, (SPECULAR_STARTING_INDEX-DIFFUSE_STARTING_INDEX));
+    
+    for (i=0;i<(NORMAL_STARTING_INDEX-SPECULAR_STARTING_INDEX);i++)
+        textureNumber[i]=i+SPECULAR_STARTING_INDEX;
+    pShader->setInt("specularTexture", textureNumber, (NORMAL_STARTING_INDEX-SPECULAR_STARTING_INDEX));
+    
+    for (i=0;i<(NORMAL_STARTING_INDEX-SPECULAR_STARTING_INDEX);i++)
+        textureNumber[i]=i+NORMAL_STARTING_INDEX;
+    pShader->setInt("normalTexture", textureNumber, (NORMAL_STARTING_INDEX-SPECULAR_STARTING_INDEX));
+}
+
 void Materials::setActiveMaterial(const unsigned int& pMaterialID, Shader *const pShader)
 {
     int i;
@@ -231,8 +234,8 @@ void Materials::setActiveMaterial(const unsigned int& pMaterialID, Shader *const
     pShader->setVec3("diffuseColor", &mMaterials[pMaterialID].mDiffuseColor);
     pShader->setVec3("specularColor", &mMaterials[pMaterialID].mSpecularColor);
     pShader->setVec3("ambientColor", &mMaterials[pMaterialID].mAmbientColor);
-    pShader->setFloat("shininess", &mMaterials[pMaterialID].mShininess);
-    pShader->setFloat("shininessStrength", &mMaterials[pMaterialID].mShininessStrength);
+    pShader->setFloat("shininess", mMaterials[pMaterialID].mShininess*mMaterials[pMaterialID].mShininessStrength);
+    
     //Sprawdzanie czy materiał używa tekstur
     if (mMaterials[pMaterialID].mDiffuseTextureID.size()==0) pShader->setBool("shouldUseDiffuseTexture", false);
     else pShader->setBool("shouldUseDiffuseTexture", true);
@@ -248,7 +251,6 @@ void Materials::setActiveMaterial(const unsigned int& pMaterialID, Shader *const
     else pShader->setBool("shouldUseNormalTexture", true);
     
     //Przypisywanie tekstur
-    Texture::deselectAllTextures();
     for (i=0;i<mMaterials[pMaterialID].mDiffuseTextureID.size();i++)
         mDiffuseTextures[mMaterials[pMaterialID].mDiffuseTextureID[i]].selectActiveTexture(DIFFUSE_NAME, i);
     for (i=0;i<mMaterials[pMaterialID].mSpecularTextureID.size();i++)
@@ -264,7 +266,8 @@ void Materials::setDefaultMaterial(Shader *const pShader)
     pShader->setInt("shadingMode", temporaryMaterial.mShadingMode);
     pShader->setVec3("diffuseColor", &temporaryMaterial.mDiffuseColor);
     pShader->setBool("shouldUseDiffuseTexture", false);
+    pShader->setBool("shouldUseSpecularTexture", false);
+    pShader->setBool("shouldUseNormalTexture", false);
     
-    Texture::deselectAllTextures();
 }
 

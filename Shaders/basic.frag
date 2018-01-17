@@ -32,7 +32,6 @@ uniform vec3 specularColor;
 uniform vec3 ambientColor;
 
 uniform float shininess;
-uniform float shininessStrength;
 
 uniform bool shouldUseDiffuseTexture;
 uniform bool shouldUseSpecularTexture;
@@ -94,11 +93,11 @@ vec3 applyPhongLight(Light light, const in vec4 inputColor, const vec3 specularC
     
     if (diffuseCoefficient>0.0) //Gdy ma wartość 0 oznacza, że jest od środka
     {
-        if (shadingMode==SHADING_PHONG) specularCoefficient=pow(max(0.0, dot(inputToCamera, reflect(-inputToLight, transformedNormal))), shininess*shininessStrength);
+        if (shadingMode==SHADING_PHONG) specularCoefficient=pow(max(0.0, dot(inputToCamera, reflect(-inputToLight, transformedNormal))), shininess);
         else
         {
             vec3 H=normalize(inputToCamera+inputToLight);
-            specularCoefficient=pow(max(0.0,dot(transformedNormal, H)), shininess*shininessStrength);
+            specularCoefficient=pow(max(0.0,dot(transformedNormal, H)), shininess);
         }
     }
     specular=specularCoefficient*specularColor*light.color;

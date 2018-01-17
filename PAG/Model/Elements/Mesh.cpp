@@ -30,50 +30,18 @@
 
 Mesh::Mesh(const std::vector<Vertex>& pVerticles, const std::vector<unsigned int>& pIndices): mVerticles(pVerticles), mIndices(pIndices)
 {
-    calculateTanBitan();
+    fixMirroredTan();
     loadContent();
 }
 
-void Mesh::calculateTanBitan()
+void Mesh::fixMirroredTan()
 {
-    int i;
-    for (i=0;i<mIndices.size();i+=3)
-    {
-        //Shortcuts for vertices
-        glm::vec3& v0 = mVerticles[mIndices[i]].mPosition;
-        glm::vec3& v1 = mVerticles[mIndices[i+1]].mPosition;
-        glm::vec3& v2 = mVerticles[mIndices[i+2]].mPosition;
-        
-        //Shortcuts for UVs
-        glm::vec2& uv0 = mVerticles[mIndices[i]].mTexture;
-        glm::vec2& uv1 = mVerticles[mIndices[i+1]].mTexture;
-        glm::vec2& uv2 = mVerticles[mIndices[i+2]].mTexture;
-        
-        //Edges of the triangle : postion delta
-        glm::vec3 deltaPos1 = v1-v0;
-        glm::vec3 deltaPos2 = v2-v0;
-        
-        //UV delta
-        glm::vec2 deltaUV1 = uv1-uv0;
-        glm::vec2 deltaUV2 = uv2-uv0;
-        
-        float r = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV1.y * deltaUV2.x);
-        glm::vec3 tangent = (deltaPos1 * deltaUV2.y   - deltaPos2 * deltaUV1.y)*r;
-        glm::vec3 biTangent = (deltaPos2 * deltaUV1.x   - deltaPos1 * deltaUV2.x)*r;
-        
-        mVerticles[mIndices[i]].mTangent=tangent;
-        mVerticles[mIndices[i+1]].mTangent=tangent;
-        mVerticles[mIndices[i+2]].mTangent=tangent;
-        
-        mVerticles[mIndices[i]].mBitangent=biTangent;
-        mVerticles[mIndices[i+1]].mBitangent=biTangent;
-        mVerticles[mIndices[i+2]].mBitangent=biTangent;
-    }
     for (Vertex& vertex: mVerticles) {
+        //Nie jestem pewien czy jest to potrzebne
+        vertex.mTangent=glm::normalize(vertex.mTangent - vertex.mNormal * glm::dot(vertex.mNormal, vertex.mTangent));
+        
         if (glm::dot(glm::cross(vertex.mNormal, vertex.mTangent), vertex.mBitangent) < 0.0f)
-        {
             vertex.mTangent*=-1.0f;
-        }
     }
 }
 

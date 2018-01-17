@@ -39,7 +39,6 @@ public:
     Texture(const std::string& pTexturePath);
     Texture(const Texture& pSourceTexture);
     ~Texture();
-    static void deselectAllTextures();
     void selectActiveTexture(const std::string& pTextureType, const unsigned int& pTextureNumber);
     const std::string& getTexturePath();
 };

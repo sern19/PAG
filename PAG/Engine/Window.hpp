@@ -34,7 +34,6 @@ private:
     
     void createWindow(const int& pScreenWidth, const int& pScreenHeight);
 public:
-    Window();
     Window(const int& pScreenWidth, const int& pScreenHeight);
     GLFWwindow* const getWindow();
 };

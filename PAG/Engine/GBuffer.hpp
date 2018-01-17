@@ -1,6 +1,6 @@
-// Window.cpp
+// GBuffer.hpp
 //
-// Copyright (c) 2017 Krystian Owoc
+// Copyright (c) 2018 Krystian Owoc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -20,35 +20,29 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "Window.hpp"
-#include <stdexcept>
+#ifndef GBuffer_hpp
+#define GBuffer_hpp
 
-Window::Window(const int& pScreenWidth, const int& pScreenHeight)
-{
-    //Tworzenie okna
-    try
-    {
-        createWindow(pScreenWidth, pScreenHeight);
-    } catch (std::runtime_error err)
-    {
-        throw err;
-    }
-    
-    //Tworzenie kontekstu
-    glfwMakeContextCurrent(mWindow);
-}
+#include <stdio.h>
+#include <vector>
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
 
-void Window::createWindow(const int& pScreenWidth, const int& pScreenHeight)
+class GBuffer
 {
-    mWindow=glfwCreateWindow(pScreenWidth, pScreenHeight, WINDOW_NAME, NULL, NULL);
-    if (!mWindow) //W przypadku niepowodzenia zwalniamy zasoby i niszczymy okienka
-    {
-        glfwTerminate();
-        throw std::runtime_error("(Window::createWindow): Nie można utworzyć okna");
-    }
-}
-GLFWwindow* const Window::getWindow()
-{
-    return mWindow;
+private:
+    GLuint mFramebuffer;
+    std::vector<GLuint> mFramebufferTextures;
+    GLuint mDepthTexture;
     
-}
+    void createFramebuffer(const int& pScreenWidth, const int& pScreenHeight);
+    void createTextures(const int& pScreenWidth, const int& pScreenHeight);
+public:
+    GBuffer(const int& pScreenWidth, const int& pScreenHeight);
+    
+    void bindForWriting();
+    void bindForReading();
+    void setReadBuffer(const unsigned int& textureType);
+};
+
+#endif /* GBuffer_hpp */

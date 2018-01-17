@@ -32,12 +32,12 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
-Model::Model(const std::string& pModelPath, Shader *const pShader)
+Model::Model(const std::string& pModelPath)
 {
-    loadModel(pModelPath, pShader);
+    loadModel(pModelPath);
 }
 
-Model::Model(const std::string& pModelPath, Shader *const pShader, Transform* const pBakeTransform): Model(pModelPath, pShader)
+Model::Model(const std::string& pModelPath, Transform* const pBakeTransform): Model(pModelPath)
 {
     bakeTransfrom(pBakeTransform);
 }
@@ -85,12 +85,12 @@ const std::pair<glm::vec4, glm::vec4>  Model::calculateModelOBB()
     return output;
 }
 
-void Model::loadModel(const std::string &pModelPath, Shader *const pShader)
+void Model::loadModel(const std::string &pModelPath)
 {
     Assimp::Importer importer;
     importer.SetPropertyFloat(AI_CONFIG_PP_GSN_MAX_SMOOTHING_ANGLE,80.0f);
-    importer.SetPropertyInteger(AI_CONFIG_PP_RVC_FLAGS, aiComponent_NORMALS);
-    const aiScene *scene = importer.ReadFile(pModelPath, aiProcess_RemoveComponent | aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_FixInfacingNormals | aiProcess_FindInvalidData | aiProcess_RemoveRedundantMaterials | aiProcess_OptimizeMeshes | aiProcess_JoinIdenticalVertices |  aiProcess_SplitLargeMeshes |  aiProcess_SortByPType | aiProcess_ImproveCacheLocality);
+    importer.SetPropertyInteger(AI_CONFIG_PP_RVC_FLAGS, aiComponent_TANGENTS_AND_BITANGENTS | aiComponent_NORMALS);
+    const aiScene *scene = importer.ReadFile(pModelPath, aiProcess_RemoveComponent | aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_CalcTangentSpace | aiProcess_FixInfacingNormals | aiProcess_FindInvalidData | aiProcess_RemoveRedundantMaterials | aiProcess_OptimizeMeshes | aiProcess_JoinIdenticalVertices |  aiProcess_SplitLargeMeshes |  aiProcess_SortByPType | aiProcess_ImproveCacheLocality);
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
     {
         std::string outputMessage="(Model::loadModel): Błąd wczytywania modelu\n\t(ASSIMP): ";
@@ -103,7 +103,7 @@ void Model::loadModel(const std::string &pModelPath, Shader *const pShader)
     mModelDirectory.erase(mModelDirectory.find(MODEL_SOURCE_FOLDER));
     mModelFilename=pModelPath.substr(pModelPath.rfind(MODEL_SOURCE_FOLDER)+std::string(MODEL_SOURCE_FOLDER).length());
     
-    mMaterials=new Materials(scene, mModelDirectory.append(MODEL_TEXTURE_FOLDER), pShader);
+    mMaterials=new Materials(scene, mModelDirectory.append(MODEL_TEXTURE_FOLDER));
     mRootNode=new Node(scene->mRootNode, scene, mMaterials);
 }
 

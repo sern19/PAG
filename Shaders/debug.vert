@@ -10,6 +10,8 @@ out Data
 {
     vec3 position;
     vec3 normal;
+    vec3 tangent;
+    vec3 bitangent;
     mat4 mvp;
 } vdata;
 
@@ -20,4 +22,6 @@ void main()
     vdata.mvp=MVPMatrix;
     vdata.position=vertexPosition;
     vdata.normal=normalize(vertexNormal);
+    vdata.tangent=normalize(vertexTangent);
+    vdata.bitangent=normalize(vertexBitangent);
 }

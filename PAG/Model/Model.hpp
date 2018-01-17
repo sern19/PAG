@@ -44,12 +44,12 @@ private:
     std::string mModelDirectory;
     std::string mModelFilename;
     
-    void loadModel(const std::string& pModelPath, Shader *const pShader);
+    void loadModel(const std::string& pModelPath);
     const std::pair<glm::vec4, glm::vec4> calculateModelOBB();
     void bakeTransfrom(Transform* const pBakeTransform);
 public:
-    Model(const std::string& pModelPath, Shader *const pShader);
-    Model(const std::string& pModelPath, Shader *const pShader, Transform* const pBakeTransform);
+    Model(const std::string& pModelPath);
+    Model(const std::string& pModelPath, Transform* const pBakeTransform);
     Model(const Model& pSourceModel);
     ~Model();
     void draw(Shader* const pShader, Scene* const pScene);
