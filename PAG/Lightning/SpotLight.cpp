@@ -35,6 +35,12 @@ SpotLight::SpotLight(const glm::vec3& pLightPos, const glm::vec3& pConeDirection
 }
 SpotLight::~SpotLight() { }
 
+const glm::vec3& SpotLight::getConeDirection() { return mConeDirection; }
+const float& SpotLight::getConeAngle() { return mConeAngle; }
+
+void SpotLight::setConeDirection(const glm::vec3& pConeDirection) { mConeDirection=pConeDirection; }
+void SpotLight::setConeAngle(const float& pConeAngle) { mConeAngle=pConeAngle; }
+
 void SpotLight::setLight(Shader* const pShader, Scene* const pScene, const unsigned int& pLightNumber) //Trochę rakowe, do przepisania będzie, ale jest 6 rano
 {
     glm::vec4 transformedPosition=glm::vec4(glm::vec3(glm::vec4(mLightPos,1)), 1);

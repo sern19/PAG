@@ -44,6 +44,7 @@ private:
     std::string mTexturesPath;
     
     void loadTextures(const aiScene* const pScene);
+    std::string getTextureName(const aiString& pTexturePath);
     const bool chcekIfIsLoaded(const std::string& pTexturePath, const std::string& pTextureType);
 public:
     Materials(const aiScene* const pScene, const std::string& pTexturesPath, Shader *const pShader);

@@ -25,6 +25,7 @@
 
 #include <stdio.h>
 #include <string>
+#include <vector>
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 
@@ -32,11 +33,13 @@ class Shader
 {
 private:
     GLuint mProgramHandle;
+    std::vector<std::pair<std::string, GLenum>> mShaderPrograms;
     
     std::string loadFile(const std::string& pFileName);
     void compileShaderFromFile(const GLint& pShaderType, const std::string& pFileName);
 public:
     Shader();
+    Shader(std::vector<std::pair<std::string, GLenum>> pShaderPrograms);
     ~Shader();
     void linkAndReloadProgram();
     void unlinkAndDeleteProgram();

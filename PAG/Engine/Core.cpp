@@ -86,8 +86,8 @@ Core::~Core()
     if (mLights.size()!=0)
     {
         int i;
-        for (i=0;i<mLights.size();i++)
-            if (mLights[i]) delete mLights[i];
+        for (BaseLight* light: mLights)
+            if (light) delete light;
     }
     if (mLightModel) delete mLightModel;
     if (mWindow) delete mWindow;
@@ -104,10 +104,12 @@ void Core::display()
     std::chrono::duration<double, std::ratio<1, 1000>> timePoint=time.time_since_epoch(); //W ms
     glClearColor(BACKGROUND_COLOR);
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT); //Czyszczenie sceny
-    for (i=0;i<mModels.size();i++)
-        mModels[i].draw(mShader, mScene);
-    for (i=0;i<mLights.size();i++)
-        mLights[i]->drawModel(mLightModel, mShader, mScene);
+    for (Model& model: mModels)
+        model.draw(mShader, mScene);
+    if (mInput->isEditMode())
+        for (BaseLight* light: mLights)
+            light->drawModel(mLightModel, mShader, mScene);
+    
     mUI->draw();
     glfwSwapBuffers(mWindow->getWindow()); //Swap front- i backbuffer
     
@@ -116,7 +118,8 @@ void Core::display()
     mShader->setVec3("cameraPos", mCamera->getCameraPos());
     //To samo z ruchomym światełkiem
     mLights[3]->setLightPos(glm::vec3(sin(timePoint.count()/1000.0)*2, 0.5, cos(timePoint.count()/1000.0)*2));
-    mLights[3]->setLight(mShader, mScene, 3);
+    for (i=0; i<mLights.size(); i++)
+        if (mLights[i]) mLights[i]->setLight(mShader, mScene, i);
     
     glfwPollEvents(); //Poll dla eventów
 }
@@ -125,6 +128,7 @@ void Core::loadModels()
 {
     mModels.push_back(Model("Models/2B/source/2B.fbx", mShader));
     mModels.push_back(Model("Models/Spheres/source/Spheres.obj", mShader));
+    mModels.push_back(Model("Models/Plane/source/plane.obj", mShader));
 
     mModels[0].addGLSetting(GL_BLEND);
     mModels[0].addGLSetting(GL_SAMPLE_ALPHA_TO_COVERAGE);
@@ -133,6 +137,8 @@ void Core::loadModels()
     mModels[1].getRootNode()->getNodeTransform()->setScale(glm::vec3(0.3,0.3,0.3));
     
     mModels[1].getRootNode()->getNodeTransform()->setPosition(glm::vec3(0,0.3,0));
+
+	mModels[2].getRootNode()->getNodeTransform()->setRotation(glm::vec3(-90, 0, 0));
     
     mLightModel=new Model("Models/LightSphere/source/LightSphere.obj", mShader);
 }
@@ -141,14 +147,14 @@ void Core::loadLights()
 {
     int i;
     //Kierunkowe
-    mLights.push_back(new DirectionalLight(glm::vec3(0,-1,-0.5), glm::vec3(0.5,0.5,0.5), 0));
+    mLights.push_back(new DirectionalLight(glm::vec3(0, -1, 0.5), glm::vec3(0.5,0.5,0.5), 0));
     //Spotlighty
     mLights.push_back(new SpotLight(glm::vec3(-1,1,1), glm::vec3(0,0.7,0)-glm::vec3(-1,1,1), glm::vec3(1.2,0,0), 8, 0.5, 0));
     mLights.push_back(new SpotLight(glm::vec3(1,1,1), glm::vec3(0,0.7,0)-glm::vec3(1,1,1), glm::vec3(0,0,1.2), 8, 0.5, 0));
     //Punktowe
     mLights.push_back(new PointLight(glm::vec3(2,0.5,2), glm::vec3(1.2,1.2,1.2), 0.5));
     
-    for (i=0;i<mLights.size();i++)
+    for (i=0; i<mLights.size(); i++)
         if (mLights[i]) mLights[i]->setLight(mShader, mScene, i);
     
     mShader->setInt("numberOfActiveLights", mLights.size());
@@ -176,7 +182,7 @@ void Core::mainLoop()
         while ((glfwGetTime()>nextGameTick) && (loops<MAX_FRAMESKIP))
         {
             mInput->processKeyboard(mWindow->getWindow(), mUI, mCamera);
-            mInput->processMouse(mWindow->getWindow(), mUI, mScene, &mModels, mCamera);
+            mInput->processMouse(mWindow->getWindow(), mUI, mScene, &mModels, &mLights, mLightModel, mCamera);
             
             nextGameTick+=SKIP_TICKS;
             loops++;

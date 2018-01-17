@@ -37,6 +37,19 @@ const glm::vec3& BaseLight::getLightColor() { return mLightColor; }
 const float& BaseLight::getLightAttenuation() { return mLightAttenuation; }
 const float& BaseLight::getLightAmbientCoefficient() { return mLightAmbientCoefficient; }
 
+std::pair<BaseLight*, float> BaseLight::testRay(Model* pModel, const glm::vec3& pRaySource, const glm::vec3& pRayDirection)
+{
+	std::pair<BaseLight*, float> output;
+	pModel->getRootNode()->getNodeTransform()->setPosition(mLightPos);
+	pModel->getMaterials()->getMaterial(0)->mDiffuseColor = glm::vec4(mLightColor, 1);
+	std::pair<Node*, float> node = pModel->testRayOBBIntersection(pRaySource, pRayDirection);
+	output.second = node.second;
+
+	if (node.first!=NULL) output.first = this;
+	else output.first = NULL;
+	return output;
+}
+
 void BaseLight::setLightPos(const glm::vec3& pLightPos) { mLightPos=pLightPos; }
 void BaseLight::setLightColor(const glm::vec3& pLightColor) { mLightColor=pLightColor; }
 void BaseLight::setLightAttenuation(const float& pLightAttenuation) { mLightAttenuation=pLightAttenuation; }

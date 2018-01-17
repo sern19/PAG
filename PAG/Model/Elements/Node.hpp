@@ -43,7 +43,7 @@ private:
     const aiMatrix4x4 mOriginalTransform;
     std::vector<Node> mChildNodes;
     std::vector<Mesh> mMeshes;
-    std::pair<glm::vec4, glm::vec4> mOBB=std::pair<glm::vec4, glm::vec4>(0, 0);
+    std::pair<glm::vec4, glm::vec4> mOBB=std::pair<glm::vec4, glm::vec4>(glm::vec4(0), glm::vec4(0));
     
     Node(const aiNode* const pNode, const aiScene* const pScene, Node* const pParentNode, Materials* const pTextures);
     void processNode(const aiNode* const pNode, const aiScene* const pScene, Materials* const pTextures);

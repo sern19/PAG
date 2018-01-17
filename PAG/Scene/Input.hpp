@@ -33,6 +33,7 @@ class Camera;
 class Scene;
 class Model;
 class UserInterface;
+class BaseLight;
 
 class Input
 {
@@ -50,8 +51,9 @@ private:
 public:
     Input(GLFWwindow* const pWindow);
     ~Input();
+    bool isEditMode();
     void processKeyboard(GLFWwindow* const pWindow, UserInterface* const pUI, Camera* const pCamera);
-    void processMouse(GLFWwindow* const pWindow, UserInterface* const pUI, Scene* const pScene, std::vector<Model>* const pModels, Camera* const pCamera);
+    void processMouse(GLFWwindow* const pWindow, UserInterface* const pUI, Scene* const pScene, std::vector<Model>* const pModels, std::vector<BaseLight*>* const pLights, Model* const pLightModel, Camera* const pCamera);
 };
 
 #endif /* Input_hpp */

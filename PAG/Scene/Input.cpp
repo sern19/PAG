@@ -44,6 +44,8 @@ void Input::toggleEditMode(GLFWwindow* const pWindow, UserInterface* const pUI)
     pUI->setShouldShowInterface(mIsEditMode);
 }
 
+bool Input::isEditMode() { return mIsEditMode; }
+
 void Input::processKeyboard(GLFWwindow* const pWindow, UserInterface* const pUI, Camera* const pCamera)
 {
     glm::vec3 cameraMoveVector(0.0f);
@@ -70,7 +72,7 @@ void Input::processKeyboard(GLFWwindow* const pWindow, UserInterface* const pUI,
     pCamera->moveInDirection(cameraMoveVector);
 }
 
-void Input::processMouse(GLFWwindow* const pWindow, UserInterface* const pUI, Scene* const pScene, std::vector<Model>* const pModels, Camera* const pCamera)
+void Input::processMouse(GLFWwindow* const pWindow, UserInterface* const pUI, Scene* const pScene, std::vector<Model>* const pModels, std::vector<BaseLight*>* const pLights, Model* const pLightModel, Camera* const pCamera)
 {
     double mousePosX, mousePosY;
     
@@ -83,16 +85,28 @@ void Input::processMouse(GLFWwindow* const pWindow, UserInterface* const pUI, Sc
     mLastMousePosY=mousePosY;
 
     //W trybie edycji środkowy przycisk myszy pozwala poruszać kamerą
-    if (glfwGetMouseButton(pWindow, GLFW_MOUSE_BUTTON_MIDDLE)==GLFW_RELEASE && mIsMouseMiddlePressed) mIsMouseMiddlePressed=0;
-    if (glfwGetMouseButton(pWindow, GLFW_MOUSE_BUTTON_MIDDLE)==GLFW_PRESS) mIsMouseMiddlePressed=1;
+    if (mIsEditMode && glfwGetMouseButton(pWindow, GLFW_MOUSE_BUTTON_MIDDLE)==GLFW_RELEASE && mIsMouseMiddlePressed) mIsMouseMiddlePressed=0;
+    if (mIsEditMode && glfwGetMouseButton(pWindow, GLFW_MOUSE_BUTTON_MIDDLE)==GLFW_PRESS) mIsMouseMiddlePressed=1;
     
-    if (glfwGetMouseButton(pWindow, GLFW_MOUSE_BUTTON_RIGHT)==GLFW_RELEASE&&mIsMouseRightPressed)
+    if (mIsEditMode && glfwGetMouseButton(pWindow, GLFW_MOUSE_BUTTON_RIGHT)==GLFW_RELEASE&&mIsMouseRightPressed)
     {
         std::pair<int, int> screenSize;
         std::pair<double, double> mousePos;
         glfwGetWindowSize(pWindow, &screenSize.first, &screenSize.second);
         glfwGetCursorPos(pWindow, &mousePos.first, &mousePos.second);
-        pUI->setSelectedNode(ModelNodePicker::pickNode(pScene, pModels, screenSize, mousePos));
+		std::pair<Node*, float> closestNode = ModelNodePicker::pickNode(pScene, pModels, screenSize, mousePos);
+		std::pair<BaseLight*, float> closestLight = ModelNodePicker::pickBaseLight(pLightModel, pScene, pLights, screenSize, mousePos);
+		if (closestNode.second < closestLight.second)
+		{
+			pUI->setSelectedNode(closestNode.first);
+			pUI->setSelectedLight(NULL);
+		}
+		else
+		{
+			pUI->setSelectedNode(NULL);
+			pUI->setSelectedLight(closestLight.first);
+		}
+
         mIsMouseRightPressed=0;
     }
     if (glfwGetMouseButton(pWindow, GLFW_MOUSE_BUTTON_RIGHT)==GLFW_PRESS) mIsMouseRightPressed=1;

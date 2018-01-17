@@ -33,13 +33,15 @@
 class Node;
 class Scene;
 class Model;
+class BaseLight;
 
 class ModelNodePicker
 {
 private:
     ModelNodePicker(){};
 public:
-    static Node* const pickNode(Scene *const pScene, std::vector<Model>* pModels, const std::pair<int, int>& pScreenSize, const std::pair<double, double>& pMousePos);
+    static std::pair<Node*, float> const pickNode(Scene *const pScene, std::vector<Model>* pModels, const std::pair<int, int>& pScreenSize, const std::pair<double, double>& pMousePos);
+	static std::pair<BaseLight*, float> const pickBaseLight(Model * pModel, Scene *const pScene, std::vector<BaseLight*>* pLights, const std::pair<int, int>& pScreenSize, const std::pair<double, double>& pMousePos);
     static const bool checkRayIntersectionTriangle(const glm::vec3& pRaySource, const glm::vec3& pRayDirection, const glm::vec3 pTriangle[3], float& pDistanceOutput);
     static const bool checkRayIntersectionOBB(const glm::vec3& pRaySource, const glm::vec3& pRayDirection, const std::pair<glm::vec4,glm::vec4>& pOBB, const glm::mat4& pTransform, float& pDistanceOutput);
 };

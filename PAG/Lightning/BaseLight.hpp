@@ -24,6 +24,7 @@
 #define BaseLight_hpp
 
 #include <stdio.h>
+#include <vector>
 #include <glm/glm.hpp>
 
 class Model;
@@ -41,11 +42,13 @@ protected:
     BaseLight(const glm::vec3& pLightPos, const glm::vec3& pLightColor, const float& pLightAttenuation, const float& pLightAmbientCoefficient);
 public:
     virtual ~BaseLight();
-    
+
     const glm::vec3& getLightPos();
     const glm::vec3& getLightColor();
     const float& getLightAttenuation();
     const float& getLightAmbientCoefficient();
+
+	std::pair<BaseLight*, float> testRay(Model* pModel, const glm::vec3& pRaySource, const glm::vec3& pRayDirection);
     
     void setLightPos(const glm::vec3& pLightPos);
     void setLightColor(const glm::vec3& pLightColor);

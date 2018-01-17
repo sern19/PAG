@@ -74,7 +74,7 @@ vec3 applyPhongLight(Light light, const in vec4 inputColor, const vec3 specularC
         attenuation=1.0/(1.0+light.attenuation*pow(distanceToLight, 2)); //Z funkcji tłumienia światła, dodajemy 1 gdy odległość jest równa 0, dodatkowo mnożymy ją przez procentowe tłumienie światła (0.0 - 1.0)
         inputToLight=normalize(light.position.xyz-inputPos);
         
-        //Kierunkowe
+        //Stożkowe
         if (light.coneDirection!=vec3(0))
         {
             float lightToInputAngle=degrees(acos(dot(-inputToLight, normalize(light.coneDirection))));

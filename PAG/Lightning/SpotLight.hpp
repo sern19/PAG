@@ -36,6 +36,12 @@ public:
     SpotLight(const glm::vec3& pLightPos, const glm::vec3& pConeDirection, const glm::vec3& pLightColor, const float& pConeAngle, const float& pLightAttenuation, const float& pLightAmbientCoefficient=0.14f);
     virtual ~SpotLight();
     
+    const glm::vec3& getConeDirection();
+    const float& getConeAngle();
+    
+    void setConeDirection(const glm::vec3& pConeDirection);
+    void setConeAngle(const float& pConeAngle);
+    
     virtual void setLight(Shader* const pShader, Scene* const pScene, const unsigned int& pLightNumber);
 };
 

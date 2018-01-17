@@ -45,7 +45,7 @@ Model::Model(const Model& pSourceModel): mModelDirectory(pSourceModel.mModelDire
 const std::pair<glm::vec4, glm::vec4>  Model::calculateModelOBB()
 {
     int i;
-    std::pair<glm::vec4, glm::vec4> output=std::pair<glm::vec4, glm::vec4>(0, 0);
+    std::pair<glm::vec4, glm::vec4> output=std::pair<glm::vec4, glm::vec4>(glm::vec4(0), glm::vec4(0));
     
     if (mRootNode==NULL) return output;
     
@@ -77,7 +77,7 @@ void Model::loadModel(const std::string &pModelPath, Shader *const pShader)
     Assimp::Importer importer;
     importer.SetPropertyFloat(AI_CONFIG_PP_GSN_MAX_SMOOTHING_ANGLE,80.0f);
     importer.SetPropertyInteger(AI_CONFIG_PP_RVC_FLAGS, aiComponent_TANGENTS_AND_BITANGENTS | aiComponent_NORMALS);
-    const aiScene *scene = importer.ReadFile(pModelPath, aiProcess_RemoveComponent | aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_CalcTangentSpace | aiProcess_FixInfacingNormals | aiProcess_FindInvalidData | aiProcess_RemoveRedundantMaterials | aiProcess_OptimizeMeshes| aiProcess_JoinIdenticalVertices |  aiProcess_SplitLargeMeshes |  aiProcess_SortByPType | aiProcess_ImproveCacheLocality);
+    const aiScene *scene = importer.ReadFile(pModelPath, aiProcess_RemoveComponent | aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_CalcTangentSpace | aiProcess_FixInfacingNormals | aiProcess_FindInvalidData | aiProcess_RemoveRedundantMaterials | aiProcess_OptimizeMeshes | aiProcess_JoinIdenticalVertices |  aiProcess_SplitLargeMeshes |  aiProcess_SortByPType | aiProcess_ImproveCacheLocality);
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
     {
         std::string outputMessage="(Model::loadModel): Błąd wczytywania modelu\n\t(ASSIMP): ";

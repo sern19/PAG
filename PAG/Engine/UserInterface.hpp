@@ -29,6 +29,7 @@
 #include <GLFW/glfw3.h>
 
 class Node;
+class BaseLight;
 class Transform;
 
 class UserInterface
@@ -36,18 +37,29 @@ class UserInterface
 private:
     bool mShouldShowInterface=false;
 	Node* mSelectedNode=NULL;
+	BaseLight* mSelectedLight=NULL;
 	Transform* mSelectedTransform=NULL;
+
+	int mMainMenuHeight;
 
 	//Stringi do wyświetlania
 	float mTranslateX, mTranslateY, mTranslateZ, mScaleX, mScaleY, mScaleZ, mRotationX, mRotationY, mRotationZ;
+
+	float mLightX, mLightY, mLightZ, mLightR, mLightG, mLightB, mLightAttenuation, mLightAmbient, mLightConeX, mLightConeY, mLightConeZ, mLightConeAngle;
     
     void updateUITransformData();
+	void updateUILightData();
+    void updateLight();
 	void updateTransform();
+
+	void drawTransformUI();
+	void drawLightUI();
 public:
     UserInterface(GLFWwindow* const pWindow);
     void draw();
     void setShouldShowInterface(const bool& pShouldShowInterface);
 	void setSelectedNode(Node* const pSelectedNode);
+	void setSelectedLight(BaseLight* const pSelectedLight);
 };
 
 #endif /* UserInterface_hpp */

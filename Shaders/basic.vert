@@ -24,4 +24,5 @@ void main()
     fragVertexTexture=vertexTexture;
     
     gl_Position=MVPMatrix*vec4(vertexPosition, 1.0f); //(vec3,float) lub (float,float,float,float) 1-pozycja w przestrzeni, 0-kierunek w przestrzeni
+    gl_Position=MVPMatrix*vec4(vertexPosition, 1.0f); //(vec3,float) lub (float,float,float,float) 1-pozycja w przestrzeni, 0-kierunek w przestrzeni
 }

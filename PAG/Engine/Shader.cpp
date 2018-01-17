@@ -25,7 +25,10 @@
 #include <fstream>
 #include <sstream>
 
-Shader::Shader()
+Shader::Shader(): Shader({ {VERTEX_SHADER_LOCATION, GL_VERTEX_SHADER}, {FRAGMENT_SHADER_LOCATION, GL_FRAGMENT_SHADER} })
+{}
+
+Shader::Shader(std::vector<std::pair<std::string, GLenum>> pShaderPrograms): mShaderPrograms(pShaderPrograms)
 {
     try
     {
@@ -35,6 +38,7 @@ Shader::Shader()
         throw err;
     }
 }
+
 Shader::~Shader()
 {
     if (mProgramHandle) glDeleteProgram(mProgramHandle);
@@ -110,11 +114,8 @@ void Shader::linkAndReloadProgram()
     } else mProgramHandle=glCreateProgram();
     try
     {
-//        compileShaderFromFile(GL_VERTEX_SHADER, "Shaders/debug.vert");
-//        compileShaderFromFile(GL_GEOMETRY_SHADER, "Shaders/debug.geom");
-//        compileShaderFromFile(GL_FRAGMENT_SHADER, "Shaders/debug.frag");
-        compileShaderFromFile(GL_VERTEX_SHADER, VERTEX_SHADER_LOCATION);
-        compileShaderFromFile(GL_FRAGMENT_SHADER, FRAGMENT_SHADER_LOCATION);
+        for (auto shaderProgram: mShaderPrograms)
+            compileShaderFromFile(shaderProgram.second, shaderProgram.first);
     } catch (std::runtime_error err)
     {
         throw err;

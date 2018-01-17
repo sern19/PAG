@@ -70,8 +70,8 @@ void Node::generateOBB()
     
     if (mMeshes.size()==0) return;
     
-    for (i=0;i<mMeshes.size();i++)
-        obbs.push_back(mMeshes[i].getMinMaxVerticles());
+    for (Mesh& mesh: mMeshes)
+        obbs.push_back(mesh.getMinMaxVerticles());
     
     mOBB=obbs[0];
     
@@ -147,16 +147,16 @@ void Node::updateCache()
     int i;
     if (mParentNode==NULL) mCachedTransform=mElementTransform->getChildCombinedTransform();
     else mCachedTransform=mParentNode->mCachedTransform*mElementTransform->getChildCombinedTransform();
-    for (i=0;i<mChildNodes.size();i++)
-        mChildNodes[i].updateCache();
+    for (Node& childNode: mChildNodes)
+        childNode.updateCache();
 }
 
 void Node::updateChildrenPointers(Node* const pParent)
 {
     int i;
     if (mParentNode!=NULL && pParent!=this) mParentNode=pParent;
-    for (i=0;i<mChildNodes.size();i++)
-        mChildNodes[i].updateChildrenPointers(this);
+    for (Node& childNode: mChildNodes)
+        childNode.updateChildrenPointers(this);
 }
 
 void Node::drawContent(Shader *const pShader, Scene* const pScene, Materials* const pTextures)
@@ -171,19 +171,19 @@ void Node::drawContent(Shader *const pShader, Scene* const pScene, Materials* co
     pShader->setMat4("modelMatrix", &mCachedTransform);
     pShader->setMat3("normalMatrix", &normalMatrix);
     
-    for (i=0;i<mMeshes.size();i++)
-        mMeshes[i].drawContent(pShader, pTextures);
-    for (i=0;i<mChildNodes.size();i++)
-        mChildNodes[i].drawContent(pShader, pScene, pTextures);
+    for (Mesh& mesh: mMeshes)
+        mesh.drawContent(pShader, pTextures);
+    for (Node& childNode: mChildNodes)
+        childNode.drawContent(pShader, pScene, pTextures);
 }
 
 void Node::setIsSelected(const bool& pIsSelected)
 {
     int i;
-    for (i=0;i<mMeshes.size();i++)
-        mMeshes[i].setIsSelected(pIsSelected);
-    for (i=0;i<mChildNodes.size();i++)
-        mChildNodes[i].setIsSelected(pIsSelected);
+    for (Mesh& mesh: mMeshes)
+        mesh.setIsSelected(pIsSelected);
+    for (Node& childNode: mChildNodes)
+        childNode.setIsSelected(pIsSelected);
 }
 
 void Node::resetNodeTransform() { mElementTransform->importAiTransform(mOriginalTransform); }
@@ -212,9 +212,9 @@ const std::vector<std::pair<glm::vec4, glm::vec4>> Node::getOBBs()
     if (mChildNodes.size()>0)
     {
         std::vector<std::pair<glm::vec4, glm::vec4>> childrenOutput;
-        for (i=0;i<mChildNodes.size();i++)
+        for (Node& childNode: mChildNodes)
         {
-            childrenOutput=mChildNodes[i].getOBBs();
+            childrenOutput=childNode.getOBBs();
             output.insert(std::end(output), std::begin(childrenOutput), std::end(childrenOutput));
         }
     }
@@ -240,16 +240,16 @@ const std::vector<std::pair<Node*,float>> Node::testRayOBBIntersection(const glm
     
     if (mMeshes.size()>0 && ModelNodePicker::checkRayIntersectionOBB(pRaySource, pRayDirection, mOBB, mCachedTransform, distance))
     {
-        for (i=0;i<mMeshes.size();i++)
-            if (mMeshes[i].checkRayIntersections(pRaySource, pRayDirection, mCachedTransform, distance)) output.push_back(std::pair<Node*,float>(this,distance));
+        for (Mesh& mesh: mMeshes)
+            if (mesh.checkRayIntersections(pRaySource, pRayDirection, mCachedTransform, distance)) output.push_back(std::pair<Node*,float>(this,distance));
     }
     //Łączenie vectorów
     if (mChildNodes.size()>0)
     {
         std::vector<std::pair<Node*,float>> childrenOutput;
-        for (i=0;i<mChildNodes.size();i++)
+        for (Node& childNode: mChildNodes)
         {
-            childrenOutput=mChildNodes[i].testRayOBBIntersection(pRaySource, pRayDirection);
+            childrenOutput=childNode.testRayOBBIntersection(pRaySource, pRayDirection);
             output.insert(std::end(output), std::begin(childrenOutput), std::end(childrenOutput));
         }
     }
