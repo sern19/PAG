@@ -62,6 +62,8 @@ public:
     
     void resetNodeTransform();
     
+    void bakeTransfrom(const glm::mat4& pBakeTransform, const glm::mat3& pNormalBakeTransform);
+    
     const std::vector<std::pair<glm::vec4, glm::vec4>> getOBBs();
     const unsigned int getChildrensCount();
     const unsigned int getNodeLevel();

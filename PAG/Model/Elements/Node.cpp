@@ -21,7 +21,6 @@
 // THE SOFTWARE.
 
 #include "Node.hpp"
-
 #include "Mesh.hpp"
 #include "Transform.hpp"
 #include "Shader.hpp"
@@ -104,16 +103,16 @@ Mesh Node::processMesh(const aiMesh* const pMesh, const aiScene* const pScene, M
         temporaryVertex.mPosition.x=pMesh->mVertices[i].x;
         temporaryVertex.mPosition.y=pMesh->mVertices[i].y;
         temporaryVertex.mPosition.z=pMesh->mVertices[i].z;
-        if (pMesh->HasTangentsAndBitangents())
-        {
-            temporaryVertex.mTangent.x=pMesh->mTangents[i].x;
-            temporaryVertex.mTangent.y=pMesh->mTangents[i].y;
-            temporaryVertex.mTangent.z=pMesh->mTangents[i].z;
-            
-            temporaryVertex.mBitangent.x=pMesh->mBitangents[i].x;
-            temporaryVertex.mBitangent.y=pMesh->mBitangents[i].y;
-            temporaryVertex.mBitangent.z=pMesh->mBitangents[i].z;
-        }
+//        if (pMesh->HasTangentsAndBitangents())
+//        {
+//            temporaryVertex.mTangent.x=pMesh->mTangents[i].x;
+//            temporaryVertex.mTangent.y=pMesh->mTangents[i].y;
+//            temporaryVertex.mTangent.z=pMesh->mTangents[i].z;
+//
+//            temporaryVertex.mBitangent.x=pMesh->mBitangents[i].x;
+//            temporaryVertex.mBitangent.y=pMesh->mBitangents[i].y;
+//            temporaryVertex.mBitangent.z=pMesh->mBitangents[i].z;
+//        }
         //Normalne
         if (pMesh->mNormals)
         {
@@ -188,6 +187,16 @@ void Node::setIsSelected(const bool& pIsSelected)
 
 void Node::resetNodeTransform() { mElementTransform->importAiTransform(mOriginalTransform); }
 
+void Node::bakeTransfrom(const glm::mat4& pBakeTransform, const glm::mat3& pNormalBakeTransform)
+{
+    for (Mesh& mesh: mMeshes)
+        mesh.bakeTransfrom(pBakeTransform, pNormalBakeTransform);
+    for (Node& childNode: mChildNodes)
+        childNode.bakeTransfrom(pBakeTransform, pNormalBakeTransform);
+    updateCache();
+    generateOBB();
+}
+
 const unsigned int Node::getNodeLevel()
 {
     if (mParentNode==NULL) return 0;
@@ -234,7 +243,6 @@ const std::vector<std::pair<Node*,float>> Node::testRayOBBIntersection(const glm
 {
     std::vector<std::pair<Node*,float>> output;
     float distance;
-    int i;
     
     if (mElementTransform&&mElementTransform->getNeedsUpdateCache()) updateCache();
     

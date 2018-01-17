@@ -126,19 +126,24 @@ void Core::display()
 
 void Core::loadModels()
 {
-    mModels.push_back(Model("Models/2B/source/2B.fbx", mShader));
-    mModels.push_back(Model("Models/Spheres/source/Spheres.obj", mShader));
-    mModels.push_back(Model("Models/Plane/source/plane.obj", mShader));
-
-    mModels[0].addGLSetting(GL_BLEND);
-    mModels[0].addGLSetting(GL_SAMPLE_ALPHA_TO_COVERAGE);
-
-    mModels[0].getRootNode()->getNodeTransform()->setScale(glm::vec3(0.004,0.004,0.004));
-    mModels[1].getRootNode()->getNodeTransform()->setScale(glm::vec3(0.3,0.3,0.3));
+//    mModels.push_back(Model("Models/2B/source/2B.fbx", mShader));
+//    mModels.push_back(Model("Models/Spheres/source/Spheres.obj", mShader));
+//    mModels.push_back(Model("Models/Plane/source/plane.obj", mShader));
+//
+//    mModels[0].addGLSetting(GL_BLEND);
+//    mModels[0].addGLSetting(GL_SAMPLE_ALPHA_TO_COVERAGE);
+//
+//    mModels[0].getRootNode()->getNodeTransform()->setScale(glm::vec3(0.004,0.004,0.004));
+//    mModels[1].getRootNode()->getNodeTransform()->setScale(glm::vec3(0.3,0.3,0.3));
+//
+//    mModels[1].getRootNode()->getNodeTransform()->setPosition(glm::vec3(0,0.3,0));
+//
+//    mModels[2].getRootNode()->getNodeTransform()->setRotation(glm::vec3(-90, 0, 0));
     
-    mModels[1].getRootNode()->getNodeTransform()->setPosition(glm::vec3(0,0.3,0));
-
-	mModels[2].getRootNode()->getNodeTransform()->setRotation(glm::vec3(-90, 0, 0));
+    Transform sponzaScaler;
+    sponzaScaler.setScale(glm::vec3(0.01,0.01,0.01));
+    
+    mModels.push_back(Model("Models/Sponza/source/sponza.obj", mShader, &sponzaScaler));
     
     mLightModel=new Model("Models/LightSphere/source/LightSphere.obj", mShader);
 }

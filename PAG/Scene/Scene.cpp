@@ -37,7 +37,7 @@ Scene::Scene(GLFWwindow* const pWindow)
     
     //Inicjalizacja macierzy projekcji
     glfwGetWindowSize(pWindow, &screenWidth, &screenHeight);
-    mProjectionSpace=glm::perspective(45.0f, (float)screenWidth / (float)screenHeight, 0.001f, 50.0f); //FOV, Aspect Ratio, zNear, zFar
+    mProjectionSpace=glm::perspective(45.0f, (float)screenWidth / (float)screenHeight, 0.001f, 1000.0f); //FOV, Aspect Ratio, zNear, zFar
     updateWVP();
 }
 

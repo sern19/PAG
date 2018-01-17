@@ -21,6 +21,7 @@
 // THE SOFTWARE.
 
 #include "Model.hpp"
+#include "Transform.hpp"
 #include "ModelNodePicker.hpp"
 #include "Materials.hpp"
 #include "Texture.hpp"
@@ -36,10 +37,22 @@ Model::Model(const std::string& pModelPath, Shader *const pShader)
     loadModel(pModelPath, pShader);
 }
 
+Model::Model(const std::string& pModelPath, Shader *const pShader, Transform* const pBakeTransform): Model(pModelPath, pShader)
+{
+    bakeTransfrom(pBakeTransform);
+}
+
 Model::Model(const Model& pSourceModel): mModelDirectory(pSourceModel.mModelDirectory), mModelFilename(pSourceModel.mModelFilename), mAdditionalGLSettings(pSourceModel.mAdditionalGLSettings)
 {
     mRootNode=new Node(*pSourceModel.mRootNode);
     mMaterials=new Materials(*pSourceModel.mMaterials);
+}
+void Model::bakeTransfrom(Transform* const pBakeTransform)
+{
+    if (pBakeTransform==NULL||mRootNode==NULL) return;
+    glm::mat4 bakeTransform=pBakeTransform->getChildCombinedTransform();
+    glm::mat3 normalBakeTransform=glm::transpose(glm::inverse(glm::mat3(bakeTransform)));
+    mRootNode->bakeTransfrom(bakeTransform, normalBakeTransform);
 }
 
 const std::pair<glm::vec4, glm::vec4>  Model::calculateModelOBB()
@@ -76,8 +89,8 @@ void Model::loadModel(const std::string &pModelPath, Shader *const pShader)
 {
     Assimp::Importer importer;
     importer.SetPropertyFloat(AI_CONFIG_PP_GSN_MAX_SMOOTHING_ANGLE,80.0f);
-    importer.SetPropertyInteger(AI_CONFIG_PP_RVC_FLAGS, aiComponent_TANGENTS_AND_BITANGENTS | aiComponent_NORMALS);
-    const aiScene *scene = importer.ReadFile(pModelPath, aiProcess_RemoveComponent | aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_CalcTangentSpace | aiProcess_FixInfacingNormals | aiProcess_FindInvalidData | aiProcess_RemoveRedundantMaterials | aiProcess_OptimizeMeshes | aiProcess_JoinIdenticalVertices |  aiProcess_SplitLargeMeshes |  aiProcess_SortByPType | aiProcess_ImproveCacheLocality);
+    importer.SetPropertyInteger(AI_CONFIG_PP_RVC_FLAGS, aiComponent_NORMALS);
+    const aiScene *scene = importer.ReadFile(pModelPath, aiProcess_RemoveComponent | aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_FixInfacingNormals | aiProcess_FindInvalidData | aiProcess_RemoveRedundantMaterials | aiProcess_OptimizeMeshes | aiProcess_JoinIdenticalVertices |  aiProcess_SplitLargeMeshes |  aiProcess_SortByPType | aiProcess_ImproveCacheLocality);
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
     {
         std::string outputMessage="(Model::loadModel): Błąd wczytywania modelu\n\t(ASSIMP): ";

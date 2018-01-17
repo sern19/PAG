@@ -61,6 +61,7 @@ private:
     bool mShouldUseMaterial=true;
     
     void clearData();
+    void calculateTanBitan();
     void loadContent();
 public:
     Mesh(const std::vector<Vertex>& pVerticles, const std::vector<unsigned int>& pIndices);
@@ -68,6 +69,8 @@ public:
     void setMaterial(const unsigned int& pMaterialID);
     void disableMaterialUsage();
     void setIsSelected(const bool& pIsSelected);
+    
+    void bakeTransfrom(const glm::mat4& pBakeTransform, const glm::mat3& pNormalBakeTransform);
     
     void drawContent(Shader* const pShader, Materials* const pTextures);
     

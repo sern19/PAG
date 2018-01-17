@@ -10,12 +10,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Scene/ModelNodePicker.cpp"
-            timestampString = "534318338.374593"
+            timestampString = "537900738.9303499"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "207"
             endingLineNumber = "207"
-            landmarkName = "ModelNodePicker::pickNode(Scene *const pScene, std::vector&lt;Model&gt;* pModels, const std::pair&lt;int, int&gt;&amp; pScreenSize, const std::pair&lt;double, double&gt;&amp; pMousePos)"
+            landmarkName = "ModelNodePicker::pickBaseLight(Model * pModel, Scene *const pScene, std::vector&lt;BaseLight*&gt;* pLights, const std::pair&lt;int, int&gt;&amp; pScreenSize, const std::pair&lt;double, double&gt;&amp; pMousePos)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Model/Elements/Node.cpp"
-            timestampString = "537831248.667711"
+            timestampString = "537900738.930424"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "248"
-            endingLineNumber = "248"
+            startingLineNumber = "256"
+            endingLineNumber = "256"
             landmarkName = "Node::testRayOBBIntersection(const glm::vec3&amp; pRaySource, const glm::vec3&amp; pRayDirection)"
             landmarkType = "7">
          </BreakpointContent>
@@ -42,11 +42,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Model/Model.cpp"
-            timestampString = "537831248.6677769"
+            timestampString = "537900738.930496"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "148"
-            endingLineNumber = "148"
+            startingLineNumber = "161"
+            endingLineNumber = "161"
             landmarkName = "Model::testRayOBBIntersection(const glm::vec3&amp; pRaySource, const glm::vec3&amp; pRayDirection)"
             landmarkType = "7">
          </BreakpointContent>
@@ -106,11 +106,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Model/Elements/Mesh.cpp"
-            timestampString = "534285098.912557"
+            timestampString = "537900738.93065"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "122"
-            endingLineNumber = "122"
+            startingLineNumber = "179"
+            endingLineNumber = "179"
             landmarkName = "Mesh::checkRayIntersections(const glm::vec3&amp; pRaySource, const glm::vec3&amp; pRayDirection, const glm::mat4&amp; pTransform, float&amp; pDistanceOutput)"
             landmarkType = "7">
          </BreakpointContent>
@@ -122,13 +122,45 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Model/Elements/Node.cpp"
-            timestampString = "537831248.668208"
+            timestampString = "537900738.930722"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "243"
-            endingLineNumber = "243"
+            startingLineNumber = "251"
+            endingLineNumber = "251"
             landmarkName = "Node::testRayOBBIntersection(const glm::vec3&amp; pRaySource, const glm::vec3&amp; pRayDirection)"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Node::testRayOBBIntersection(glm::tvec3&lt;float, (glm::precision)0&gt; const&amp;, glm::tvec3&lt;float, (glm::precision)0&gt; const&amp;)"
+                  moduleName = "PAG"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Volumes/Dane/Inne/Google%20Drive/Studia%20-%20Prace/Programowanie%20Aplikacji%20Graficznych/GitHub/PAG/PAG/Model/Elements/Node.cpp"
+                  timestampString = "537892567.733146"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "243"
+                  endingLineNumber = "243"
+                  offsetFromSymbolStart = "531">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Node::testRayOBBIntersection(glm::tvec3&lt;float, (glm::precision)0&gt; const&amp;, glm::tvec3&lt;float, (glm::precision)0&gt; const&amp;)"
+                  moduleName = "PAG"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Volumes/Dane/Inne/Google%20Drive/Studia%20-%20Prace/Programowanie%20Aplikacji%20Graficznych/GitHub/PAG/PAG/Model/Elements/Node.cpp"
+                  timestampString = "537892567.735057"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "243"
+                  endingLineNumber = "243"
+                  offsetFromSymbolStart = "965">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -218,11 +250,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Model/Elements/Node.cpp"
-            timestampString = "537831248.6683609"
+            timestampString = "537900738.930905"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "56"
-            endingLineNumber = "56"
+            startingLineNumber = "55"
+            endingLineNumber = "55"
             landmarkName = "Node::processNode(const aiNode* const pNode, const aiScene* const pScene, Materials* const pTextures)"
             landmarkType = "7">
          </BreakpointContent>
@@ -234,11 +266,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Model/Elements/Node.cpp"
-            timestampString = "537831248.668406"
+            timestampString = "537900738.930974"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "62"
-            endingLineNumber = "62"
+            startingLineNumber = "61"
+            endingLineNumber = "61"
             landmarkName = "Node::processNode(const aiNode* const pNode, const aiScene* const pScene, Materials* const pTextures)"
             landmarkType = "7">
          </BreakpointContent>
@@ -250,7 +282,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Model/Materials/Texture.cpp"
-            timestampString = "537846347.055698"
+            timestampString = "537891914.563019"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "58"
@@ -282,11 +314,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Model/Elements/Node.cpp"
-            timestampString = "537831248.668489"
+            timestampString = "537900738.931084"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "143"
-            endingLineNumber = "143"
+            startingLineNumber = "142"
+            endingLineNumber = "142"
             landmarkName = "Node::processMesh(const aiMesh* const pMesh, const aiScene* const pScene, Materials* const pMaterials)"
             landmarkType = "7">
          </BreakpointContent>
@@ -298,7 +330,23 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Model/Elements/Node.cpp"
-            timestampString = "537831248.6685309"
+            timestampString = "537900738.93116"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "144"
+            endingLineNumber = "144"
+            landmarkName = "Node::updateCache()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "PAG/Model/Elements/Node.cpp"
+            timestampString = "537900738.93125"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "145"
@@ -314,27 +362,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Model/Elements/Node.cpp"
-            timestampString = "537831248.668573"
+            timestampString = "537900738.931334"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "146"
-            endingLineNumber = "146"
-            landmarkName = "Node::updateCache()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "PAG/Model/Elements/Node.cpp"
-            timestampString = "537831248.668613"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "55"
-            endingLineNumber = "55"
+            startingLineNumber = "54"
+            endingLineNumber = "54"
             landmarkName = "Node::processNode(const aiNode* const pNode, const aiScene* const pScene, Materials* const pTextures)"
             landmarkType = "7">
          </BreakpointContent>
@@ -346,11 +378,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Model/Elements/Node.cpp"
-            timestampString = "537831248.668654"
+            timestampString = "537900738.931397"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "61"
-            endingLineNumber = "61"
+            startingLineNumber = "60"
+            endingLineNumber = "60"
             landmarkName = "Node::processNode(const aiNode* const pNode, const aiScene* const pScene, Materials* const pTextures)"
             landmarkType = "7">
          </BreakpointContent>
@@ -362,11 +394,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Model/Model.cpp"
-            timestampString = "537831248.668698"
+            timestampString = "537900738.931532"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "112"
-            endingLineNumber = "112"
+            startingLineNumber = "125"
+            endingLineNumber = "125"
             landmarkName = "Model::addGLSetting(const GLenum&amp; pSetting)"
             landmarkType = "7">
          </BreakpointContent>
@@ -378,11 +410,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Model/Model.cpp"
-            timestampString = "537831248.668931"
+            timestampString = "537900738.931594"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "34"
-            endingLineNumber = "34"
+            startingLineNumber = "35"
+            endingLineNumber = "35"
             landmarkName = "Model::Model(const std::string&amp; pModelPath, Shader *const pShader)"
             landmarkType = "7">
             <Locations>
@@ -426,11 +458,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Model/Model.cpp"
-            timestampString = "537831248.669138"
+            timestampString = "537900738.931659"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "91"
-            endingLineNumber = "91"
+            startingLineNumber = "104"
+            endingLineNumber = "104"
             landmarkName = "Model::loadModel(const std::string &amp;pModelPath, Shader *const pShader)"
             landmarkType = "7">
          </BreakpointContent>
@@ -442,11 +474,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Model/Elements/Node.cpp"
-            timestampString = "537831248.669333"
+            timestampString = "537900738.9317321"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "245"
-            endingLineNumber = "245"
+            startingLineNumber = "253"
+            endingLineNumber = "253"
             landmarkName = "Node::testRayOBBIntersection(const glm::vec3&amp; pRaySource, const glm::vec3&amp; pRayDirection)"
             landmarkType = "7">
          </BreakpointContent>
@@ -458,11 +490,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Model/Elements/Node.cpp"
-            timestampString = "537831248.669374"
+            timestampString = "537900738.931801"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "247"
-            endingLineNumber = "247"
+            startingLineNumber = "255"
+            endingLineNumber = "255"
             landmarkName = "Node::testRayOBBIntersection(const glm::vec3&amp; pRaySource, const glm::vec3&amp; pRayDirection)"
             landmarkType = "7">
          </BreakpointContent>
@@ -474,11 +506,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Model/Elements/Node.cpp"
-            timestampString = "537831248.669415"
+            timestampString = "537900738.931885"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "76"
-            endingLineNumber = "76"
+            startingLineNumber = "75"
+            endingLineNumber = "75"
             landmarkName = "Node::generateOBB()"
             landmarkType = "7">
          </BreakpointContent>
@@ -490,11 +522,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Model/Elements/Node.cpp"
-            timestampString = "537831248.669456"
+            timestampString = "537900738.931946"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "91"
-            endingLineNumber = "91"
+            startingLineNumber = "90"
+            endingLineNumber = "90"
             landmarkName = "Node::generateOBB()"
             landmarkType = "7">
          </BreakpointContent>
@@ -506,12 +538,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Scene/ModelNodePicker.cpp"
-            timestampString = "534318338.375771"
+            timestampString = "537900738.932024"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "186"
             endingLineNumber = "186"
-            landmarkName = "ModelNodePicker::pickNode(Scene *const pScene, std::vector&lt;Model&gt;* pModels, const std::pair&lt;int, int&gt;&amp; pScreenSize, const std::pair&lt;double, double&gt;&amp; pMousePos)"
+            landmarkName = "ModelNodePicker::pickBaseLight(Model * pModel, Scene *const pScene, std::vector&lt;BaseLight*&gt;* pLights, const std::pair&lt;int, int&gt;&amp; pScreenSize, const std::pair&lt;double, double&gt;&amp; pMousePos)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -522,7 +554,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Scene/ModelNodePicker.cpp"
-            timestampString = "534318338.375816"
+            timestampString = "537900738.932083"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "99"
@@ -538,7 +570,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Scene/ModelNodePicker.cpp"
-            timestampString = "534318338.375857"
+            timestampString = "537900738.932132"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "81"
@@ -554,7 +586,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Scene/ModelNodePicker.cpp"
-            timestampString = "534318338.375898"
+            timestampString = "537900738.9322"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "111"
@@ -570,7 +602,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Scene/ModelNodePicker.cpp"
-            timestampString = "534318338.375938"
+            timestampString = "537900738.932252"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "90"
@@ -586,11 +618,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Model/Model.cpp"
-            timestampString = "537831248.669595"
+            timestampString = "537900738.932305"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "146"
-            endingLineNumber = "146"
+            startingLineNumber = "159"
+            endingLineNumber = "159"
             landmarkName = "Model::testRayOBBIntersection(const glm::vec3&amp; pRaySource, const glm::vec3&amp; pRayDirection)"
             landmarkType = "7">
          </BreakpointContent>
@@ -602,11 +634,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Model/Elements/Node.cpp"
-            timestampString = "537831248.66979"
+            timestampString = "537900738.932359"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "213"
-            endingLineNumber = "213"
+            startingLineNumber = "222"
+            endingLineNumber = "222"
             landmarkName = "Node::getOBBs()"
             landmarkType = "7">
          </BreakpointContent>
@@ -618,11 +650,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Model/Elements/Node.cpp"
-            timestampString = "537831248.669831"
+            timestampString = "537900738.932423"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "260"
-            endingLineNumber = "260"
+            startingLineNumber = "268"
+            endingLineNumber = "268"
             landmarkName = "Node::~Node()"
             landmarkType = "7">
          </BreakpointContent>
@@ -634,7 +666,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Model/Elements/Transform.cpp"
-            timestampString = "534285098.914512"
+            timestampString = "537895694.079476"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "115"
@@ -650,7 +682,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Model/Elements/Transform.cpp"
-            timestampString = "534285098.914707"
+            timestampString = "537895694.079518"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "88"
@@ -698,43 +730,43 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Model/Model.cpp"
-            timestampString = "537831248.66995"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "81"
-            endingLineNumber = "81"
-            landmarkName = "Model::loadModel(const std::string &amp;pModelPath, Shader *const pShader)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "PAG/Model/Model.cpp"
-            timestampString = "537831248.6701421"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "92"
-            endingLineNumber = "92"
-            landmarkName = "Model::loadModel(const std::string &amp;pModelPath, Shader *const pShader)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "PAG/Model/Model.cpp"
-            timestampString = "537831248.670334"
+            timestampString = "537900738.932573"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "94"
             endingLineNumber = "94"
+            landmarkName = "Model::loadModel(const std::string &amp;pModelPath, Shader *const pShader)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "PAG/Model/Model.cpp"
+            timestampString = "537900738.932629"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "105"
+            endingLineNumber = "105"
+            landmarkName = "Model::loadModel(const std::string &amp;pModelPath, Shader *const pShader)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "PAG/Model/Model.cpp"
+            timestampString = "537900738.932707"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "107"
+            endingLineNumber = "107"
             landmarkName = "Model::loadModel(const std::string &amp;pModelPath, Shader *const pShader)"
             landmarkType = "7">
             <Locations>
@@ -826,11 +858,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Model/Materials/Materials.cpp"
-            timestampString = "537836266.723125"
+            timestampString = "537900738.932835"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "208"
-            endingLineNumber = "208"
+            startingLineNumber = "217"
+            endingLineNumber = "217"
             landmarkName = "Materials::fillMaterialData(aiMaterial* const pMaterial)"
             landmarkType = "7">
          </BreakpointContent>
@@ -858,11 +890,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Model/Model.cpp"
-            timestampString = "537831248.670622"
+            timestampString = "537900738.93293"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "85"
-            endingLineNumber = "85"
+            startingLineNumber = "98"
+            endingLineNumber = "98"
             landmarkName = "Model::loadModel(const std::string &amp;pModelPath, Shader *const pShader)"
             landmarkType = "7">
          </BreakpointContent>
@@ -870,11 +902,11 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Model/Materials/Texture.cpp"
-            timestampString = "537846347.056899"
+            timestampString = "537891914.563774"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "78"
@@ -890,11 +922,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Model/Model.cpp"
-            timestampString = "537831248.6708339"
+            timestampString = "537900738.933019"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "77"
-            endingLineNumber = "77"
+            startingLineNumber = "90"
+            endingLineNumber = "90"
             landmarkName = "Model::loadModel(const std::string &amp;pModelPath, Shader *const pShader)"
             landmarkType = "7">
          </BreakpointContent>
@@ -906,23 +938,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Model/Materials/Materials.cpp"
-            timestampString = "537836266.723313"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "70"
-            endingLineNumber = "70"
-            landmarkName = "Materials::loadTextures(const aiScene* const pScene)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "PAG/Model/Materials/Materials.cpp"
-            timestampString = "537836266.723424"
+            timestampString = "537900738.933081"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "71"
@@ -938,7 +954,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Model/Materials/Materials.cpp"
-            timestampString = "537836266.723516"
+            timestampString = "537900738.933144"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "72"
@@ -954,103 +970,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Model/Materials/Materials.cpp"
-            timestampString = "537836266.7236069"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "209"
-            endingLineNumber = "209"
-            landmarkName = "Materials::fillMaterialData(aiMaterial* const pMaterial)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "PAG/Model/Materials/Materials.cpp"
-            timestampString = "537836266.7236871"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "184"
-            endingLineNumber = "184"
-            landmarkName = "Materials::fillMaterialData(aiMaterial* const pMaterial)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "PAG/Model/Materials/Materials.cpp"
-            timestampString = "537836266.7237591"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "191"
-            endingLineNumber = "191"
-            landmarkName = "Materials::fillMaterialData(aiMaterial* const pMaterial)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "PAG/Model/Materials/Materials.cpp"
-            timestampString = "537836266.72383"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "154"
-            endingLineNumber = "154"
-            landmarkName = "Materials::fillMaterialData(aiMaterial* const pMaterial)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "PAG/Model/Materials/Materials.cpp"
-            timestampString = "537836266.723887"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "136"
-            endingLineNumber = "136"
-            landmarkName = "Materials::chcekIfIsLoaded(const std::string&amp; pTexturePath, const std::string&amp; pTextureType)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "PAG/Model/Materials/Materials.cpp"
-            timestampString = "537836266.7239389"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "82"
-            endingLineNumber = "82"
-            landmarkName = "Materials::loadTextures(const aiScene* const pScene)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "PAG/Model/Materials/Materials.cpp"
-            timestampString = "537836266.723991"
+            timestampString = "537900738.933202"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "73"
@@ -1066,11 +986,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Model/Materials/Materials.cpp"
-            timestampString = "537836266.724041"
+            timestampString = "537900738.933267"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "177"
-            endingLineNumber = "177"
+            startingLineNumber = "218"
+            endingLineNumber = "218"
             landmarkName = "Materials::fillMaterialData(aiMaterial* const pMaterial)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1082,11 +1002,75 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Model/Materials/Materials.cpp"
-            timestampString = "537836266.7240911"
+            timestampString = "537900738.933323"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "88"
-            endingLineNumber = "88"
+            startingLineNumber = "193"
+            endingLineNumber = "193"
+            landmarkName = "Materials::fillMaterialData(aiMaterial* const pMaterial)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "PAG/Model/Materials/Materials.cpp"
+            timestampString = "537900738.933378"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "200"
+            endingLineNumber = "200"
+            landmarkName = "Materials::fillMaterialData(aiMaterial* const pMaterial)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "PAG/Model/Materials/Materials.cpp"
+            timestampString = "537900738.933426"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "163"
+            endingLineNumber = "163"
+            landmarkName = "Materials::fillMaterialData(aiMaterial* const pMaterial)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "PAG/Model/Materials/Materials.cpp"
+            timestampString = "537900738.933484"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "145"
+            endingLineNumber = "145"
+            landmarkName = "Materials::chcekIfIsLoaded(const std::string&amp; pTexturePath, const std::string&amp; pTextureType)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "PAG/Model/Materials/Materials.cpp"
+            timestampString = "537900738.933531"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "85"
+            endingLineNumber = "85"
             landmarkName = "Materials::loadTextures(const aiScene* const pScene)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1098,11 +1082,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Model/Materials/Materials.cpp"
-            timestampString = "537836266.724141"
+            timestampString = "537900738.9335769"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "103"
-            endingLineNumber = "103"
+            startingLineNumber = "74"
+            endingLineNumber = "74"
             landmarkName = "Materials::loadTextures(const aiScene* const pScene)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1114,11 +1098,59 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Model/Materials/Materials.cpp"
-            timestampString = "537836266.72419"
+            timestampString = "537900738.93362"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "116"
-            endingLineNumber = "116"
+            startingLineNumber = "186"
+            endingLineNumber = "186"
+            landmarkName = "Materials::fillMaterialData(aiMaterial* const pMaterial)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "PAG/Model/Materials/Materials.cpp"
+            timestampString = "537900738.9336669"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "91"
+            endingLineNumber = "91"
+            landmarkName = "Materials::loadTextures(const aiScene* const pScene)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "PAG/Model/Materials/Materials.cpp"
+            timestampString = "537900738.9337209"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "108"
+            endingLineNumber = "108"
+            landmarkName = "Materials::loadTextures(const aiScene* const pScene)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "PAG/Model/Materials/Materials.cpp"
+            timestampString = "537900738.933781"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "123"
+            endingLineNumber = "123"
             landmarkName = "Materials::loadTextures(const aiScene* const pScene)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1130,11 +1162,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Model/Model.cpp"
-            timestampString = "537831248.671301"
+            timestampString = "537900738.933848"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "89"
-            endingLineNumber = "89"
+            startingLineNumber = "102"
+            endingLineNumber = "102"
             landmarkName = "Model::loadModel(const std::string &amp;pModelPath, Shader *const pShader)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1146,11 +1178,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Model/Materials/Materials.cpp"
-            timestampString = "537836266.724256"
+            timestampString = "537900738.933931"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "54"
-            endingLineNumber = "54"
+            startingLineNumber = "55"
+            endingLineNumber = "55"
             landmarkName = "Materials::getTextureName(const aiString&amp; pTexturePath)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1162,7 +1194,23 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Model/Materials/Materials.cpp"
-            timestampString = "537836266.724303"
+            timestampString = "537900738.934001"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "57"
+            endingLineNumber = "57"
+            landmarkName = "Materials::getTextureName(const aiString&amp; pTexturePath)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "PAG/Model/Materials/Materials.cpp"
+            timestampString = "537900738.934056"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "56"
@@ -1177,13 +1225,317 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "PAG/Model/Materials/Materials.cpp"
-            timestampString = "537836266.72435"
+            filePath = "PAG/Scene/ModelNodePicker.cpp"
+            timestampString = "537900738.934106"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "55"
-            endingLineNumber = "55"
-            landmarkName = "Materials::getTextureName(const aiString&amp; pTexturePath)"
+            startingLineNumber = "212"
+            endingLineNumber = "212"
+            landmarkName = "ModelNodePicker::pickBaseLight(Model * pModel, Scene *const pScene, std::vector&lt;BaseLight*&gt;* pLights, const std::pair&lt;int, int&gt;&amp; pScreenSize, const std::pair&lt;double, double&gt;&amp; pMousePos)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "PAG/Scene/ModelNodePicker.cpp"
+            timestampString = "537900738.934171"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "252"
+            endingLineNumber = "252"
+            landmarkName = "ModelNodePicker::pickNode(Scene *const pScene, std::vector&lt;Model&gt;* pModels, const std::pair&lt;int, int&gt;&amp; pScreenSize, const std::pair&lt;double, double&gt;&amp; pMousePos)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "PAG/Scene/ModelNodePicker.cpp"
+            timestampString = "537900738.934233"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "244"
+            endingLineNumber = "244"
+            landmarkName = "ModelNodePicker::pickNode(Scene *const pScene, std::vector&lt;Model&gt;* pModels, const std::pair&lt;int, int&gt;&amp; pScreenSize, const std::pair&lt;double, double&gt;&amp; pMousePos)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "PAG/Model/Model.cpp"
+            timestampString = "537900738.934304"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "150"
+            endingLineNumber = "150"
+            landmarkName = "Model::testRayOBBIntersection(const glm::vec3&amp; pRaySource, const glm::vec3&amp; pRayDirection)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "PAG/Model/Model.cpp"
+            timestampString = "537900738.934358"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "154"
+            endingLineNumber = "154"
+            landmarkName = "Model::testRayOBBIntersection(const glm::vec3&amp; pRaySource, const glm::vec3&amp; pRayDirection)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "PAG/Model/Elements/Node.cpp"
+            timestampString = "537900738.934425"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "264"
+            endingLineNumber = "264"
+            landmarkName = "Node::testRayOBBIntersection(const glm::vec3&amp; pRaySource, const glm::vec3&amp; pRayDirection)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "PAG/Model/Elements/Node.cpp"
+            timestampString = "537900738.934489"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "247"
+            endingLineNumber = "247"
+            landmarkName = "Node::testRayOBBIntersection(const glm::vec3&amp; pRaySource, const glm::vec3&amp; pRayDirection)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "PAG/Model/Elements/Node.cpp"
+            timestampString = "537900738.9345551"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "249"
+            endingLineNumber = "249"
+            landmarkName = "Node::testRayOBBIntersection(const glm::vec3&amp; pRaySource, const glm::vec3&amp; pRayDirection)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "PAG/Model/Elements/Mesh.cpp"
+            timestampString = "537900738.93462"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "171"
+            endingLineNumber = "171"
+            landmarkName = "Mesh::checkRayIntersections(const glm::vec3&amp; pRaySource, const glm::vec3&amp; pRayDirection, const glm::mat4&amp; pTransform, float&amp; pDistanceOutput)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "PAG/Model/Elements/Mesh.cpp"
+            timestampString = "537900738.934684"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "186"
+            endingLineNumber = "186"
+            landmarkName = "Mesh::checkRayIntersections(const glm::vec3&amp; pRaySource, const glm::vec3&amp; pRayDirection, const glm::mat4&amp; pTransform, float&amp; pDistanceOutput)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "PAG/Model/Elements/Mesh.cpp"
+            timestampString = "537900738.934768"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "184"
+            endingLineNumber = "184"
+            landmarkName = "Mesh::checkRayIntersections(const glm::vec3&amp; pRaySource, const glm::vec3&amp; pRayDirection, const glm::mat4&amp; pTransform, float&amp; pDistanceOutput)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "PAG/Model/Elements/Mesh.cpp"
+            timestampString = "537900738.934839"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "181"
+            endingLineNumber = "181"
+            landmarkName = "Mesh::checkRayIntersections(const glm::vec3&amp; pRaySource, const glm::vec3&amp; pRayDirection, const glm::mat4&amp; pTransform, float&amp; pDistanceOutput)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "PAG/Model/Elements/Mesh.cpp"
+            timestampString = "537900738.934896"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "123"
+            endingLineNumber = "123"
+            landmarkName = "Mesh::bakeTransfrom(const glm::mat4&amp; pBakeTransform, const glm::mat3&amp; pNormalBakeTransform)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "PAG/Model/Elements/Mesh.cpp"
+            timestampString = "537900738.934945"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "124"
+            endingLineNumber = "124"
+            landmarkName = "Mesh::bakeTransfrom(const glm::mat4&amp; pBakeTransform, const glm::mat3&amp; pNormalBakeTransform)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "PAG/Model/Elements/Mesh.cpp"
+            timestampString = "537900738.934993"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "138"
+            endingLineNumber = "138"
+            landmarkName = "Mesh::drawContent(Shader* const pShader, Materials* const pMaterials)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "PAG/Scene/ModelNodePicker.cpp"
+            timestampString = "537900738.93504"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "191"
+            endingLineNumber = "191"
+            landmarkName = "ModelNodePicker::pickBaseLight(Model * pModel, Scene *const pScene, std::vector&lt;BaseLight*&gt;* pLights, const std::pair&lt;int, int&gt;&amp; pScreenSize, const std::pair&lt;double, double&gt;&amp; pMousePos)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "PAG/Scene/ModelNodePicker.cpp"
+            timestampString = "537900738.935087"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "192"
+            endingLineNumber = "192"
+            landmarkName = "ModelNodePicker::pickBaseLight(Model * pModel, Scene *const pScene, std::vector&lt;BaseLight*&gt;* pLights, const std::pair&lt;int, int&gt;&amp; pScreenSize, const std::pair&lt;double, double&gt;&amp; pMousePos)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "PAG/Scene/ModelNodePicker.cpp"
+            timestampString = "537900738.935138"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "193"
+            endingLineNumber = "193"
+            landmarkName = "ModelNodePicker::pickBaseLight(Model * pModel, Scene *const pScene, std::vector&lt;BaseLight*&gt;* pLights, const std::pair&lt;int, int&gt;&amp; pScreenSize, const std::pair&lt;double, double&gt;&amp; pMousePos)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "PAG/Scene/ModelNodePicker.cpp"
+            timestampString = "537900738.935213"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "194"
+            endingLineNumber = "194"
+            landmarkName = "ModelNodePicker::pickBaseLight(Model * pModel, Scene *const pScene, std::vector&lt;BaseLight*&gt;* pLights, const std::pair&lt;int, int&gt;&amp; pScreenSize, const std::pair&lt;double, double&gt;&amp; pMousePos)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "PAG/Scene/ModelNodePicker.cpp"
+            timestampString = "537900738.935284"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "196"
+            endingLineNumber = "196"
+            landmarkName = "ModelNodePicker::pickBaseLight(Model * pModel, Scene *const pScene, std::vector&lt;BaseLight*&gt;* pLights, const std::pair&lt;int, int&gt;&amp; pScreenSize, const std::pair&lt;double, double&gt;&amp; pMousePos)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

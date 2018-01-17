@@ -29,6 +29,7 @@
 #include <vector>
 #include <string>
 
+class Transform;
 class Materials;
 class Node;
 class Shader;
@@ -45,8 +46,10 @@ private:
     
     void loadModel(const std::string& pModelPath, Shader *const pShader);
     const std::pair<glm::vec4, glm::vec4> calculateModelOBB();
+    void bakeTransfrom(Transform* const pBakeTransform);
 public:
     Model(const std::string& pModelPath, Shader *const pShader);
+    Model(const std::string& pModelPath, Shader *const pShader, Transform* const pBakeTransform);
     Model(const Model& pSourceModel);
     ~Model();
     void draw(Shader* const pShader, Scene* const pScene);

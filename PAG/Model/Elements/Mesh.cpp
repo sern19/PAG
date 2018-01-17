@@ -30,7 +30,51 @@
 
 Mesh::Mesh(const std::vector<Vertex>& pVerticles, const std::vector<unsigned int>& pIndices): mVerticles(pVerticles), mIndices(pIndices)
 {
+    calculateTanBitan();
     loadContent();
+}
+
+void Mesh::calculateTanBitan()
+{
+    int i;
+    for (i=0;i<mIndices.size();i+=3)
+    {
+        //Shortcuts for vertices
+        glm::vec3& v0 = mVerticles[mIndices[i]].mPosition;
+        glm::vec3& v1 = mVerticles[mIndices[i+1]].mPosition;
+        glm::vec3& v2 = mVerticles[mIndices[i+2]].mPosition;
+        
+        //Shortcuts for UVs
+        glm::vec2& uv0 = mVerticles[mIndices[i]].mTexture;
+        glm::vec2& uv1 = mVerticles[mIndices[i+1]].mTexture;
+        glm::vec2& uv2 = mVerticles[mIndices[i+2]].mTexture;
+        
+        //Edges of the triangle : postion delta
+        glm::vec3 deltaPos1 = v1-v0;
+        glm::vec3 deltaPos2 = v2-v0;
+        
+        //UV delta
+        glm::vec2 deltaUV1 = uv1-uv0;
+        glm::vec2 deltaUV2 = uv2-uv0;
+        
+        float r = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV1.y * deltaUV2.x);
+        glm::vec3 tangent = (deltaPos1 * deltaUV2.y   - deltaPos2 * deltaUV1.y)*r;
+        glm::vec3 biTangent = (deltaPos2 * deltaUV1.x   - deltaPos1 * deltaUV2.x)*r;
+        
+        mVerticles[mIndices[i]].mTangent=tangent;
+        mVerticles[mIndices[i+1]].mTangent=tangent;
+        mVerticles[mIndices[i+2]].mTangent=tangent;
+        
+        mVerticles[mIndices[i]].mBitangent=biTangent;
+        mVerticles[mIndices[i+1]].mBitangent=biTangent;
+        mVerticles[mIndices[i+2]].mBitangent=biTangent;
+    }
+    for (Vertex& vertex: mVerticles) {
+        if (glm::dot(glm::cross(vertex.mNormal, vertex.mTangent), vertex.mBitangent) < 0.0f)
+        {
+            vertex.mTangent*=-1.0f;
+        }
+    }
 }
 
 void Mesh::loadContent()
@@ -71,6 +115,19 @@ void Mesh::loadContent()
 void Mesh::setMaterial(const unsigned int& pMaterialID) { mMaterialID=pMaterialID; }
 void Mesh::disableMaterialUsage() { mShouldUseMaterial=false; }
 void Mesh::setIsSelected(const bool& pIsSelected) { mIsSelected=pIsSelected; }
+
+void Mesh::bakeTransfrom(const glm::mat4& pBakeTransform, const glm::mat3& pNormalBakeTransform)
+{
+    for (Vertex& vertex: mVerticles)
+    {
+        vertex.mPosition=glm::vec3(pBakeTransform*glm::vec4(vertex.mPosition,1.0f));
+        vertex.mNormal=pNormalBakeTransform*vertex.mNormal;
+    }
+    glDeleteVertexArrays(1,&mVertexArrayObject);
+    glDeleteBuffers(1,&mVertexBufferObject);
+    glDeleteBuffers(1,&mElementObjectBuffer);
+    loadContent();
+}
 
 void Mesh::drawContent(Shader* const pShader, Materials* const pMaterials)
 {

@@ -24,6 +24,7 @@
 #include "Texture.hpp"
 #include "Shader.hpp"
 #include "Config.hpp"
+#include <iostream>
 
 Materials::Materials(const aiScene* const pScene, const std::string& pTexturesPath, Shader *const pShader): mTexturesPath(pTexturesPath)
 {
@@ -75,7 +76,9 @@ void Materials::loadTextures(const aiScene* const pScene)
                     try
                     {
                         mDiffuseTextures.push_back(Texture(texturePath));
-                    } catch (std::runtime_error err) { throw err; }
+                    } catch (std::runtime_error err) {
+                        std::cout << err.what();
+                    }
                 }
             }
             //Specular
@@ -90,7 +93,9 @@ void Materials::loadTextures(const aiScene* const pScene)
                     try
                     {
                         mSpecularTextures.push_back(Texture(texturePath));
-                    } catch (std::runtime_error err) { throw err; }
+                    }  catch (std::runtime_error err) {
+                        std::cout << err.what();
+                    }
                 }
             }
             //Normal
@@ -105,7 +110,9 @@ void Materials::loadTextures(const aiScene* const pScene)
                     try
                     {
                         mNormalTextures.push_back(Texture(texturePath));
-                    } catch (std::runtime_error err) { throw err; }
+                    }  catch (std::runtime_error err) {
+                        std::cout << err.what();
+                    }
                 }
             }
             for (j=0;j<pScene->mMaterials[i]->GetTextureCount(aiTextureType_HEIGHT);j++) //Czasem normalne wykrywane przez assimpa są jako wysokości
@@ -119,7 +126,9 @@ void Materials::loadTextures(const aiScene* const pScene)
                     try
                     {
                         mNormalTextures.push_back(Texture(texturePath));
-                    } catch (std::runtime_error err) { throw err; }
+                    }  catch (std::runtime_error err) {
+                        std::cout << err.what();
+                    }
                 }
             }
             

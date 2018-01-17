@@ -163,5 +163,5 @@ void main()
         normal=normalize(normalMatrix*fragVertexNormal);
     
     fragColor=shadeColor(diffuse, specular, normal);
-    //fragColor=vec4(normal.rgb* vec3(0.5) + vec3(0.5),1);//shadeColor(diffuse, specular, normal);
+    //fragColor=vec4(normalize(fragVertexTangent),1);//shadeColor(diffuse, specular, normal);
 }
