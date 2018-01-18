@@ -41,6 +41,14 @@ Node::Node(const Mesh& pMesh)
     generateOBB();
 }
 
+Node::Node(const std::vector<Mesh>& pMeshes)
+{
+    mElementTransform=new Transform();
+    mMeshes=pMeshes;
+    updateCache();
+    generateOBB();
+}
+
 Node::Node(const aiNode* const pNode, const aiScene* const pScene, Materials* const pTextures): mOriginalTransform(pNode->mTransformation)
 {
     mElementTransform=new Transform();

@@ -33,6 +33,7 @@
 		DDD878371FBF8C9A00109AC6 /* Input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DDD8782C1FBF8C9A00109AC6 /* Input.cpp */; };
 		DDD878381FBF8C9A00109AC6 /* Scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DDD8782D1FBF8C9A00109AC6 /* Scene.cpp */; };
 		DDD878391FBF8C9A00109AC6 /* Shader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DDD8782E1FBF8C9A00109AC6 /* Shader.cpp */; };
+		DDEF9D422010817800CCF4AE /* CubeTexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DDEF9D402010817800CCF4AE /* CubeTexture.cpp */; };
 		DDF9C621200FC1C6005F68B7 /* GBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DDF9C61F200FC1C6005F68B7 /* GBuffer.cpp */; };
 		DDFBF2A71FD61D1500EC76B3 /* BaseLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DDFBF2A51FD61D1500EC76B3 /* BaseLight.cpp */; };
 		DDFBF2AA1FD65D4A00EC76B3 /* PointLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DDFBF2A81FD65D4A00EC76B3 /* PointLight.cpp */; };
@@ -113,6 +114,8 @@
 		DDD8782E1FBF8C9A00109AC6 /* Shader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Shader.cpp; sourceTree = "<group>"; };
 		DDD8782F1FBF8C9A00109AC6 /* Config.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Config.hpp; path = PAG/Config.hpp; sourceTree = "<group>"; };
 		DDEF9D3F2010652200CCF4AE /* nullShader.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = nullShader.frag; sourceTree = "<group>"; };
+		DDEF9D402010817800CCF4AE /* CubeTexture.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CubeTexture.cpp; sourceTree = "<group>"; };
+		DDEF9D412010817800CCF4AE /* CubeTexture.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CubeTexture.hpp; sourceTree = "<group>"; };
 		DDF9C61F200FC1C6005F68B7 /* GBuffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GBuffer.cpp; sourceTree = "<group>"; };
 		DDF9C620200FC1C6005F68B7 /* GBuffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GBuffer.hpp; sourceTree = "<group>"; };
 		DDF9C622200FD273005F68B7 /* debug.geom */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = debug.geom; sourceTree = "<group>"; };
@@ -381,6 +384,8 @@
 				DDD878291FBF8C9A00109AC6 /* Texture.hpp */,
 				DD7002A21FC4F4E200B198C5 /* Materials.cpp */,
 				DD7002A31FC4F4E200B198C5 /* Materials.hpp */,
+				DDEF9D402010817800CCF4AE /* CubeTexture.cpp */,
+				DDEF9D412010817800CCF4AE /* CubeTexture.hpp */,
 			);
 			path = Materials;
 			sourceTree = "<group>";
@@ -732,6 +737,7 @@
 				DD7002A41FC4F4E200B198C5 /* Materials.cpp in Sources */,
 				DD041AEB1FC3AF6500AC2AF7 /* Node.cpp in Sources */,
 				DD3705CE1FD916ED000DE9C4 /* DirectionalLight.cpp in Sources */,
+				DDEF9D422010817800CCF4AE /* CubeTexture.cpp in Sources */,
 				DD041AE71FC3902900AC2AF7 /* Model.cpp in Sources */,
 				DDD878321FBF8C9A00109AC6 /* Window.cpp in Sources */,
 				DD3B1AE41FBF8518005E9485 /* stb_image.cpp in Sources */,

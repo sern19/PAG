@@ -1,4 +1,4 @@
-// ModelCreator.hpp
+// CubeTexture.hpp
 //
 // Copyright (c) 2018 Krystian Owoc
 //
@@ -20,25 +20,20 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef ModelCreator_hpp
-#define ModelCreator_hpp
+#ifndef CubeTexture_hpp
+#define CubeTexture_hpp
 
 #include <stdio.h>
-#include <string>
+#include <vector>
+#include "Texture.hpp"
 
-class Model;
-class Material;
-
-class ModelCreator
+class CubeTexture:Texture
 {
-private:
-    ModelCreator() {};
-    
-    static Material createDefaultMaterial();
+protected:
+    void loadTexture(const std::vector<std::string>& pTexturePath);
 public:
-    static Model createSkybox(const std::string& texturePath);
-    static Model createCube();
-    static Model createPlane();
+    CubeTexture(const std::vector<std::string>& pTexturePath);
+    virtual void selectActiveTexture(const std::string& pTextureType, const unsigned int& pTextureNumber);
 };
 
-#endif /* ModelCreator_hpp */
+#endif /* CubeTexture_hpp */

@@ -36,6 +36,11 @@ Materials::Materials(const Material& pMaterial)
     mMaterials.push_back(pMaterial);
 }
 
+Materials::Materials(const Material& pMaterial, const Texture& pDiffuseTexture): Materials(pMaterial)
+{
+    mDiffuseTextures.push_back(pDiffuseTexture);
+}
+
 std::string Materials::getTextureName(const aiString& pTexturePath)
 {
     std::string output=pTexturePath.C_Str();

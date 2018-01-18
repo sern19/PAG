@@ -54,6 +54,7 @@ private:
     const glm::mat4& getTransform(); //Zwraca cache bądź niezmodyfikowane cache rodzica
 public:
     Node(const Mesh& pMesh);
+    Node(const std::vector<Mesh>& pMeshes);
     Node(const aiNode* const pNode, const aiScene* const pScene, Materials* const pTextures);
     Node(const Node& pSourceNode);
     ~Node();

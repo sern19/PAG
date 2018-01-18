@@ -30,16 +30,17 @@
 
 class Texture
 {
-private:
+protected:
     std::string mTexturePath;
     GLuint mTexture;
     
-    void loadTexture(const std::string& pTexturePath);
+    Texture() {};
+    virtual void loadTexture(const std::string& pTexturePath);
 public:
     Texture(const std::string& pTexturePath);
     Texture(const Texture& pSourceTexture);
-    ~Texture();
-    void selectActiveTexture(const std::string& pTextureType, const unsigned int& pTextureNumber);
+    virtual ~Texture();
+    virtual void selectActiveTexture(const std::string& pTextureType, const unsigned int& pTextureNumber);
     const std::string& getTexturePath();
 };
 

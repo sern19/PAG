@@ -26,6 +26,7 @@
 
 #include "Materials.hpp"
 #include "Texture.hpp"
+#include "CubeTexture.hpp"
 #include "Mesh.hpp"
 #include "Node.hpp"
 #include "Model.hpp"
@@ -43,6 +44,218 @@ Material ModelCreator::createDefaultMaterial()
     return defaultMaterial;
 }
 
+
+Model ModelCreator::createSkybox(const std::string& texturePath)
+{
+    int i,j;
+    std::vector<std::string> texturesPath;
+    
+    for (i=0;i<6;i++)
+    {
+        std::string path;
+        path+=texturePath;
+        path+=std::to_string(i);
+        path+=".tga";
+        texturesPath.push_back(path);
+    }
+    
+    Material defaultMaterial=createDefaultMaterial();
+    CubeTexture skyBoxTexture(texturesPath);
+    defaultMaterial.mDiffuseTextureID.push_back(0);
+    Materials defaultMaterials(defaultMaterial);
+    
+    std::vector<Vertex> planeVertex(4);
+    std::vector<unsigned int> planeIndices={2, 1, 0, 2, 3, 1};
+    std::vector<Mesh> meshes;
+    
+    for (i=0;i<2;i++)
+    {
+        for (j=0;j<2;j++)
+        {
+            planeVertex[i+2*j].mPosition.x=((float)i-0.5f)*2.0f;
+            planeVertex[i+2*j].mPosition.y=-1;
+            planeVertex[i+2*j].mPosition.z=((float)j-0.5f)*2.0f;
+            planeVertex[i+2*j].mNormal.y=1;
+            planeVertex[i+2*j].mTexture.x=i;
+            planeVertex[i+2*j].mTexture.y=1-j;
+        }
+    }
+    meshes.push_back(Mesh(planeVertex, planeIndices));
+    
+    for (i=0;i<2;i++)
+    {
+        for (j=0;j<2;j++)
+        {
+            planeVertex[i+2*j].mPosition.x=((float)i-0.5f)*2.0f;
+            planeVertex[i+2*j].mPosition.z=1;
+            planeVertex[i+2*j].mPosition.y=((float)j-0.5f)*2.0f;
+            planeVertex[i+2*j].mNormal.z=-1;
+            planeVertex[i+2*j].mTexture.x=i;
+            planeVertex[i+2*j].mTexture.y=1-j;
+        }
+    }
+    meshes.push_back(Mesh(planeVertex, planeIndices));
+    
+    for (i=0;i<2;i++)
+    {
+        for (j=0;j<2;j++)
+        {
+            planeVertex[i+2*j].mPosition.z=((float)i-0.5f)*2.0f;
+            planeVertex[i+2*j].mPosition.x=-1;
+            planeVertex[i+2*j].mPosition.y=((float)j-0.5f)*2.0f;
+            planeVertex[i+2*j].mNormal.x=1;
+            planeVertex[i+2*j].mTexture.x=i;
+            planeVertex[i+2*j].mTexture.y=1-j;
+        }
+    }
+    meshes.push_back(Mesh(planeVertex, planeIndices));
+    
+    planeIndices={0, 1, 2, 1, 3, 2};
+    
+    for (i=0;i<2;i++)
+    {
+        for (j=0;j<2;j++)
+        {
+            planeVertex[i+2*j].mPosition.x=((float)i-0.5f)*2.0f;
+            planeVertex[i+2*j].mPosition.y=1;
+            planeVertex[i+2*j].mPosition.z=((float)j-0.5f)*2.0f;
+            planeVertex[i+2*j].mNormal.y=-1;
+            planeVertex[i+2*j].mTexture.x=i;
+            planeVertex[i+2*j].mTexture.y=1-j;
+        }
+    }
+    meshes.push_back(Mesh(planeVertex, planeIndices));
+    
+    for (i=0;i<2;i++)
+    {
+        for (j=0;j<2;j++)
+        {
+            planeVertex[i+2*j].mPosition.x=((float)i-0.5f)*2.0f;
+            planeVertex[i+2*j].mPosition.z=-1;
+            planeVertex[i+2*j].mPosition.y=((float)j-0.5f)*2.0f;
+            planeVertex[i+2*j].mNormal.z=1;
+            planeVertex[i+2*j].mTexture.x=i;
+            planeVertex[i+2*j].mTexture.y=1-j;
+        }
+    }
+    meshes.push_back(Mesh(planeVertex, planeIndices));
+    
+    for (i=0;i<2;i++)
+    {
+        for (j=0;j<2;j++)
+        {
+            planeVertex[i+2*j].mPosition.z=((float)i-0.5f)*2.0f;
+            planeVertex[i+2*j].mPosition.x=1;
+            planeVertex[i+2*j].mPosition.y=((float)j-0.5f)*2.0f;
+            planeVertex[i+2*j].mNormal.x=-1;
+            planeVertex[i+2*j].mTexture.x=i;
+            planeVertex[i+2*j].mTexture.y=1-j;
+        }
+    }
+    meshes.push_back(Mesh(planeVertex, planeIndices));
+    
+    return Model(Node(meshes), defaultMaterials);
+}
+
+Model ModelCreator::createCube()
+{
+    int i,j;
+    Material defaultMaterial=createDefaultMaterial();
+    Materials defaultMaterials(defaultMaterial);
+    
+    std::vector<Vertex> planeVertex(4);
+    std::vector<unsigned int> planeIndices={2, 1, 0, 2, 3, 1};
+    std::vector<Mesh> meshes;
+    
+    for (i=0;i<2;i++)
+    {
+        for (j=0;j<2;j++)
+        {
+            planeVertex[i+2*j].mPosition.x=((float)i-0.5f)*2.0f;
+            planeVertex[i+2*j].mPosition.y=-1;
+            planeVertex[i+2*j].mPosition.z=((float)j-0.5f)*2.0f;
+            planeVertex[i+2*j].mNormal.y=1;
+            planeVertex[i+2*j].mTexture.x=i;
+            planeVertex[i+2*j].mTexture.y=1-j;
+        }
+    }
+    meshes.push_back(Mesh(planeVertex, planeIndices));
+    
+    for (i=0;i<2;i++)
+    {
+        for (j=0;j<2;j++)
+        {
+            planeVertex[i+2*j].mPosition.x=((float)i-0.5f)*2.0f;
+            planeVertex[i+2*j].mPosition.z=1;
+            planeVertex[i+2*j].mPosition.y=((float)j-0.5f)*2.0f;
+            planeVertex[i+2*j].mNormal.z=-1;
+            planeVertex[i+2*j].mTexture.x=i;
+            planeVertex[i+2*j].mTexture.y=1-j;
+        }
+    }
+    meshes.push_back(Mesh(planeVertex, planeIndices));
+    
+    for (i=0;i<2;i++)
+    {
+        for (j=0;j<2;j++)
+        {
+            planeVertex[i+2*j].mPosition.z=((float)i-0.5f)*2.0f;
+            planeVertex[i+2*j].mPosition.x=-1;
+            planeVertex[i+2*j].mPosition.y=((float)j-0.5f)*2.0f;
+            planeVertex[i+2*j].mNormal.x=1;
+            planeVertex[i+2*j].mTexture.x=i;
+            planeVertex[i+2*j].mTexture.y=1-j;
+        }
+    }
+    meshes.push_back(Mesh(planeVertex, planeIndices));
+    
+    planeIndices={0, 1, 2, 1, 3, 2};
+    
+    for (i=0;i<2;i++)
+    {
+        for (j=0;j<2;j++)
+        {
+            planeVertex[i+2*j].mPosition.x=((float)i-0.5f)*2.0f;
+            planeVertex[i+2*j].mPosition.y=1;
+            planeVertex[i+2*j].mPosition.z=((float)j-0.5f)*2.0f;
+            planeVertex[i+2*j].mNormal.y=-1;
+            planeVertex[i+2*j].mTexture.x=i;
+            planeVertex[i+2*j].mTexture.y=1-j;
+        }
+    }
+    meshes.push_back(Mesh(planeVertex, planeIndices));
+    
+    for (i=0;i<2;i++)
+    {
+        for (j=0;j<2;j++)
+        {
+            planeVertex[i+2*j].mPosition.x=((float)i-0.5f)*2.0f;
+            planeVertex[i+2*j].mPosition.z=-1;
+            planeVertex[i+2*j].mPosition.y=((float)j-0.5f)*2.0f;
+            planeVertex[i+2*j].mNormal.z=1;
+            planeVertex[i+2*j].mTexture.x=i;
+            planeVertex[i+2*j].mTexture.y=1-j;
+        }
+    }
+    meshes.push_back(Mesh(planeVertex, planeIndices));
+    
+    for (i=0;i<2;i++)
+    {
+        for (j=0;j<2;j++)
+        {
+            planeVertex[i+2*j].mPosition.z=((float)i-0.5f)*2.0f;
+            planeVertex[i+2*j].mPosition.x=1;
+            planeVertex[i+2*j].mPosition.y=((float)j-0.5f)*2.0f;
+            planeVertex[i+2*j].mNormal.x=-1;
+            planeVertex[i+2*j].mTexture.x=i;
+            planeVertex[i+2*j].mTexture.y=1-j;
+        }
+    }
+    meshes.push_back(Mesh(planeVertex, planeIndices));
+    
+    return Model(Node(meshes), defaultMaterials);
+}
+
 Model ModelCreator::createPlane()
 {
     int i,j;
@@ -50,7 +263,7 @@ Model ModelCreator::createPlane()
     Materials defaultMaterials(defaultMaterial);
     
     std::vector<Vertex> planeVertex(4);
-    std::vector<unsigned int> planeIndices={0, 1, 2, 1, 3, 2};
+    std::vector<unsigned int> planeIndices={2, 1, 0, 2, 3, 1};
     
     for (i=0;i<2;i++)
     {

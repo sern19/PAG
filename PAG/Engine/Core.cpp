@@ -262,6 +262,7 @@ void Core::display()
 void Core::loadModels()
 {
     mModels.push_back(Model("Models/2B/source/2B.fbx"));
+    //mModels.push_back(ModelCreator::createSkybox("Skybox/"));
     //mModels.push_back(Model("Models/Spheres/source/Spheres.obj", mShader));
     //mModels.push_back(Model("Models/Plane/source/plane.obj", mShader));
     mModels[0].getRootNode()->getNodeTransform()->setScale(glm::vec3(0.004,0.004,0.004));
