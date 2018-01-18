@@ -9,7 +9,9 @@ in vec2 fragVertexTexture;
 layout (location = 0) out vec4 diffuseOut;
 layout (location = 1) out vec4 normalOut;
 layout (location = 2) out vec4 positionOut;
-layout (location = 3) out vec4 texCoordOut;
+layout (location = 3) out vec4 specularColorOut;
+layout (location = 4) out vec4 ambientColorOut;
+layout (location = 5) out vec4 texCoordsOut;
 
 //Jak narazie silnik nie obsługuje wielu tekstur tego samego typu
 uniform sampler2D diffuseTexture[5];
@@ -17,10 +19,13 @@ uniform sampler2D specularTexture[5];
 uniform sampler2D normalTexture[5];
 
 uniform vec3 diffuseColor;
+uniform vec3 specularColor;
+uniform vec3 ambientColor;
 
 uniform float shininess;
 
 uniform bool shouldUseDiffuseTexture;
+uniform bool shouldUseSpecularTexture;
 uniform bool shouldUseNormalTexture;
 
 uniform mat3 normalMatrix;
@@ -29,7 +34,7 @@ void main()
 {
     int i;
     vec4 diffuse;
-    vec4 normal;
+    vec3 normal, specular;
     
     vec4 texelDiffuse, texelSpecular, texelNormal;
     
@@ -45,17 +50,24 @@ void main()
     else
         diffuse=vec4(diffuseColor,1);
 
+    //Wybór specular - tu docelowo mieszanie tekstur
+    if (shouldUseSpecularTexture)
+        specular=texelSpecular.xyz;
+    else
+        specular=specularColor;
+    
     //Wybór normalnych - tu docelowo mieszanie tekstur
     if (shouldUseNormalTexture)
     {
         mat3 tbn=mat3(normalize(fragVertexTangent), normalize(fragVertexBitangent), normalize(fragVertexNormal));
-        normal=vec4(normalize(normalMatrix*tbn*texelNormal.xyz), shininess);
+        normal=normalize(normalMatrix*tbn*texelNormal.xyz);
     }
-    else
-        normal=vec4(normalize(normalMatrix*fragVertexNormal), shininess);
+    else normal=normalize(normalMatrix*fragVertexNormal);
     
     diffuseOut=diffuse;
-    normalOut=vec4(normal.rgb, 1);
+    normalOut=vec4(normal, 1);
     positionOut=vec4(fragVertexPosition,1);
-    texCoordOut=vec4(fragVertexTexture, shininess,1);
+    specularColorOut=vec4(specular,1);
+    ambientColorOut=vec4(ambientColor,1);
+    texCoordsOut=vec4(fragVertexTexture, shininess, 1);
 }

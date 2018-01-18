@@ -48,11 +48,12 @@ private:
     const std::pair<glm::vec4, glm::vec4> calculateModelOBB();
     void bakeTransfrom(Transform* const pBakeTransform);
 public:
+    Model(const Node& pRootNode, const Materials& pMaterials);
     Model(const std::string& pModelPath);
     Model(const std::string& pModelPath, Transform* const pBakeTransform);
     Model(const Model& pSourceModel);
     ~Model();
-    void draw(Shader* const pShader, Scene* const pScene);
+    void draw(Shader* const pShader, const glm::mat4& pVP);
     void addGLSetting(const GLenum& pSetting);
     void removeGLSetting(const GLenum& pSetting);
     Node* const getRootNode();

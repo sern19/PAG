@@ -39,10 +39,12 @@ public:
     const glm::vec3& getConeDirection();
     const float& getConeAngle();
     
+    virtual void drawBoundings(Model* pModel, Shader* const pShader, const glm::mat4& pVP);
+    
     void setConeDirection(const glm::vec3& pConeDirection);
     void setConeAngle(const float& pConeAngle);
     
-    virtual void setLight(Shader* const pShader, Scene* const pScene, const unsigned int& pLightNumber);
+    virtual void setLight(Shader* const pShader, Scene* const pScene);
 };
 
 #endif /* SpotLight_hpp */

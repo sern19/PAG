@@ -24,6 +24,7 @@
 
 #include "Shader.hpp"
 #include "Scene.hpp"
+#include "Model.hpp"
 
 #include <sstream>
 
@@ -41,32 +42,19 @@ const float& SpotLight::getConeAngle() { return mConeAngle; }
 void SpotLight::setConeDirection(const glm::vec3& pConeDirection) { mConeDirection=pConeDirection; }
 void SpotLight::setConeAngle(const float& pConeAngle) { mConeAngle=pConeAngle; }
 
-void SpotLight::setLight(Shader* const pShader, Scene* const pScene, const unsigned int& pLightNumber) //Trochę rakowe, do przepisania będzie, ale jest 6 rano
+void SpotLight::setLight(Shader* const pShader, Scene* const pScene) //Trochę rakowe, do przepisania będzie, ale jest 6 rano
 {
     glm::vec4 transformedPosition=glm::vec4(glm::vec3(glm::vec4(mLightPos,1)), 1);
     
-    std::stringstream output;
-    output << "lights[" << pLightNumber << "].position";
-    pShader->setVec4(output.str().c_str(), &transformedPosition);
-    output.str("");
-    
-    output << "lights[" << pLightNumber << "].color";
-    pShader->setVec3(output.str().c_str(), &mLightColor);
-    output.str("");
-    
-    output << "lights[" << pLightNumber << "].attenuation";
-    pShader->setFloat(output.str().c_str(), &mLightAttenuation);
-    output.str("");
-    
-    output << "lights[" << pLightNumber << "].ambientCoefficient";
-    pShader->setFloat(output.str().c_str(), &mLightAmbientCoefficient);
-    output.str("");
-    
-    output << "lights[" << pLightNumber << "].coneAngle";
-    pShader->setFloat(output.str().c_str(), &mConeAngle);
-    output.str("");
-    
-    output << "lights[" << pLightNumber << "].coneDirection";
-    pShader->setVec3(output.str().c_str(), &mConeDirection);
-    output.str("");
+    pShader->setVec4("light.position", &transformedPosition);
+    pShader->setVec3("light.color", &mLightColor);
+    pShader->setFloat("light.attenuation", &mLightAttenuation);
+    pShader->setFloat("light.ambientCoefficient", &mLightAmbientCoefficient);
+    pShader->setFloat("light.coneAngle", &mConeAngle);
+    pShader->setVec3("light.coneDirection", &mConeDirection);
+}
+
+void SpotLight::drawBoundings(Model* pModel, Shader* const pShader, const glm::mat4& pVP)
+{
+    pModel->draw(pShader, pVP);
 }

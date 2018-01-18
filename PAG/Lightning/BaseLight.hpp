@@ -55,9 +55,10 @@ public:
     void setLightAttenuation(const float& pLightAttenuation);
     void setLightAmbientCoefficient(const float& pLightAmbientCoefficient);
     
-    virtual void drawModel(Model* pModel, Shader* const pShader, Scene* const pScene);
+    virtual void drawModel(Model* pModel, Shader* const pShader, const glm::mat4& pVP);
+    virtual void drawBoundings(Model* pModel, Shader* const pShader, const glm::mat4& pVP)=0;
     
-    virtual void setLight(Shader* const pShader, Scene* const pScene, const unsigned int& pLightNumber)=0;
+    virtual void setLight(Shader* const pShader, Scene* const pScene)=0;
 };
 
 #endif /* BaseLight_hpp */

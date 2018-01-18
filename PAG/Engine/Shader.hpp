@@ -48,6 +48,7 @@ public:
     void setBool(const std::string& pUniformName, const bool* const pValue, const int& pArraySize=1);
     void setInt(const std::string& pUniformName, const int* const pValue, const int& pArraySize=1);
     void setFloat(const std::string& pUniformName, const float* const pValue, const int& pArraySize=1);
+    void setVec2(const std::string& pUniformName, const glm::vec2* const pValue, const int& pArraySize=1);
     void setVec3(const std::string& pUniformName, const glm::vec3* const pValue, const int& pArraySize=1);
     void setVec4(const std::string& pUniformName, const glm::vec4* const pValue, const int& pArraySize=1);
     void setMat3(const std::string& pUniformName, const glm::mat3* const pValue, const int& pArraySize=1);
@@ -55,7 +56,9 @@ public:
     void setBool(const std::string& pUniformName, const bool& pValue);
     void setInt(const std::string& pUniformName, const int& pValue);
     void setFloat(const std::string& pUniformName, const float& pValue);
+    void setVec2(const std::string& pUniformName, const glm::vec2& pValue);
     void setVec3(const std::string& pUniformName, const glm::vec3& pValue);
+    void setVec4(const std::string& pUniformName, const glm::vec4& pValue);
 };
 
 #endif /* Shader_hpp */

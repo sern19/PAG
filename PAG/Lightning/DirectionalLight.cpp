@@ -24,34 +24,25 @@
 
 #include "Shader.hpp"
 #include "Scene.hpp"
+#include "Model.hpp"
 
 #include <sstream>
 
 DirectionalLight::DirectionalLight(const glm::vec3& pLightDirection, const glm::vec3& pLightColor, const float& pLightAmbientCoefficient):BaseLight(pLightDirection, pLightColor, 1.0, pLightAmbientCoefficient) { }
 DirectionalLight::~DirectionalLight() { }
 
-void DirectionalLight::setLight(Shader* const pShader, Scene* const pScene, const unsigned int& pLightNumber) //Trochę rakowe, do przepisania będzie, ale jest 6 rano
+void DirectionalLight::setLight(Shader* const pShader, Scene* const pScene) //Trochę rakowe, do przepisania będzie, ale jest 6 rano
 {
     glm::vec4 transformedPosition=glm::vec4(glm::vec3(glm::vec4(mLightPos,1)), 0);
     
-    std::stringstream output;
-    output << "lights[" << pLightNumber << "].position";
-    pShader->setVec4(output.str().c_str(), &transformedPosition);
-    output.str("");
-    
-    output << "lights[" << pLightNumber << "].color";
-    pShader->setVec3(output.str().c_str(), &mLightColor);
-    output.str("");
-    
-    output << "lights[" << pLightNumber << "].attenuation";
-    pShader->setFloat(output.str().c_str(), &mLightAttenuation);
-    output.str("");
-    
-    output << "lights[" << pLightNumber << "].ambientCoefficient";
-    pShader->setFloat(output.str().c_str(), &mLightAmbientCoefficient);
-    output.str("");
-    
-    output << "lights[" << pLightNumber << "].coneDirection";
-    pShader->setVec3(output.str().c_str(), glm::vec3(0));
-    output.str("");
+    pShader->setVec4("light.position", &transformedPosition);
+    pShader->setVec3("light.color", &mLightColor);
+    pShader->setFloat("light.attenuation", &mLightAttenuation);
+    pShader->setFloat("light.ambientCoefficient", &mLightAmbientCoefficient);
+    pShader->setVec3("light.coneDirection", glm::vec3(0));
+}
+
+void DirectionalLight::drawBoundings(Model* pModel, Shader* const pShader, const glm::mat4& pVP)
+{
+    pModel->draw(pShader, pVP);
 }

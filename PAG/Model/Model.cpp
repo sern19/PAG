@@ -42,6 +42,12 @@ Model::Model(const std::string& pModelPath, Transform* const pBakeTransform): Mo
     bakeTransfrom(pBakeTransform);
 }
 
+Model::Model(const Node& pRootNode, const Materials& pMaterials)
+{
+    mRootNode=new Node(pRootNode);
+    mMaterials=new Materials(pMaterials);
+}
+
 Model::Model(const Model& pSourceModel): mModelDirectory(pSourceModel.mModelDirectory), mModelFilename(pSourceModel.mModelFilename), mAdditionalGLSettings(pSourceModel.mAdditionalGLSettings)
 {
     mRootNode=new Node(*pSourceModel.mRootNode);
@@ -107,14 +113,14 @@ void Model::loadModel(const std::string &pModelPath)
     mRootNode=new Node(scene->mRootNode, scene, mMaterials);
 }
 
-void Model::draw(Shader* const pShader, Scene* const pScene)
+void Model::draw(Shader* const pShader, const glm::mat4& pVP)
 {
     int i;
     if (mRootNode)
     {
         for (i=0;i<mAdditionalGLSettings.size();i++)
             glEnable(mAdditionalGLSettings[i]);
-        mRootNode->drawContent(pShader, pScene, mMaterials);
+        mRootNode->drawContent(pShader, pVP, mMaterials);
         for (i=0;i<mAdditionalGLSettings.size();i++)
             glDisable(mAdditionalGLSettings[i]);
     }

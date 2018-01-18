@@ -53,11 +53,12 @@ private:
     void updateChildrenPointers(Node* const pParent);
     const glm::mat4& getTransform(); //Zwraca cache bądź niezmodyfikowane cache rodzica
 public:
+    Node(const Mesh& pMesh);
     Node(const aiNode* const pNode, const aiScene* const pScene, Materials* const pTextures);
     Node(const Node& pSourceNode);
     ~Node();
     
-    void drawContent(Shader *const pShader, Scene* const pScene, Materials* const pTextures);
+    void drawContent(Shader *const pShader, const glm::mat4& pVP, Materials* const pTextures);
     void setIsSelected(const bool& pIsSelected);
     
     void resetNodeTransform();

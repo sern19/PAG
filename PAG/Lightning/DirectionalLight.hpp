@@ -33,7 +33,9 @@ public:
     DirectionalLight(const glm::vec3& pLightDirection, const glm::vec3& pLightColor, const float& pLightAmbientCoefficient=0.14f);
     virtual ~DirectionalLight();
     
-    virtual void setLight(Shader* const pShader, Scene* const pScene, const unsigned int& pLightNumber);
+    virtual void drawBoundings(Model* pModel, Shader* const pShader, const glm::mat4& pVP);
+    
+    virtual void setLight(Shader* const pShader, Scene* const pScene);
 };
 
 #endif /* DirectionalLight_hpp */

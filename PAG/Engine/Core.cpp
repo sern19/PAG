@@ -33,6 +33,7 @@
 #include "Input.hpp"
 #include "Transform.hpp"
 #include "Model.hpp"
+#include "ModelCreator.hpp"
 #include "Materials.hpp"
 #include "Node.hpp"
 #include "UserInterface.hpp"
@@ -67,8 +68,8 @@ Core::Core()
         //Inicjalizacja GLAD
         if (!gladLoadGL()) throw std::runtime_error("(Core::Core): Nie można zainicjalizować biblioteki GLAD");
         mGeometryPassShader=new Shader({{"Shaders/geometryPass.vert", GL_VERTEX_SHADER}, {"Shaders/geometryPass.frag", GL_FRAGMENT_SHADER}});
-        //mGeometryPassShader=new Shader();
-        mLightPassShader=new Shader();
+        mStencilTestShader=new Shader({{"Shaders/lightPass.vert", GL_VERTEX_SHADER}, {"Shaders/nullShader.frag", GL_FRAGMENT_SHADER}});
+        mLightPassShader=new Shader({{"Shaders/lightPass.vert", GL_VERTEX_SHADER}, {"Shaders/lightPass.frag", GL_FRAGMENT_SHADER}});
         mGBuffer=new GBuffer(SCREEN_WIDTH, SCREEN_HEIGHT);
         //mShader=new Shader({ {"Shaders/debug.vert", GL_VERTEX_SHADER}, {"Shaders/debug.geom", GL_GEOMETRY_SHADER}, {"Shaders/debug.frag", GL_FRAGMENT_SHADER} });
         mScene=new Scene(mWindow->getWindow());
@@ -80,12 +81,17 @@ Core::Core()
         throw err;
     }
     //Inicjalizacja
-    glBlendFunc (GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-    glEnable(GL_DEPTH_TEST);
-    //glEnable(GL_CULL_FACE); //Psuje piórka
     glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+    //Początkowe wartości lightPassa
+    mLightPassShader->useProgram();
+    mLightPassShader->setVec2("screenSize",glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT));
+    mLightPassShader->setInt("diffuseMap", 0);
+    mLightPassShader->setInt("normalMap", 1);
+    mLightPassShader->setInt("positionMap", 2);
+    mLightPassShader->setInt("specularColorMap", 3);
+    mLightPassShader->setInt("ambientColorMap", 4);
+    mLightPassShader->setInt("texCoordsMap", 5);
     mGeometryPassShader->useProgram();
-    Materials::prepareTextureUnits(mGeometryPassShader);
 }
 Core::~Core()
 {
@@ -98,6 +104,7 @@ Core::~Core()
     if (mLightModel) delete mLightModel;
     if (mWindow) delete mWindow;
     if (mGeometryPassShader) delete mGeometryPassShader;
+    if (mStencilTestShader) delete mStencilTestShader;
     if (mLightPassShader) delete mLightPassShader;
     if (mScene) delete mScene;
     if (mCamera) delete mCamera;
@@ -108,20 +115,33 @@ Core::~Core()
 void Core::geometryPass()
 {
     mGeometryPassShader->useProgram();
-    mGBuffer->bindForWriting();
+    mGBuffer->clearFinalTexture();
+    mGBuffer->bindForWritingGeometryPass();
+    
+    //Żeby tylko geometrypass modyfikował głębokość
+    glDepthMask(GL_TRUE);
+    
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
+    glEnable(GL_DEPTH_TEST);
+    glDisable(GL_BLEND);
+    
     for (Model& model: mModels)
-        model.draw(mGeometryPassShader, mScene);
+        model.draw(mGeometryPassShader, mScene->getWVP());
     if (mInput->isEditMode())
         for (BaseLight* light: mLights)
-            light->drawModel(mLightModel, mGeometryPassShader, mScene);
-    
+            light->drawModel(mLightModel, mGeometryPassShader, mScene->getWVP());
+    glDepthMask(GL_FALSE);
+    glDisable(GL_DEPTH_TEST);
 }
 
-void Core::lightPass()
+void Core::debugPass()
 {
-    //mLightPassShader->useProgram();
+    mGeometryPassShader->useProgram();
+    glEnable(GL_BLEND);
+    glBlendEquation(GL_FUNC_ADD);
+    glBlendFunc(GL_ONE, GL_ONE);
+    
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
@@ -142,15 +162,87 @@ void Core::lightPass()
     glBlitFramebuffer(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT,
                       halfWidth, halfHeight, SCREEN_WIDTH, SCREEN_HEIGHT, GL_COLOR_BUFFER_BIT, GL_LINEAR);
     
-    mGBuffer->setReadBuffer(GBUFFER_TEXTURE_TEXTURECOORD);
+    mGBuffer->setReadBuffer(GBUFFER_TEXTURE_TEXCOORDS);
     glBlitFramebuffer(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT,
                       halfWidth, 0, SCREEN_WIDTH, halfHeight, GL_COLOR_BUFFER_BIT, GL_LINEAR);
-//
-//    mLightPassShader->setVec3("cameraPos", mCamera->getCameraPos());
-//
-//    for (i=0; i<mLights.size(); i++)
-//        if (mLights[i]) mLights[i]->setLight(mLightPassShader, mScene, i);
+}
+
+void Core::lightPass()
+{
+    int i;
+    mLightPassShader->useProgram();
     
+    //Potrzebujemy blendingu bo każde światło ma swoje własne wywołanie
+    glEnable(GL_BLEND);
+    glBlendEquation(GL_FUNC_ADD);
+    glBlendFunc(GL_ONE, GL_ONE);
+    
+    mGBuffer->bindForReadingLightPass();
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    mLightPassShader->setVec3("cameraPos", mCamera->getCameraPos());
+
+    //Punktowe
+    //glEnable(GL_STENCIL_TEST);
+    
+    for (i=0; i<mLights.size(); i++)
+    if (mLights[i] && dynamic_cast<PointLight*>(mLights[i]))
+    {
+        //Stencil
+        mStencilTestShader->useProgram();
+        mGBuffer->bindForStencilPass();
+        glEnable(GL_DEPTH_TEST);
+        glDisable(GL_CULL_FACE);
+        glClear(GL_STENCIL_BUFFER_BIT);
+        glStencilFunc(GL_ALWAYS, 0, 0);
+        glStencilOpSeparate(GL_BACK, GL_KEEP, GL_INCR_WRAP, GL_KEEP);
+        glStencilOpSeparate(GL_FRONT, GL_KEEP, GL_DECR_WRAP, GL_KEEP);
+        //mLights[i]->drawBoundings(&planeModel, mLightPassShader, glm::mat4(1));
+        //
+        mGBuffer->bindForReadingLightPass();
+        mLightPassShader->useProgram();
+        glStencilFunc(GL_NOTEQUAL, 0, 0xFF);
+        
+        //Potrzebujemy blendingu bo każde światło ma swoje własne wywołanie
+        glDisable(GL_DEPTH_TEST);
+        glEnable(GL_BLEND);
+        glBlendEquation(GL_FUNC_ADD);
+        glBlendFunc(GL_ONE, GL_ONE);
+        
+        glEnable(GL_CULL_FACE);
+        glCullFace(GL_FRONT);
+        
+        Model planeModel=ModelCreator::createPlane();
+        mLights[i]->setLight(mLightPassShader, mScene);
+        //mLights[i]->drawBoundings(&planeModel, mLightPassShader, glm::mat4(1));
+        glCullFace(GL_BACK);
+        
+        glDisable(GL_BLEND);
+    }
+    
+    //Kierunkowe światło
+    glDisable(GL_STENCIL_TEST);
+    //Potrzebujemy blendingu bo każde światło ma swoje własne wywołanie
+    glEnable(GL_BLEND);
+    glBlendEquation(GL_FUNC_ADD);
+    glBlendFunc(GL_ONE, GL_ONE);
+    mGBuffer->bindForReadingLightPass();
+    for (i=0; i<mLights.size(); i++)
+        if (mLights[i] && dynamic_cast<DirectionalLight*>(mLights[i]))
+        {
+            Model planeModel=ModelCreator::createPlane();
+            mLights[i]->setLight(mLightPassShader, mScene);
+            mLights[i]->drawBoundings(&planeModel, mLightPassShader, glm::mat4(1));
+        }
+    
+}
+
+
+void Core::finalPass()
+{
+    mGBuffer->bindForFinalPass();
+    glBlitFramebuffer(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 
+                      0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, GL_COLOR_BUFFER_BIT, GL_LINEAR);
 }
 
 void Core::display()
@@ -163,9 +255,11 @@ void Core::display()
     mLights[3]->setLightPos(glm::vec3(sin(timePoint.count()/1000.0)*2, 0.5, cos(timePoint.count()/1000.0)*2));
     
     geometryPass();
+    //debugPass();
     lightPass();
+    finalPass();
     
-    //mUI->draw();
+    mUI->draw();
     glfwSwapBuffers(mWindow->getWindow()); //Swap front- i backbuffer
     glfwPollEvents(); //Poll dla eventów
 }
@@ -175,10 +269,6 @@ void Core::loadModels()
     mModels.push_back(Model("Models/2B/source/2B.fbx"));
     //mModels.push_back(Model("Models/Spheres/source/Spheres.obj", mShader));
     //mModels.push_back(Model("Models/Plane/source/plane.obj", mShader));
-
-    mModels[0].addGLSetting(GL_BLEND);
-    mModels[0].addGLSetting(GL_SAMPLE_ALPHA_TO_COVERAGE);
-
     mModels[0].getRootNode()->getNodeTransform()->setScale(glm::vec3(0.004,0.004,0.004));
     mModels[0].getRootNode()->getNodeTransform()->setRotation(glm::vec3(0,-90,0));
     mModels[0].getRootNode()->getNodeTransform()->setPosition(glm::vec3(0,0,-0.2));
@@ -208,7 +298,7 @@ void Core::loadLights()
     mLights.push_back(new PointLight(glm::vec3(2,0.5,2), glm::vec3(1.2,1.2,1.2), 0.5));
     
     for (i=0; i<mLights.size(); i++)
-        if (mLights[i]) mLights[i]->setLight(mLightPassShader, mScene, i);
+        if (mLights[i]) mLights[i]->setLight(mLightPassShader, mScene);
     
     mLightPassShader->setInt("numberOfActiveLights", mLights.size());
 }
@@ -221,6 +311,7 @@ void Core::mainLoop()
     loadModels();
     loadLights();
     
+    Materials::prepareTextureUnits(mGeometryPassShader);
     while ((mWindow->getWindow())&&(!glfwWindowShouldClose(mWindow->getWindow())))
     {
         loops=0;

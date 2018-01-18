@@ -46,6 +46,7 @@ class Core
 private:
     Window* mWindow=NULL;
     Shader* mGeometryPassShader=NULL;
+    Shader* mStencilTestShader=NULL;
     Shader* mLightPassShader=NULL;
     GBuffer* mGBuffer=NULL;
     Scene* mScene=NULL;
@@ -58,7 +59,10 @@ private:
     std::vector<BaseLight*> mLights;
     
     void geometryPass();
+    void debugPass();
     void lightPass();
+    void stencilPass();
+    void finalPass();
     void display();
     void loadModels();
     void loadLights();

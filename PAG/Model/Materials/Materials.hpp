@@ -47,6 +47,7 @@ private:
     std::string getTextureName(const aiString& pTexturePath);
     const bool chcekIfIsLoaded(const std::string& pTexturePath, const std::string& pTextureType);
 public:
+    Materials(const Material& pMaterial);
     Materials(const aiScene* const pScene, const std::string& pTexturesPath);
     const Material fillMaterialData(aiMaterial* const pMaterial);
     Material* getMaterial(const unsigned int& pMaterialID);

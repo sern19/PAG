@@ -38,7 +38,7 @@ class BaseLight;
 class ModelNodePicker
 {
 private:
-    ModelNodePicker(){};
+    ModelNodePicker() {};
 public:
     static std::pair<Node*, float> const pickNode(Scene *const pScene, std::vector<Model>* pModels, const std::pair<int, int>& pScreenSize, const std::pair<double, double>& pMousePos);
 	static std::pair<BaseLight*, float> const pickBaseLight(Model * pModel, Scene *const pScene, std::vector<BaseLight*>* pLights, const std::pair<int, int>& pScreenSize, const std::pair<double, double>& pMousePos);

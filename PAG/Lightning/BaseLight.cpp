@@ -55,9 +55,9 @@ void BaseLight::setLightColor(const glm::vec3& pLightColor) { mLightColor=pLight
 void BaseLight::setLightAttenuation(const float& pLightAttenuation) { mLightAttenuation=pLightAttenuation; }
 void BaseLight::setLightAmbientCoefficient(const float& pLightAmbientCoefficient) { mLightAmbientCoefficient=pLightAmbientCoefficient; }
 
-void BaseLight::drawModel(Model* pModel, Shader* const pShader, Scene* const pScene)
+void BaseLight::drawModel(Model* pModel, Shader* const pShader, const glm::mat4& pVP)
 {
     pModel->getRootNode()->getNodeTransform()->setPosition(mLightPos);
     pModel->getMaterials()->getMaterial(0)->mDiffuseColor=glm::vec4(mLightColor,1);
-    pModel->draw(pShader, pScene);
+    pModel->draw(pShader, pVP);
 }

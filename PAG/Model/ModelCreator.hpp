@@ -1,6 +1,6 @@
-// PointLight.hpp
+// ModelCreator.hpp
 //
-// Copyright (c) 2017 Krystian Owoc
+// Copyright (c) 2018 Krystian Owoc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -20,22 +20,22 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PointLight_hpp
-#define PointLight_hpp
+#ifndef ModelCreator_hpp
+#define ModelCreator_hpp
 
 #include <stdio.h>
 
-#include "BaseLight.hpp"
+class Model;
+class Material;
 
-class PointLight:public BaseLight
+class ModelCreator
 {
+private:
+    ModelCreator() {};
+    
+    static Material createDefaultMaterial();
 public:
-    PointLight(const glm::vec3& pLightPos, const glm::vec3& pLightColor, const float& pLightAttenuation, const float& pLightAmbientCoefficient=0.14f);
-    virtual ~PointLight();
-    
-    virtual void drawBoundings(Model* pModel, Shader* const pShader, const glm::mat4& pVP);
-    
-    virtual void setLight(Shader* const pShader, Scene* const pScene);
+    static Model createPlane();
 };
 
-#endif /* PointLight_hpp */
+#endif /* ModelCreator_hpp */

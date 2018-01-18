@@ -31,6 +31,11 @@ Materials::Materials(const aiScene* const pScene, const std::string& pTexturesPa
     loadTextures(pScene);
 }
 
+Materials::Materials(const Material& pMaterial)
+{
+    mMaterials.push_back(pMaterial);
+}
+
 std::string Materials::getTextureName(const aiString& pTexturePath)
 {
     std::string output=pTexturePath.C_Str();

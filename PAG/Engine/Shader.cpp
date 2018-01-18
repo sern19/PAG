@@ -143,6 +143,10 @@ void Shader::setFloat(const std::string& pUniformName, const float* const pValue
 {
     glUniform1fv(glGetUniformLocation(mProgramHandle, pUniformName.c_str()), pArraySize, (float*)pValue);
 }
+void Shader::setVec2(const std::string& pUniformName, const glm::vec2* const pValue, const int& pArraySize)
+{
+    glUniform2fv(glGetUniformLocation(mProgramHandle, pUniformName.c_str()), pArraySize, (float*)pValue);
+}
 void Shader::setVec3(const std::string& pUniformName, const glm::vec3* const pValue, const int& pArraySize)
 {
     glUniform3fv(glGetUniformLocation(mProgramHandle, pUniformName.c_str()), pArraySize, (float*)pValue);
@@ -171,7 +175,15 @@ void Shader::setFloat(const std::string& pUniformName, const float& pValue)
 {
     glUniform1f(glGetUniformLocation(mProgramHandle, pUniformName.c_str()),pValue);
 }
+void Shader::setVec2(const std::string& pUniformName, const glm::vec2& pValue)
+{
+    glUniform2f(glGetUniformLocation(mProgramHandle, pUniformName.c_str()),pValue[0],pValue[1]);
+}
 void Shader::setVec3(const std::string& pUniformName, const glm::vec3& pValue)
 {
     glUniform3f(glGetUniformLocation(mProgramHandle, pUniformName.c_str()),pValue[0],pValue[1],pValue[2]);
+}
+void Shader::setVec4(const std::string& pUniformName, const glm::vec4& pValue)
+{
+    glUniform4f(glGetUniformLocation(mProgramHandle, pUniformName.c_str()),pValue[0],pValue[1],pValue[2],pValue[3]);
 }

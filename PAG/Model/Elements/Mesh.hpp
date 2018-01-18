@@ -55,7 +55,7 @@ private:
     GLuint mElementObjectBuffer=NULL;
     std::vector<Vertex> mVerticles;
     std::vector<unsigned int> mIndices;
-    unsigned int mMaterialID;
+    unsigned int mMaterialID=0;
     
     bool mIsSelected=false;
     bool mShouldUseMaterial=true;

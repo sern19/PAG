@@ -33,6 +33,14 @@
 
 Node::Node(const aiNode* const pNode, const aiScene* const pScene, Node* pParentNode, Materials* const pTextures): Node(pNode, pScene, pTextures) { mParentNode=pParentNode; }
 
+Node::Node(const Mesh& pMesh)
+{
+    mElementTransform=new Transform();
+    mMeshes.push_back(pMesh);
+    updateCache();
+    generateOBB();
+}
+
 Node::Node(const aiNode* const pNode, const aiScene* const pScene, Materials* const pTextures): mOriginalTransform(pNode->mTransformation)
 {
     mElementTransform=new Transform();
@@ -158,12 +166,12 @@ void Node::updateChildrenPointers(Node* const pParent)
         childNode.updateChildrenPointers(this);
 }
 
-void Node::drawContent(Shader *const pShader, Scene* const pScene, Materials* const pTextures)
+void Node::drawContent(Shader *const pShader, const glm::mat4& pVP, Materials* const pTextures)
 {
     int i;
     if (mElementTransform&&mElementTransform->getNeedsUpdateCache()) updateCache();
     
-    glm::mat4 MVPMatrix=pScene->getWVP()*mCachedTransform;
+    glm::mat4 MVPMatrix=pVP*mCachedTransform;
     glm::mat3 normalMatrix=glm::transpose(glm::inverse(glm::mat3(mCachedTransform)));
     
     pShader->setMat4("MVPMatrix", &MVPMatrix);
@@ -173,7 +181,7 @@ void Node::drawContent(Shader *const pShader, Scene* const pScene, Materials* co
     for (Mesh& mesh: mMeshes)
         mesh.drawContent(pShader, pTextures);
     for (Node& childNode: mChildNodes)
-        childNode.drawContent(pShader, pScene, pTextures);
+        childNode.drawContent(pShader, pVP, pTextures);
 }
 
 void Node::setIsSelected(const bool& pIsSelected)
