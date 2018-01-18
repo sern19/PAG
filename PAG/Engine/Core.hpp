@@ -38,6 +38,7 @@ class Scene;
 class Camera;
 class Input;
 class Model;
+class Skybox;
 class BaseLight;
 class UserInterface;
 
@@ -48,6 +49,7 @@ private:
     Shader* mGeometryPassShader=NULL;
     Shader* mStencilTestShader=NULL;
     Shader* mLightPassShader=NULL;
+	Shader* mSkyboxShader = NULL;
     GBuffer* mGBuffer=NULL;
     Scene* mScene=NULL;
     Camera* mCamera=NULL;
@@ -55,13 +57,14 @@ private:
     UserInterface* mUI=NULL;
     
     Model* mLightModel=NULL;
+	Skybox* mSkybox = NULL;
     std::vector<Model> mModels;
     std::vector<BaseLight*> mLights;
     
     void geometryPass();
     void debugPass();
     void lightPass();
-    void stencilPass();
+	void skyboxPass();
     void finalPass();
     void display();
     void loadModels();

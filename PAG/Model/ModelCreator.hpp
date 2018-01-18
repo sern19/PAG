@@ -27,6 +27,7 @@
 #include <string>
 
 class Model;
+class Skybox;
 class Material;
 
 class ModelCreator
@@ -36,7 +37,6 @@ private:
     
     static Material createDefaultMaterial();
 public:
-    static Model createSkybox(const std::string& texturePath);
     static Model createCube();
     static Model createPlane();
 };

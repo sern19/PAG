@@ -4,7 +4,10 @@ layout (location = 0) in vec3 vertexPosition; //Gdzie ma szukać wektora wierzch
 
 uniform mat4 MVPMatrix;
 
+out vec3 fragVertexPosition;
+
 void main()
 {    
-    gl_Position=MVPMatrix*vec4(vertexPosition, 1.0f);
+	fragVertexPosition=vertexPosition;
+    gl_Position=(MVPMatrix*vec4(vertexPosition, 1.0f)).xyww;
 }

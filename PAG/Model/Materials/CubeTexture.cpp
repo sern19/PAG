@@ -25,7 +25,13 @@
 #include <string>
 #include <stdexcept>
 
-CubeTexture::CubeTexture(const std::vector<std::string>& pTexturePath) 
+CubeTexture::CubeTexture()
+{}
+
+CubeTexture::CubeTexture(const CubeTexture & pSourceTexture): CubeTexture(pSourceTexture.mTexturePath)
+{}
+
+CubeTexture::CubeTexture(const std::vector<std::string>& pTexturePath):mTexturePath(pTexturePath)
 {
     glGenTextures(1, &mTexture); //Generowanie kontenera na tekstury
     
@@ -36,6 +42,11 @@ CubeTexture::CubeTexture(const std::vector<std::string>& pTexturePath)
     {
         throw err;
     }
+}
+
+CubeTexture::~CubeTexture()
+{
+	//glDeleteTextures(1, &mTexture);
 }
 
 void CubeTexture::loadTexture(const std::vector<std::string>& pTexturePath)
@@ -65,11 +76,10 @@ void CubeTexture::loadTexture(const std::vector<std::string>& pTexturePath)
         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-        glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
     }
 }
 
-void CubeTexture::selectActiveTexture(const std::string& pTextureType, const unsigned int& pTextureNumber)
+void CubeTexture::selectActiveTexture(const unsigned int& pTextureNumber)
 {
     glActiveTexture(GL_TEXTURE0+pTextureNumber);
     glBindTexture(GL_TEXTURE_CUBE_MAP, mTexture);

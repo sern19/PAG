@@ -33,6 +33,7 @@
 #include "Input.hpp"
 #include "Transform.hpp"
 #include "Model.hpp"
+#include "Skybox.hpp"
 #include "ModelCreator.hpp"
 #include "Materials.hpp"
 #include "Node.hpp"
@@ -70,6 +71,7 @@ Core::Core()
         mGeometryPassShader=new Shader({{"Shaders/geometryPass.vert", GL_VERTEX_SHADER}, {"Shaders/geometryPass.frag", GL_FRAGMENT_SHADER}});
         mStencilTestShader=new Shader({{"Shaders/lightPass.vert", GL_VERTEX_SHADER}, {"Shaders/nullShader.frag", GL_FRAGMENT_SHADER}});
         mLightPassShader=new Shader({{"Shaders/lightPass.vert", GL_VERTEX_SHADER}, {"Shaders/lightPass.frag", GL_FRAGMENT_SHADER}});
+		mSkyboxShader = new Shader({ { "Shaders/skybox.vert", GL_VERTEX_SHADER },{ "Shaders/skybox.frag", GL_FRAGMENT_SHADER } });
         mGBuffer=new GBuffer(SCREEN_WIDTH, SCREEN_HEIGHT);
         //mShader=new Shader({ {"Shaders/debug.vert", GL_VERTEX_SHADER}, {"Shaders/debug.geom", GL_GEOMETRY_SHADER}, {"Shaders/debug.frag", GL_FRAGMENT_SHADER} });
         mScene=new Scene(mWindow->getWindow());
@@ -91,6 +93,9 @@ Core::Core()
     mLightPassShader->setInt("specularColorMap", 3);
     mLightPassShader->setInt("ambientColorMap", 4);
     mLightPassShader->setInt("texCoordsMap", 5);
+    //Początkowe wartości skyboxPassa
+    mSkyboxShader->useProgram();
+    mSkyboxShader->setInt("cubeMap", 0);
     mGeometryPassShader->useProgram();
 }
 Core::~Core()
@@ -102,10 +107,12 @@ Core::~Core()
             if (light) delete light;
     }
     if (mLightModel) delete mLightModel;
+	if (mSkybox) delete mSkybox;
     if (mWindow) delete mWindow;
     if (mGeometryPassShader) delete mGeometryPassShader;
     if (mStencilTestShader) delete mStencilTestShader;
     if (mLightPassShader) delete mLightPassShader;
+	if (mSkyboxShader) delete mSkyboxShader;
     if (mScene) delete mScene;
     if (mCamera) delete mCamera;
     if (mInput) delete mInput;
@@ -123,7 +130,7 @@ void Core::geometryPass()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
     glEnable(GL_DEPTH_TEST);
-    
+
     for (Model& model: mModels)
         model.draw(mGeometryPassShader, mScene->getWVP());
     if (mInput->isEditMode())
@@ -211,7 +218,7 @@ void Core::lightPass()
     }
     
     glDisable(GL_STENCIL_TEST);
-    //mLights[3]->drawBoundings(mLightModel, mLightPassShader, mScene->getWVP());
+
     //Kierunkowe światło
     mGBuffer->bindForReadingLightPass();
     mLightPassShader->useProgram();
@@ -220,7 +227,6 @@ void Core::lightPass()
     glEnable(GL_BLEND);
     glBlendEquation(GL_FUNC_ADD);
     glBlendFunc(GL_ONE, GL_ONE);
-    mGBuffer->bindForReadingLightPass();
     for (i=0; i<mLights.size(); i++)
         if (mLights[i] && dynamic_cast<DirectionalLight*>(mLights[i]))
         {
@@ -229,6 +235,20 @@ void Core::lightPass()
             mLights[i]->drawBoundings(&planeModel, mLightPassShader, glm::mat4(1));
         }
     glDisable(GL_BLEND);
+}
+
+void Core::skyboxPass()
+{
+    glDepthMask(GL_TRUE);
+    glEnable(GL_DEPTH_TEST);
+    
+    glDepthFunc(GL_LEQUAL);
+    mSkyboxShader->useProgram();
+    mSkybox->draw(mSkyboxShader, mScene->getWVP());
+    glDepthFunc(GL_LESS);
+    
+    glDisable(GL_DEPTH_TEST);
+    glDepthMask(GL_FALSE);
 }
 
 
@@ -252,8 +272,9 @@ void Core::display()
     geometryPass();
     //debugPass();
     lightPass();
+	skyboxPass();
     finalPass();
-    
+
     mUI->draw();
     glfwSwapBuffers(mWindow->getWindow()); //Swap front- i backbuffer
     glfwPollEvents(); //Poll dla eventów
@@ -262,7 +283,7 @@ void Core::display()
 void Core::loadModels()
 {
     mModels.push_back(Model("Models/2B/source/2B.fbx"));
-    //mModels.push_back(ModelCreator::createSkybox("Skybox/"));
+	mSkybox=new Skybox("Skybox/");
     //mModels.push_back(Model("Models/Spheres/source/Spheres.obj", mShader));
     //mModels.push_back(Model("Models/Plane/source/plane.obj", mShader));
     mModels[0].getRootNode()->getNodeTransform()->setScale(glm::vec3(0.004,0.004,0.004));

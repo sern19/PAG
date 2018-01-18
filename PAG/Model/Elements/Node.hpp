@@ -51,7 +51,6 @@ private:
     void generateOBB();
     void updateCache(); //Uaktualnia jedynie gdy istnieje cache
     void updateChildrenPointers(Node* const pParent);
-    const glm::mat4& getTransform(); //Zwraca cache bądź niezmodyfikowane cache rodzica
 public:
     Node(const Mesh& pMesh);
     Node(const std::vector<Mesh>& pMeshes);

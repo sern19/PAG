@@ -60,7 +60,6 @@ private:
     bool mIsSelected=false;
     bool mShouldUseMaterial=true;
     
-    void clearData();
     void fixMirroredTan();
     void loadContent();
 public:
@@ -72,6 +71,7 @@ public:
     
     void bakeTransfrom(const glm::mat4& pBakeTransform, const glm::mat3& pNormalBakeTransform);
     
+	void drawContent(Shader* const pShader);
     void drawContent(Shader* const pShader, Materials* const pTextures);
     
     const std::pair<glm::vec4, glm::vec4> getMinMaxVerticles();

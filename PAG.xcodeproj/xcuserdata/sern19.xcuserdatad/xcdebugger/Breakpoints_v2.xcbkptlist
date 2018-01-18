@@ -106,7 +106,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Model/Elements/Mesh.cpp"
-            timestampString = "537952387.206737"
+            timestampString = "538009531.727103"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "147"
@@ -1338,12 +1338,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Model/Elements/Mesh.cpp"
-            timestampString = "537952387.210073"
+            timestampString = "538009531.728705"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "139"
             endingLineNumber = "139"
-            landmarkName = "Mesh::checkRayIntersections(const glm::vec3&amp; pRaySource, const glm::vec3&amp; pRayDirection, const glm::mat4&amp; pTransform, float&amp; pDistanceOutput)"
+            landmarkName = "Mesh::getMinMaxVerticles()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1354,7 +1354,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Model/Elements/Mesh.cpp"
-            timestampString = "537952387.210119"
+            timestampString = "538009531.728758"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "154"
@@ -1370,7 +1370,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Model/Elements/Mesh.cpp"
-            timestampString = "537952387.210161"
+            timestampString = "538009531.728799"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "152"
@@ -1386,7 +1386,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Model/Elements/Mesh.cpp"
-            timestampString = "537952387.2102031"
+            timestampString = "538009531.728839"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "149"
@@ -1402,7 +1402,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Model/Elements/Mesh.cpp"
-            timestampString = "537952387.210246"
+            timestampString = "538009531.728879"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "91"
@@ -1418,7 +1418,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Model/Elements/Mesh.cpp"
-            timestampString = "537952387.210287"
+            timestampString = "538009531.728919"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "92"
@@ -1434,12 +1434,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Model/Elements/Mesh.cpp"
-            timestampString = "537952387.21033"
+            timestampString = "538009531.728959"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "106"
             endingLineNumber = "106"
-            landmarkName = "Mesh::drawContent(Shader* const pShader, Materials* const pMaterials)"
+            landmarkName = "Mesh::drawContent(Shader* const pShader)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1530,7 +1530,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Engine/GBuffer.cpp"
-            timestampString = "537952387.21061"
+            timestampString = "538009531.729113"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "52"
@@ -1562,7 +1562,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Engine/Core.cpp"
-            timestampString = "537954729.892223"
+            timestampString = "538009531.729182"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "73"
@@ -1658,11 +1658,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Model/ModelCreator.cpp"
-            timestampString = "537954729.892363"
+            timestampString = "538009531.7296"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "176"
-            endingLineNumber = "176"
+            startingLineNumber = "68"
+            endingLineNumber = "68"
             landmarkName = "ModelCreator::createCube()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1674,11 +1674,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Model/ModelCreator.cpp"
-            timestampString = "537954729.892713"
+            timestampString = "538009531.729643"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "177"
-            endingLineNumber = "177"
+            startingLineNumber = "69"
+            endingLineNumber = "69"
             landmarkName = "ModelCreator::createCube()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1754,12 +1754,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Engine/Core.cpp"
-            timestampString = "537954729.893008"
+            timestampString = "538009531.729775"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "252"
-            endingLineNumber = "252"
-            landmarkName = "Core::display()"
+            startingLineNumber = "262"
+            endingLineNumber = "262"
+            landmarkName = "Core::finalPass()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1770,7 +1770,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Engine/GBuffer.cpp"
-            timestampString = "537952387.211814"
+            timestampString = "538009531.73002"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "63"
@@ -1786,7 +1786,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Engine/GBuffer.cpp"
-            timestampString = "537952387.2118731"
+            timestampString = "538009531.7300611"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "71"
@@ -1834,7 +1834,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Engine/GBuffer.cpp"
-            timestampString = "537952387.212019"
+            timestampString = "538009531.730148"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "72"
@@ -1850,7 +1850,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Engine/GBuffer.cpp"
-            timestampString = "537952387.212073"
+            timestampString = "538009531.730188"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "77"
@@ -1866,7 +1866,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Engine/GBuffer.cpp"
-            timestampString = "537952387.212126"
+            timestampString = "538009531.730227"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "79"
@@ -1882,11 +1882,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Engine/Core.cpp"
-            timestampString = "537954729.893146"
+            timestampString = "538009531.730265"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "258"
-            endingLineNumber = "258"
+            startingLineNumber = "268"
+            endingLineNumber = "268"
             landmarkName = "Core::display()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1898,11 +1898,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Engine/Core.cpp"
-            timestampString = "537954729.893188"
+            timestampString = "538009531.7304749"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "207"
-            endingLineNumber = "207"
+            startingLineNumber = "206"
+            endingLineNumber = "206"
             landmarkName = "Core::lightPass()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1930,7 +1930,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Model/Elements/Mesh.cpp"
-            timestampString = "537952387.212337"
+            timestampString = "538009531.730708"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "33"
@@ -1946,7 +1946,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAG/Model/Elements/Mesh.cpp"
-            timestampString = "537952387.2123801"
+            timestampString = "538009531.730751"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "34"
@@ -1961,61 +1961,13 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "PAG/Model/ModelCreator.cpp"
-            timestampString = "537954729.89327"
+            filePath = "PAG/Engine/Skybox.cpp"
+            timestampString = "538009531.730795"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "59"
-            endingLineNumber = "59"
-            landmarkName = "ModelCreator::createSkybox(const std::string&amp; texturePath)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "PAG/Model/ModelCreator.cpp"
-            timestampString = "537954729.893474"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "58"
-            endingLineNumber = "58"
-            landmarkName = "ModelCreator::createSkybox(const std::string&amp; texturePath)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "PAG/Model/ModelCreator.cpp"
-            timestampString = "537954729.893663"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "56"
-            endingLineNumber = "56"
-            landmarkName = "ModelCreator::createSkybox(const std::string&amp; texturePath)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "PAG/Model/ModelCreator.cpp"
-            timestampString = "537954729.8938479"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "55"
-            endingLineNumber = "55"
-            landmarkName = "ModelCreator::createSkybox(const std::string&amp; texturePath)"
+            startingLineNumber = "57"
+            endingLineNumber = "57"
+            landmarkName = "Skybox::Skybox(const Skybox &amp; pSourceSkybox)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

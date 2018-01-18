@@ -97,6 +97,14 @@ void Mesh::bakeTransfrom(const glm::mat4& pBakeTransform, const glm::mat3& pNorm
     loadContent();
 }
 
+void Mesh::drawContent(Shader* const pShader)
+{
+	//Bindowanie tablicy obiektów
+	glBindVertexArray(mVertexArrayObject);
+	glDrawElements(GL_TRIANGLES, mIndices.size(), GL_UNSIGNED_INT, 0);
+	glBindVertexArray(NULL);
+}
+
 void Mesh::drawContent(Shader* const pShader, Materials* const pMaterials)
 {
     if (!mIsSelected&&mShouldUseMaterial) pMaterials->setActiveMaterial(mMaterialID, pShader);

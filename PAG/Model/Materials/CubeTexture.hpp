@@ -27,13 +27,19 @@
 #include <vector>
 #include "Texture.hpp"
 
-class CubeTexture:Texture
+class CubeTexture
 {
-protected:
+private:
+	GLuint mTexture;
+	std::vector<std::string> mTexturePath;
+
     void loadTexture(const std::vector<std::string>& pTexturePath);
 public:
+	CubeTexture();
+	CubeTexture(const CubeTexture& pSourceTexture);
     CubeTexture(const std::vector<std::string>& pTexturePath);
-    virtual void selectActiveTexture(const std::string& pTextureType, const unsigned int& pTextureNumber);
+	~CubeTexture();
+    void selectActiveTexture(const unsigned int& pTextureNumber);
 };
 
 #endif /* CubeTexture_hpp */

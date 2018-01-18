@@ -1,6 +1,6 @@
-// ModelCreator.cpp
+// Model.cpp
 //
-// Copyright (c) 2018 Krystian Owoc
+// Copyright (c) 2017 Krystian Owoc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -20,41 +20,56 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "ModelCreator.hpp"
-
 #include "Skybox.hpp"
-
-#include <vector>
-
-#include "Materials.hpp"
-#include "Texture.hpp"
-#include "CubeTexture.hpp"
+#include "Shader.hpp"
+#include "Transform.hpp"
 #include "Mesh.hpp"
-#include "Node.hpp"
-#include "Model.hpp"
-
 #include "Config.hpp"
 
-Material ModelCreator::createDefaultMaterial()
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+
+Skybox::Skybox(const std::string pTexturePath)
 {
-    Material defaultMaterial;
-    defaultMaterial.mDiffuseColor=glm::vec3(1);
-    defaultMaterial.mSpecularColor=glm::vec3(1);
-    defaultMaterial.mAmbientColor=glm::vec3(1);
-    defaultMaterial.mShadingMode=aiShadingMode_Blinn;
-    defaultMaterial.mShininess=255;
-    return defaultMaterial;
+    int i;
+    std::vector<std::string> texturesPath;
+    
+    for (i=0;i<6;i++)
+    {
+        std::string path;
+        path+=pTexturePath;
+        path+=std::to_string(i);
+        path+=".tga";
+        texturesPath.push_back(path);
+    }
+    
+	mTexture = CubeTexture(texturesPath);
+	
+    createMesh();
+    
+	mTransform = new Transform();
+	mTransform->setScale(glm::vec3(10, 10, 10));
 }
 
-Model ModelCreator::createCube()
+Skybox::Skybox(const Skybox & pSourceSkybox)
+{
+	mMeshes = pSourceSkybox.mMeshes;
+	mTexture = CubeTexture(pSourceSkybox.mTexture);
+	mTransform = new Transform(*pSourceSkybox.mTransform);
+}
+
+Skybox::~Skybox()
+{
+	if (mTransform) delete mTransform;
+}
+
+void Skybox::createMesh()
 {
     int i,j;
-    Material defaultMaterial=createDefaultMaterial();
-    Materials defaultMaterials(defaultMaterial);
     
     std::vector<Vertex> planeVertex(4);
     std::vector<unsigned int> planeIndices={2, 1, 0, 2, 3, 1};
-    std::vector<Mesh> meshes;
     
     for (i=0;i<2;i++)
     {
@@ -68,7 +83,7 @@ Model ModelCreator::createCube()
             planeVertex[i+2*j].mTexture.y=1-j;
         }
     }
-    meshes.push_back(Mesh(planeVertex, planeIndices));
+    mMeshes.push_back(Mesh(planeVertex, planeIndices));
     
     for (i=0;i<2;i++)
     {
@@ -82,7 +97,7 @@ Model ModelCreator::createCube()
             planeVertex[i+2*j].mTexture.y=1-j;
         }
     }
-    meshes.push_back(Mesh(planeVertex, planeIndices));
+    mMeshes.push_back(Mesh(planeVertex, planeIndices));
     
     for (i=0;i<2;i++)
     {
@@ -96,7 +111,7 @@ Model ModelCreator::createCube()
             planeVertex[i+2*j].mTexture.y=1-j;
         }
     }
-    meshes.push_back(Mesh(planeVertex, planeIndices));
+    mMeshes.push_back(Mesh(planeVertex, planeIndices));
     
     planeIndices={0, 1, 2, 1, 3, 2};
     
@@ -112,7 +127,7 @@ Model ModelCreator::createCube()
             planeVertex[i+2*j].mTexture.y=1-j;
         }
     }
-    meshes.push_back(Mesh(planeVertex, planeIndices));
+    mMeshes.push_back(Mesh(planeVertex, planeIndices));
     
     for (i=0;i<2;i++)
     {
@@ -126,7 +141,7 @@ Model ModelCreator::createCube()
             planeVertex[i+2*j].mTexture.y=1-j;
         }
     }
-    meshes.push_back(Mesh(planeVertex, planeIndices));
+    mMeshes.push_back(Mesh(planeVertex, planeIndices));
     
     for (i=0;i<2;i++)
     {
@@ -140,30 +155,24 @@ Model ModelCreator::createCube()
             planeVertex[i+2*j].mTexture.y=1-j;
         }
     }
-    meshes.push_back(Mesh(planeVertex, planeIndices));
-    
-    return Model(Node(meshes), defaultMaterials);
+    mMeshes.push_back(Mesh(planeVertex, planeIndices));
 }
 
-Model ModelCreator::createPlane()
+void Skybox::draw(Shader * const pShader, const glm::mat4 & pVP)
 {
-    int i,j;
-    Material defaultMaterial=createDefaultMaterial();
-    Materials defaultMaterials(defaultMaterial);
-    
-    std::vector<Vertex> planeVertex(4);
-    std::vector<unsigned int> planeIndices={0, 1, 2, 1, 3, 2};
-    
-    for (i=0;i<2;i++)
-    {
-        for (j=0;j<2;j++)
-        {
-            planeVertex[i+2*j].mPosition.x=((float)i-0.5f)*2.0f;
-            planeVertex[i+2*j].mPosition.y=((float)j-0.5f)*2.0f;
-            planeVertex[i+2*j].mNormal.z=1;
-            planeVertex[i+2*j].mTexture.x=i;
-            planeVertex[i+2*j].mTexture.y=1-j;
-        }
-    }
-    return Model(Node(Mesh(planeVertex, planeIndices)), defaultMaterials);
+    //Ignoruj pozycję kamery
+    glm::mat4 fixedVP=pVP;
+    fixedVP[3]={0,0,0,1};
+    //
+	glm::mat4 MVPMatrix = fixedVP*mTransform->getChildCombinedTransform();
+	glm::mat3 normalMatrix = glm::transpose(glm::inverse(glm::mat3(mTransform->getChildCombinedTransform())));
+
+	pShader->setMat4("MVPMatrix", &MVPMatrix);
+	pShader->setMat4("modelMatrix", &mTransform->getChildCombinedTransform());
+	pShader->setMat3("normalMatrix", &normalMatrix);
+
+	mTexture.selectActiveTexture(0);
+
+	for (Mesh& mesh : mMeshes)
+		mesh.drawContent(pShader);
 }

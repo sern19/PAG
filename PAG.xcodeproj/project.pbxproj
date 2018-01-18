@@ -10,6 +10,7 @@
 		DD041AE71FC3902900AC2AF7 /* Model.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD041AE51FC3902900AC2AF7 /* Model.cpp */; };
 		DD041AEB1FC3AF6500AC2AF7 /* Node.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD041AE91FC3AF6500AC2AF7 /* Node.cpp */; };
 		DD21E07E201002D5007F606D /* ModelCreator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD21E07C201002D5007F606D /* ModelCreator.cpp */; };
+		DD25524620114D86000AECA4 /* Skybox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD25524420114D86000AECA4 /* Skybox.cpp */; };
 		DD3705CE1FD916ED000DE9C4 /* DirectionalLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD3705CC1FD916ED000DE9C4 /* DirectionalLight.cpp */; };
 		DD3705D11FD91A58000DE9C4 /* SpotLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD3705CF1FD91A58000DE9C4 /* SpotLight.cpp */; };
 		DD3B1AD01FBF7E74005E9485 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD3B1ACF1FBF7E6B005E9485 /* OpenGL.framework */; };
@@ -60,6 +61,10 @@
 		DD21E07D201002D5007F606D /* ModelCreator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ModelCreator.hpp; sourceTree = "<group>"; };
 		DD21E07F20101449007F606D /* lightPass.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = lightPass.vert; sourceTree = "<group>"; };
 		DD21E08020101449007F606D /* lightPass.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = lightPass.frag; sourceTree = "<group>"; };
+		DD25524420114D86000AECA4 /* Skybox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Skybox.cpp; sourceTree = "<group>"; };
+		DD25524520114D86000AECA4 /* Skybox.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Skybox.hpp; sourceTree = "<group>"; };
+		DD25524720114DCB000AECA4 /* skybox.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = skybox.frag; sourceTree = "<group>"; };
+		DD25524820114DCB000AECA4 /* skybox.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = skybox.vert; sourceTree = "<group>"; };
 		DD3705CC1FD916ED000DE9C4 /* DirectionalLight.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DirectionalLight.cpp; sourceTree = "<group>"; };
 		DD3705CD1FD916ED000DE9C4 /* DirectionalLight.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DirectionalLight.hpp; sourceTree = "<group>"; };
 		DD3705CF1FD91A58000DE9C4 /* SpotLight.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SpotLight.cpp; sourceTree = "<group>"; };
@@ -280,6 +285,8 @@
 				DDD878231FBF8C9900109AC6 /* Core.hpp */,
 				DDD8782E1FBF8C9A00109AC6 /* Shader.cpp */,
 				DDD8781E1FBF8C9900109AC6 /* Shader.hpp */,
+				DD25524420114D86000AECA4 /* Skybox.cpp */,
+				DD25524520114D86000AECA4 /* Skybox.hpp */,
 				DDD878201FBF8C9900109AC6 /* Window.cpp */,
 				DDD878251FBF8C9900109AC6 /* Window.hpp */,
 				DD9E91111FC6AEA2009C0AE3 /* UserInterface.cpp */,
@@ -401,6 +408,8 @@
 				DD21E08020101449007F606D /* lightPass.frag */,
 				DD21E07F20101449007F606D /* lightPass.vert */,
 				DDEF9D3F2010652200CCF4AE /* nullShader.frag */,
+				DD25524720114DCB000AECA4 /* skybox.frag */,
+				DD25524820114DCB000AECA4 /* skybox.vert */,
 			);
 			path = Shaders;
 			sourceTree = "<group>";
@@ -756,6 +765,7 @@
 				DDD878311FBF8C9A00109AC6 /* Transform.cpp in Sources */,
 				DDD878351FBF8C9A00109AC6 /* Mesh.cpp in Sources */,
 				DDD878391FBF8C9A00109AC6 /* Shader.cpp in Sources */,
+				DD25524620114D86000AECA4 /* Skybox.cpp in Sources */,
 				DDFBF2AA1FD65D4A00EC76B3 /* PointLight.cpp in Sources */,
 				DD3B1AE31FBF8518005E9485 /* glad.c in Sources */,
 				DD21E07E201002D5007F606D /* ModelCreator.cpp in Sources */,

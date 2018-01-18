@@ -1,4 +1,4 @@
-// Window.cpp
+// Model.hpp
 //
 // Copyright (c) 2017 Krystian Owoc
 //
@@ -20,35 +20,36 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "Window.hpp"
-#include <stdexcept>
+#ifndef Skybox_hpp
+#define Skybox_hpp
 
-Window::Window(const int& pScreenWidth, const int& pScreenHeight)
-{
-    //Tworzenie okna
-    try
-    {
-        createWindow(pScreenWidth, pScreenHeight);
-    } catch (std::runtime_error err)
-    {
-        throw err;
-    }
-    
-    //Tworzenie kontekstu
-    glfwMakeContextCurrent(mWindow);
-}
+#include <stdio.h>
+#include <glad/glad.h>
+#include <glm/glm.hpp>
+#include <vector>
+#include <string>
 
-void Window::createWindow(const int& pScreenWidth, const int& pScreenHeight)
+#include "CubeTexture.hpp"
+
+class Transform;
+class Mesh;
+class Shader;
+class Scene;
+
+class Skybox
 {
-    mWindow=glfwCreateWindow(pScreenWidth, pScreenHeight, WINDOW_NAME, NULL, NULL);
-    if (!mWindow) //W przypadku niepowodzenia zwalniamy zasoby i niszczymy okienka
-    {
-        glfwTerminate();
-        throw std::runtime_error("(Window::createWindow): Nie można utworzyć okna");
-    }
-}
-GLFWwindow* const Window::getWindow()
-{
-    return mWindow;
+private:
+	std::vector<Mesh> mMeshes;
+	CubeTexture mTexture;
+	Transform* mTransform = NULL;
     
-}
+    void createMesh();
+public:
+	Skybox(const std::string pTexturePath);
+	Skybox(const Skybox& pSourceSkybox);
+	~Skybox();
+   
+    void draw(Shader* const pShader, const glm::mat4& pVP);
+};
+
+#endif /* Skybox_hpp */
