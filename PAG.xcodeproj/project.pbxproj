@@ -112,14 +112,13 @@
 		DDD8782D1FBF8C9A00109AC6 /* Scene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Scene.cpp; sourceTree = "<group>"; };
 		DDD8782E1FBF8C9A00109AC6 /* Shader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Shader.cpp; sourceTree = "<group>"; };
 		DDD8782F1FBF8C9A00109AC6 /* Config.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Config.hpp; path = PAG/Config.hpp; sourceTree = "<group>"; };
+		DDEF9D3F2010652200CCF4AE /* nullShader.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = nullShader.frag; sourceTree = "<group>"; };
 		DDF9C61F200FC1C6005F68B7 /* GBuffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GBuffer.cpp; sourceTree = "<group>"; };
 		DDF9C620200FC1C6005F68B7 /* GBuffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GBuffer.hpp; sourceTree = "<group>"; };
 		DDF9C622200FD273005F68B7 /* debug.geom */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = debug.geom; sourceTree = "<group>"; };
 		DDF9C623200FD273005F68B7 /* debug.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = debug.vert; sourceTree = "<group>"; };
 		DDF9C624200FD273005F68B7 /* geometryPass.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = geometryPass.frag; sourceTree = "<group>"; };
 		DDF9C625200FD273005F68B7 /* debug.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = debug.frag; sourceTree = "<group>"; };
-		DDF9C626200FD273005F68B7 /* basic.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = basic.vert; sourceTree = "<group>"; };
-		DDF9C627200FD273005F68B7 /* basic.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = basic.frag; sourceTree = "<group>"; };
 		DDF9C628200FD273005F68B7 /* geometryPass.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = geometryPass.vert; sourceTree = "<group>"; };
 		DDF9C62B200FD281005F68B7 /* Cubes.fbx */ = {isa = PBXFileReference; lastKnownFileType = file; path = Cubes.fbx; sourceTree = "<group>"; };
 		DDF9C62E200FD281005F68B7 /* 2b_head_dif.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 2b_head_dif.png; sourceTree = "<group>"; };
@@ -389,8 +388,6 @@
 		DD79D2BE1FBF8DE200558940 /* Shaders */ = {
 			isa = PBXGroup;
 			children = (
-				DDF9C627200FD273005F68B7 /* basic.frag */,
-				DDF9C626200FD273005F68B7 /* basic.vert */,
 				DDF9C625200FD273005F68B7 /* debug.frag */,
 				DDF9C622200FD273005F68B7 /* debug.geom */,
 				DDF9C623200FD273005F68B7 /* debug.vert */,
@@ -398,6 +395,7 @@
 				DDF9C628200FD273005F68B7 /* geometryPass.vert */,
 				DD21E08020101449007F606D /* lightPass.frag */,
 				DD21E07F20101449007F606D /* lightPass.vert */,
+				DDEF9D3F2010652200CCF4AE /* nullShader.frag */,
 			);
 			path = Shaders;
 			sourceTree = "<group>";

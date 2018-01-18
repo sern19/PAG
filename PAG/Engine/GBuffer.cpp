@@ -62,7 +62,7 @@ void GBuffer::createTextures(const int& pScreenWidth, const int& pScreenHeight)
     //Inicjalizacja tekstur dla framebuffera
     for (i=0; i<mFramebufferTextures.size(); i++) {
         glBindTexture(GL_TEXTURE_2D, mFramebufferTextures[i]);       
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, pScreenWidth, pScreenHeight, 0, GL_RGBA, GL_FLOAT, NULL);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB32F, pScreenWidth, pScreenHeight, 0, GL_RGB, GL_FLOAT, NULL);
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, mFramebufferTextures[i], 0);
@@ -70,12 +70,12 @@ void GBuffer::createTextures(const int& pScreenWidth, const int& pScreenHeight)
     
     //Tekstura głębokości
     glBindTexture(GL_TEXTURE_2D, mDepthTexture);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH32F_STENCIL8, pScreenWidth, pScreenHeight, 0, GL_DEPTH_COMPONENT, GL_FLOAT,
-                 NULL);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH32F_STENCIL8, pScreenWidth, pScreenHeight, 0, GL_DEPTH_STENCIL, 
+                 GL_FLOAT_32_UNSIGNED_INT_24_8_REV, NULL);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, mDepthTexture, 0);
     
     glBindTexture(GL_TEXTURE_2D, mFinalTexture);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, pScreenWidth, pScreenHeight, 0, GL_RGBA, GL_FLOAT, NULL);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, pScreenWidth, pScreenHeight, 0, GL_RGB, GL_FLOAT, NULL);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0+mFramebufferTextures.size(), GL_TEXTURE_2D, mFinalTexture, 0);    
 }
 
@@ -90,11 +90,13 @@ void GBuffer::bindForWritingGeometryPass()
 {
     int i;
     std::vector<GLenum> drawBuffers(mFramebufferTextures.size());
+    
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, mFramebuffer);
+    
     //Włączenie zapisu do tekstur
     for (i=0; i<drawBuffers.size(); i++)
         drawBuffers[i]=GL_COLOR_ATTACHMENT0+i;
     glDrawBuffers(drawBuffers.size(), &drawBuffers.at(0));
-    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, mFramebuffer);
 }
 
 void GBuffer::bindForStencilPass()

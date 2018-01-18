@@ -38,6 +38,8 @@ void DirectionalLight::setLight(Shader* const pShader, Scene* const pScene) //Tr
     pShader->setVec4("light.position", &transformedPosition);
     pShader->setVec3("light.color", &mLightColor);
     pShader->setFloat("light.attenuation", &mLightAttenuation);
+    pShader->setFloat("light.attenuationLin", &mLightAttenuationLin);
+    pShader->setFloat("light.attenuationExp", &mLightAttenuationExp);
     pShader->setFloat("light.ambientCoefficient", &mLightAmbientCoefficient);
     pShader->setVec3("light.coneDirection", glm::vec3(0));
 }

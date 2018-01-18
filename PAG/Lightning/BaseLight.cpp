@@ -41,6 +41,7 @@ std::pair<BaseLight*, float> BaseLight::testRay(Model* pModel, const glm::vec3& 
 {
 	std::pair<BaseLight*, float> output;
 	pModel->getRootNode()->getNodeTransform()->setPosition(mLightPos);
+    pModel->getRootNode()->getNodeTransform()->setScale(glm::vec3(1,1,1));
 	pModel->getMaterials()->getMaterial(0)->mDiffuseColor = glm::vec4(mLightColor, 1);
 	std::pair<Node*, float> node = pModel->testRayOBBIntersection(pRaySource, pRayDirection);
 	output.second = node.second;
@@ -55,9 +56,21 @@ void BaseLight::setLightColor(const glm::vec3& pLightColor) { mLightColor=pLight
 void BaseLight::setLightAttenuation(const float& pLightAttenuation) { mLightAttenuation=pLightAttenuation; }
 void BaseLight::setLightAmbientCoefficient(const float& pLightAmbientCoefficient) { mLightAmbientCoefficient=pLightAmbientCoefficient; }
 
+float BaseLight::calcPointLightBSphere()
+{
+    float maxChannel = fmax(fmax(mLightColor.x, mLightColor.y), mLightColor.z);
+    
+    float ret = (-mLightAttenuation + sqrtf(mLightAttenuation * mLightAttenuation -
+                                            4 * mLightAttenuationExp * (mLightAttenuationExp - 256 * maxChannel))) 
+    /
+    (2 * mLightAttenuationExp);
+    return ret;
+}
+
 void BaseLight::drawModel(Model* pModel, Shader* const pShader, const glm::mat4& pVP)
 {
     pModel->getRootNode()->getNodeTransform()->setPosition(mLightPos);
     pModel->getMaterials()->getMaterial(0)->mDiffuseColor=glm::vec4(mLightColor,1);
+    pModel->getRootNode()->getNodeTransform()->setScale(glm::vec3(1, 1, 1));
     pModel->draw(pShader, pVP);
 }

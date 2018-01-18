@@ -36,10 +36,13 @@ class BaseLight
 protected:
     glm::vec3 mLightPos;
     glm::vec3 mLightColor;
-    float mLightAttenuation; //Tłumienie
+    float mLightAttenuation; //Tłumienie stałe
+    float mLightAttenuationLin=0.5; //Tłumienie liniowe
+    float mLightAttenuationExp=0.5; //Tłumienie exp
     float mLightAmbientCoefficient; //"Jasność" ambienta
 protected:
     BaseLight(const glm::vec3& pLightPos, const glm::vec3& pLightColor, const float& pLightAttenuation, const float& pLightAmbientCoefficient);
+    float calcPointLightBSphere();
 public:
     virtual ~BaseLight();
 

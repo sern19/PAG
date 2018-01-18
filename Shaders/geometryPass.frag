@@ -6,12 +6,12 @@ in vec3 fragVertexTangent;
 in vec3 fragVertexBitangent;
 in vec2 fragVertexTexture;
 
-layout (location = 0) out vec4 diffuseOut;
-layout (location = 1) out vec4 normalOut;
-layout (location = 2) out vec4 positionOut;
-layout (location = 3) out vec4 specularColorOut;
-layout (location = 4) out vec4 ambientColorOut;
-layout (location = 5) out vec4 texCoordsOut;
+layout (location = 0) out vec3 diffuseOut;
+layout (location = 1) out vec3 normalOut;
+layout (location = 2) out vec3 positionOut;
+layout (location = 3) out vec3 specularColorOut;
+layout (location = 4) out vec3 ambientColorOut;
+layout (location = 5) out vec3 texCoordsOut;
 
 //Jak narazie silnik nie obsługuje wielu tekstur tego samego typu
 uniform sampler2D diffuseTexture[5];
@@ -64,10 +64,10 @@ void main()
     }
     else normal=normalize(normalMatrix*fragVertexNormal);
     
-    diffuseOut=diffuse;
-    normalOut=vec4(normal, 1);
-    positionOut=vec4(fragVertexPosition,1);
-    specularColorOut=vec4(specular,1);
-    ambientColorOut=vec4(ambientColor,1);
-    texCoordsOut=vec4(fragVertexTexture, shininess, 1);
+    diffuseOut=diffuse.rgb;
+    normalOut=normal;
+    positionOut=fragVertexPosition;
+    specularColorOut=specular;
+    ambientColorOut=ambientColor;
+    texCoordsOut=vec3(fragVertexTexture, shininess);
 }

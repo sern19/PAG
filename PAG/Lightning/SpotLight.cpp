@@ -24,6 +24,8 @@
 
 #include "Shader.hpp"
 #include "Scene.hpp"
+#include "Node.hpp"
+#include "Transform.hpp"
 #include "Model.hpp"
 
 #include <sstream>
@@ -49,6 +51,8 @@ void SpotLight::setLight(Shader* const pShader, Scene* const pScene) //Trochę r
     pShader->setVec4("light.position", &transformedPosition);
     pShader->setVec3("light.color", &mLightColor);
     pShader->setFloat("light.attenuation", &mLightAttenuation);
+    pShader->setFloat("light.attenuationLin", &mLightAttenuationLin);
+    pShader->setFloat("light.attenuationExp", &mLightAttenuationExp);
     pShader->setFloat("light.ambientCoefficient", &mLightAmbientCoefficient);
     pShader->setFloat("light.coneAngle", &mConeAngle);
     pShader->setVec3("light.coneDirection", &mConeDirection);
@@ -56,5 +60,8 @@ void SpotLight::setLight(Shader* const pShader, Scene* const pScene) //Trochę r
 
 void SpotLight::drawBoundings(Model* pModel, Shader* const pShader, const glm::mat4& pVP)
 {
+    float radius=calcPointLightBSphere();
+    pModel->getRootNode()->getNodeTransform()->setPosition(mLightPos);
+    pModel->getRootNode()->getNodeTransform()->setScale(glm::vec3(radius*2.5f, radius*2.5f, radius*2.5f));
     pModel->draw(pShader, pVP);
 }

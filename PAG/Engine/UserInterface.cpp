@@ -195,8 +195,6 @@ void UserInterface::drawLightUI()
     ImGui::SetNextWindowPos(ImVec2(0, mMainMenuHeight));
     ImGui::SetNextWindowSize(ImVec2(240, 480));
     ImGui::Begin("Selected light", temporaryBool, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
-    //ImGui::Text("  Node level %i", mSelectedNode->getNodeLevel());
-    //ImGui::Text("  Transform level %i", mSelectedTransform->getTransformLevel());
 
     //Pola z danymi
     if (dynamic_cast<DirectionalLight*>(mSelectedLight)!=NULL) ImGui::Text("Direction");
@@ -214,7 +212,8 @@ void UserInterface::drawLightUI()
     ImGui::PopID();
     ImGui::PushID(2); //Używamy PushID
     if (dynamic_cast<DirectionalLight*>(mSelectedLight)==NULL) ImGui::InputFloat(":Attenuation", &mLightAttenuation, 0.1f, 1.0f, 3, ImGuiInputTextFlags_CharsDecimal);
-    ImGui::InputFloat(":Ambient", &mLightAmbient, 0.1f, 1.0f, 3, ImGuiInputTextFlags_CharsDecimal);
+    else ImGui::InputFloat(":Ambient", &mLightAmbient, 0.1f, 1.0f, 3, ImGuiInputTextFlags_CharsDecimal);
+    
     ImGui::PopID();
     if (dynamic_cast<SpotLight*>(mSelectedLight)!=NULL)
     {
@@ -248,7 +247,7 @@ void UserInterface::draw()
             ImGui::SetNextWindowPos(ImVec2(0, mMainMenuHeight));
             ImGui::SetNextWindowSize(ImVec2(208, 48));
             ImGui::Begin("No object selected", temporaryBool, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
-            ImGui::Text("  Press RMB to select light");
+            ImGui::Text("  Press RMB to select object");
             ImGui::End();
         }
     }

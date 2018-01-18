@@ -115,16 +115,14 @@ Core::~Core()
 void Core::geometryPass()
 {
     mGeometryPassShader->useProgram();
-    mGBuffer->clearFinalTexture();
     mGBuffer->bindForWritingGeometryPass();
     
     //Żeby tylko geometrypass modyfikował głębokość
     glDepthMask(GL_TRUE);
     
-    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    
     glEnable(GL_DEPTH_TEST);
-    glDisable(GL_BLEND);
     
     for (Model& model: mModels)
         model.draw(mGeometryPassShader, mScene->getWVP());
@@ -132,7 +130,6 @@ void Core::geometryPass()
         for (BaseLight* light: mLights)
             light->drawModel(mLightModel, mGeometryPassShader, mScene->getWVP());
     glDepthMask(GL_FALSE);
-    glDisable(GL_DEPTH_TEST);
 }
 
 void Core::debugPass()
@@ -171,22 +168,13 @@ void Core::lightPass()
 {
     int i;
     mLightPassShader->useProgram();
-    
-    //Potrzebujemy blendingu bo każde światło ma swoje własne wywołanie
-    glEnable(GL_BLEND);
-    glBlendEquation(GL_FUNC_ADD);
-    glBlendFunc(GL_ONE, GL_ONE);
-    
-    mGBuffer->bindForReadingLightPass();
-    glClear(GL_COLOR_BUFFER_BIT);
-
     mLightPassShader->setVec3("cameraPos", mCamera->getCameraPos());
 
     //Punktowe
-    //glEnable(GL_STENCIL_TEST);
+    glEnable(GL_STENCIL_TEST);
     
     for (i=0; i<mLights.size(); i++)
-    if (mLights[i] && dynamic_cast<PointLight*>(mLights[i]))
+    if (mLights[i] && (dynamic_cast<PointLight*>(mLights[i]) || dynamic_cast<SpotLight*>(mLights[i])))
     {
         //Stencil
         mStencilTestShader->useProgram();
@@ -195,10 +183,12 @@ void Core::lightPass()
         glDisable(GL_CULL_FACE);
         glClear(GL_STENCIL_BUFFER_BIT);
         glStencilFunc(GL_ALWAYS, 0, 0);
-        glStencilOpSeparate(GL_BACK, GL_KEEP, GL_INCR_WRAP, GL_KEEP);
         glStencilOpSeparate(GL_FRONT, GL_KEEP, GL_DECR_WRAP, GL_KEEP);
-        //mLights[i]->drawBoundings(&planeModel, mLightPassShader, glm::mat4(1));
+        glStencilOpSeparate(GL_BACK, GL_KEEP, GL_INCR_WRAP, GL_KEEP);
+        mLights[i]->drawBoundings(mLightModel, mStencilTestShader, mScene->getWVP());
         //
+        
+        //Punktowe lub stożkowe
         mGBuffer->bindForReadingLightPass();
         mLightPassShader->useProgram();
         glStencilFunc(GL_NOTEQUAL, 0, 0xFF);
@@ -212,17 +202,21 @@ void Core::lightPass()
         glEnable(GL_CULL_FACE);
         glCullFace(GL_FRONT);
         
-        Model planeModel=ModelCreator::createPlane();
         mLights[i]->setLight(mLightPassShader, mScene);
-        //mLights[i]->drawBoundings(&planeModel, mLightPassShader, glm::mat4(1));
+        mLights[i]->drawBoundings(mLightModel, mLightPassShader, mScene->getWVP());
         glCullFace(GL_BACK);
         
         glDisable(GL_BLEND);
+        //
     }
     
-    //Kierunkowe światło
     glDisable(GL_STENCIL_TEST);
+    //mLights[3]->drawBoundings(mLightModel, mLightPassShader, mScene->getWVP());
+    //Kierunkowe światło
+    mGBuffer->bindForReadingLightPass();
+    mLightPassShader->useProgram();
     //Potrzebujemy blendingu bo każde światło ma swoje własne wywołanie
+    glDisable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
     glBlendEquation(GL_FUNC_ADD);
     glBlendFunc(GL_ONE, GL_ONE);
@@ -234,7 +228,7 @@ void Core::lightPass()
             mLights[i]->setLight(mLightPassShader, mScene);
             mLights[i]->drawBoundings(&planeModel, mLightPassShader, glm::mat4(1));
         }
-    
+    glDisable(GL_BLEND);
 }
 
 
@@ -254,6 +248,7 @@ void Core::display()
     mScene->updateViewSpace(mCamera->generateViewSpace());
     mLights[3]->setLightPos(glm::vec3(sin(timePoint.count()/1000.0)*2, 0.5, cos(timePoint.count()/1000.0)*2));
     
+    mGBuffer->clearFinalTexture();
     geometryPass();
     //debugPass();
     lightPass();
@@ -295,7 +290,7 @@ void Core::loadLights()
     mLights.push_back(new SpotLight(glm::vec3(-1,1,1), glm::vec3(0,0.7,0)-glm::vec3(-1,1,1), glm::vec3(1.2,0,0), 8, 0.5, 0));
     mLights.push_back(new SpotLight(glm::vec3(1,1,1), glm::vec3(0,0.7,0)-glm::vec3(1,1,1), glm::vec3(0,0,1.2), 8, 0.5, 0));
     //Punktowe
-    mLights.push_back(new PointLight(glm::vec3(2,0.5,2), glm::vec3(1.2,1.2,1.2), 0.5));
+    mLights.push_back(new PointLight(glm::vec3(2,0.5,2), glm::vec3(1.2,1.2,1.2), 0.1));
     
     for (i=0; i<mLights.size(); i++)
         if (mLights[i]) mLights[i]->setLight(mLightPassShader, mScene);

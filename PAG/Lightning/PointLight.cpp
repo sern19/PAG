@@ -24,7 +24,12 @@
 
 #include "Shader.hpp"
 #include "Scene.hpp"
+#include "Node.hpp"
+#include "Transform.hpp"
 #include "Model.hpp"
+
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 #include <sstream>
 
@@ -38,11 +43,16 @@ void PointLight::setLight(Shader* const pShader, Scene* const pScene) //Trochę 
     pShader->setVec4("light.position", &transformedPosition);
     pShader->setVec3("light.color", &mLightColor);
     pShader->setFloat("light.attenuation", &mLightAttenuation);
+    pShader->setFloat("light.attenuationLin", &mLightAttenuationLin);
+    pShader->setFloat("light.attenuationExp", &mLightAttenuationExp);
     pShader->setFloat("light.ambientCoefficient", &mLightAmbientCoefficient);
     pShader->setVec3("light.coneDirection", glm::vec3(0));
 }
 
 void PointLight::drawBoundings(Model* pModel, Shader* const pShader, const glm::mat4& pVP)
 {
+    float radius=calcPointLightBSphere();
+    pModel->getRootNode()->getNodeTransform()->setPosition(mLightPos);
+    pModel->getRootNode()->getNodeTransform()->setScale(glm::vec3(radius*2.5f, radius*2.5f, radius*2.5f));
     pModel->draw(pShader, pVP);
 }
