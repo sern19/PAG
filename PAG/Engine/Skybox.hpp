@@ -40,7 +40,7 @@ class Skybox
 {
 private:
 	std::vector<Mesh> mMeshes;
-	CubeTexture mTexture;
+	CubeTexture* mTexture=NULL;
 	Transform* mTransform = NULL;
     
     void createMesh();

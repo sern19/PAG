@@ -35,7 +35,6 @@ private:
 
     void loadTexture(const std::vector<std::string>& pTexturePath);
 public:
-	CubeTexture();
 	CubeTexture(const CubeTexture& pSourceTexture);
     CubeTexture(const std::vector<std::string>& pTexturePath);
 	~CubeTexture();

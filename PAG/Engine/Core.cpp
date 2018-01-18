@@ -307,7 +307,7 @@ void Core::loadLights()
 {
     int i;
     //Kierunkowe
-    mLights.push_back(new DirectionalLight(glm::vec3(0, -1, 0.5), glm::vec3(0.5,0.5,0.5), 0));
+    mLights.push_back(new DirectionalLight(glm::vec3(-0.2, -1, 0), glm::vec3(1.0,1.0,1.0), 0));
     //Spotlighty
     mLights.push_back(new SpotLight(glm::vec3(-1,1,1), glm::vec3(0,0.7,0)-glm::vec3(-1,1,1), glm::vec3(1.2,0,0), 8, 0.5, 0));
     mLights.push_back(new SpotLight(glm::vec3(1,1,1), glm::vec3(0,0.7,0)-glm::vec3(1,1,1), glm::vec3(0,0,1.2), 8, 0.5, 0));

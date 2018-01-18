@@ -25,9 +25,6 @@
 #include <string>
 #include <stdexcept>
 
-CubeTexture::CubeTexture()
-{}
-
 CubeTexture::CubeTexture(const CubeTexture & pSourceTexture): CubeTexture(pSourceTexture.mTexturePath)
 {}
 
@@ -46,7 +43,7 @@ CubeTexture::CubeTexture(const std::vector<std::string>& pTexturePath):mTextureP
 
 CubeTexture::~CubeTexture()
 {
-	//glDeleteTextures(1, &mTexture);
+	glDeleteTextures(1, &mTexture);
 }
 
 void CubeTexture::loadTexture(const std::vector<std::string>& pTexturePath)

@@ -44,7 +44,7 @@ Skybox::Skybox(const std::string pTexturePath)
         texturesPath.push_back(path);
     }
     
-	mTexture = CubeTexture(texturesPath);
+	mTexture = new CubeTexture(texturesPath);
 	
     createMesh();
     
@@ -55,13 +55,14 @@ Skybox::Skybox(const std::string pTexturePath)
 Skybox::Skybox(const Skybox & pSourceSkybox)
 {
 	mMeshes = pSourceSkybox.mMeshes;
-	mTexture = CubeTexture(pSourceSkybox.mTexture);
+	mTexture = new CubeTexture(*pSourceSkybox.mTexture);
 	mTransform = new Transform(*pSourceSkybox.mTransform);
 }
 
 Skybox::~Skybox()
 {
 	if (mTransform) delete mTransform;
+    if (mTexture) delete mTexture;
 }
 
 void Skybox::createMesh()
@@ -171,7 +172,7 @@ void Skybox::draw(Shader * const pShader, const glm::mat4 & pVP)
 	pShader->setMat4("modelMatrix", &mTransform->getChildCombinedTransform());
 	pShader->setMat3("normalMatrix", &normalMatrix);
 
-	mTexture.selectActiveTexture(0);
+	mTexture->selectActiveTexture(0);
 
 	for (Mesh& mesh : mMeshes)
 		mesh.drawContent(pShader);
