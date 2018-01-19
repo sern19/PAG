@@ -74,6 +74,7 @@ Core::Core()
         mLightPassShader=new Shader({{"Shaders/lightPass.vert", GL_VERTEX_SHADER}, {"Shaders/lightPass.frag", GL_FRAGMENT_SHADER}});
 		mSkyboxShader = new Shader({ { "Shaders/skybox.vert", GL_VERTEX_SHADER },{ "Shaders/skybox.frag", GL_FRAGMENT_SHADER } });
         mGBuffer=new GBuffer(SCREEN_WIDTH*SUPERSAMPLING, SCREEN_HEIGHT*SUPERSAMPLING);
+        mPostProcess.push_back(Shader({ { "Shaders/Postprocess/nullShader.vert", GL_VERTEX_SHADER },{ "Shaders/Postprocess/depthOfField.frag", GL_FRAGMENT_SHADER } }));
         mPostProcess.push_back(Shader({ { "Shaders/Postprocess/nullShader.vert", GL_VERTEX_SHADER },{ "Shaders/Postprocess/tonemap.frag", GL_FRAGMENT_SHADER } }));
         //mPostProcess.push_back(Shader({ { "Shaders/Postprocess/nullShader.vert", GL_VERTEX_SHADER },{ "Shaders/Postprocess/fisheye.frag", GL_FRAGMENT_SHADER } }));
         mScene=new Scene(mWindow->getWindow());

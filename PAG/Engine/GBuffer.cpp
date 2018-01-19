@@ -129,6 +129,8 @@ void GBuffer::bindForPostProcess()
     glDrawBuffer(GL_COLOR_ATTACHMENT0+(int)mFramebufferTextures.size()+(int)mTextureSwaper);
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, mFinalTexture[(int)!mTextureSwaper]);
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, mDepthTexture);
 }
 
 void GBuffer::bindForFinalPass()

@@ -90,6 +90,7 @@
 		DD7002A01FC4E37300B198C5 /* Material.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Material.hpp; sourceTree = "<group>"; };
 		DD7002A21FC4F4E200B198C5 /* Materials.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Materials.cpp; sourceTree = "<group>"; };
 		DD7002A31FC4F4E200B198C5 /* Materials.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Materials.hpp; sourceTree = "<group>"; };
+		DD859C8F2011DDB500EB6085 /* depthOfField.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = depthOfField.frag; sourceTree = "<group>"; };
 		DD9E910E1FC64988009C0AE3 /* ModelNodePicker.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ModelNodePicker.cpp; sourceTree = "<group>"; };
 		DD9E910F1FC64988009C0AE3 /* ModelNodePicker.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ModelNodePicker.hpp; sourceTree = "<group>"; };
 		DD9E91111FC6AEA2009C0AE3 /* UserInterface.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = UserInterface.cpp; sourceTree = "<group>"; };
@@ -310,6 +311,7 @@
 				DD19E9B72011D3C800A79BE8 /* nullShader.vert */,
 				DD25524C201197F3000AECA4 /* fisheye.frag */,
 				DD19E9B62011D3C800A79BE8 /* tonemap.frag */,
+				DD859C8F2011DDB500EB6085 /* depthOfField.frag */,
 			);
 			path = Postprocess;
 			sourceTree = "<group>";

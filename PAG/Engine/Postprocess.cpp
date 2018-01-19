@@ -32,6 +32,7 @@ PostProcess::PostProcess(const Shader& pShader): mShader(new Shader(pShader)), m
 {
     mShader->useProgram();
     mShader->setInt("screenMap", 0);
+    mShader->setInt("depthMap", 1);
     mShader->setVec2("screenSize",glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT));
     
 }

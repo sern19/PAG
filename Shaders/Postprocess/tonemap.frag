@@ -1,6 +1,7 @@
 #version 330 core //Wersja GLSL
 
 uniform sampler2D screenMap;
+uniform sampler2D depthMap;
 uniform vec2 screenSize;
 
 out vec4 fragColor;
