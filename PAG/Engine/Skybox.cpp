@@ -30,7 +30,7 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
-Skybox::Skybox(const std::string pTexturePath)
+Skybox::Skybox(const std::string pTexturePath, const float& pIntensity, const glm::vec3& pScale): mIntensity(pIntensity)
 {
     int i;
     std::vector<std::string> texturesPath;
@@ -40,23 +40,25 @@ Skybox::Skybox(const std::string pTexturePath)
         std::string path;
         path+=pTexturePath;
         path+=std::to_string(i);
-        path+=".tga";
+        path+=SKYBOX_TEXTURE_EXTENSION;
         texturesPath.push_back(path);
     }
     
-	mTexture = new CubeTexture(texturesPath);
+	mTexture=new CubeTexture(texturesPath);
 	
     createMesh();
+    setSkyboxTexture();
     
-	mTransform = new Transform();
-	mTransform->setScale(glm::vec3(10, 10, 10));
+	mTransform=new Transform();
+	mTransform->setScale(pScale);
 }
 
 Skybox::Skybox(const Skybox & pSourceSkybox)
 {
-	mMeshes = pSourceSkybox.mMeshes;
-	mTexture = new CubeTexture(*pSourceSkybox.mTexture);
-	mTransform = new Transform(*pSourceSkybox.mTransform);
+	mMeshes=pSourceSkybox.mMeshes;
+    mIntensity=pSourceSkybox.mIntensity;
+	mTexture=new CubeTexture(*pSourceSkybox.mTexture);
+	mTransform=new Transform(*pSourceSkybox.mTransform);
 }
 
 Skybox::~Skybox()
@@ -159,6 +161,11 @@ void Skybox::createMesh()
     mMeshes.push_back(Mesh(planeVertex, planeIndices));
 }
 
+void Skybox::setSkyboxTexture()
+{
+    mTexture->selectActiveTexture(31);
+}
+
 void Skybox::draw(Shader * const pShader, const glm::mat4 & pVP)
 {
     //Ignoruj pozycję kamery
@@ -171,8 +178,9 @@ void Skybox::draw(Shader * const pShader, const glm::mat4 & pVP)
 	pShader->setMat4("MVPMatrix", &MVPMatrix);
 	pShader->setMat4("modelMatrix", &mTransform->getChildCombinedTransform());
 	pShader->setMat3("normalMatrix", &normalMatrix);
-
-	mTexture->selectActiveTexture(0);
+    pShader->setFloat("intensity", mIntensity);
+    
+    setSkyboxTexture();
 
 	for (Mesh& mesh : mMeshes)
 		mesh.drawContent(pShader);

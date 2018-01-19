@@ -53,6 +53,7 @@
 #define DIFFUSE_NAME "diffuse"
 #define SPECULAR_NAME "specular"
 #define NORMAL_NAME "normal"
+#define SKYBOX_TEXTURE_EXTENSION ".jpg"
 #define DIFFUSE_STARTING_INDEX 0
 #define SPECULAR_STARTING_INDEX 5
 #define NORMAL_STARTING_INDEX 10

@@ -25,6 +25,7 @@
 #include "Camera.hpp"
 #include "UserInterface.hpp"
 #include "ModelNodePicker.hpp"
+#include "Model.hpp"
 #include "Config.hpp"
 
 Input::Input(GLFWwindow* const pWindow): mMouseSensivity(MOUSE_SENSIVITY)
@@ -90,19 +91,30 @@ void Input::processMouse(GLFWwindow* const pWindow, UserInterface* const pUI, Sc
     
     if (mIsEditMode && glfwGetMouseButton(pWindow, GLFW_MOUSE_BUTTON_RIGHT)==GLFW_RELEASE&&mIsMouseRightPressed)
     {
+        Model* selectedModel=NULL;
         std::pair<int, int> screenSize;
         std::pair<double, double> mousePos;
         glfwGetWindowSize(pWindow, &screenSize.first, &screenSize.second);
         glfwGetCursorPos(pWindow, &mousePos.first, &mousePos.second);
 		std::pair<Node*, float> closestNode = ModelNodePicker::pickNode(pScene, pModels, screenSize, mousePos);
+        if (closestNode.first!=NULL)
+        {
+            for (Model& model: *pModels)
+            {
+                selectedModel=model.findModelForNode(closestNode.first);
+                if (selectedModel!=NULL) break;
+            }
+        }
 		std::pair<BaseLight*, float> closestLight = ModelNodePicker::pickBaseLight(pLightModel, pScene, pLights, screenSize, mousePos);
 		if (closestNode.second < closestLight.second)
 		{
+            pUI->setSelectedModel(selectedModel);
 			pUI->setSelectedNode(closestNode.first);
 			pUI->setSelectedLight(NULL);
 		}
 		else
 		{
+            pUI->setSelectedModel(NULL);
 			pUI->setSelectedNode(NULL);
 			pUI->setSelectedLight(closestLight.first);
 		}

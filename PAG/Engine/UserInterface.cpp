@@ -20,7 +20,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#define GLFW_INCLUDE_NONE
+
 #include "UserInterface.hpp"
+#include "Model.hpp"
 #include "Node.hpp"
 #include "Transform.hpp"
 #include "imgui.h"
@@ -54,6 +57,7 @@ void UserInterface::updateUITransformData()
         mRotationX=mSelectedTransform->getRotation().x;
         mRotationY=mSelectedTransform->getRotation().y;
         mRotationZ=mSelectedTransform->getRotation().z;
+        if (mSelectedModel!=NULL) mIsReflective=mSelectedModel->getIsRefective();
     }
 }
 
@@ -120,6 +124,7 @@ void UserInterface::updateTransform()
 	temporaryValues.y=mRotationY;
 	temporaryValues.z=mRotationZ;
 	mSelectedTransform->setRotation(temporaryValues);
+    if (mSelectedModel!=NULL) mSelectedModel->setIsRefective(mIsReflective);
 }
 
 void UserInterface::drawTransformUI()
@@ -177,6 +182,12 @@ void UserInterface::drawTransformUI()
     ImGui::InputFloat(":z", &mRotationZ, 0.1f, 1.0f, 3, ImGuiInputTextFlags_CharsDecimal);
     ImGui::PopID();
 
+    if (mSelectedModel!=NULL)
+    {
+        ImGui::PushID(3); //Używamy PushID
+        ImGui::Checkbox("Is reflective?", &mIsReflective);
+        ImGui::PopID();
+    }
     //Przyciski aktualizacji transforma
     if (mSelectedTransform != NULL && ImGui::Button("Reset transform"))
     {
@@ -267,6 +278,11 @@ void UserInterface::setShouldShowInterface(const bool& pShouldShowInterface)
 {
     mShouldShowInterface=pShouldShowInterface;
     if (mSelectedNode!=NULL) mSelectedNode->setIsSelected(pShouldShowInterface);
+}
+
+void UserInterface::setSelectedModel(Model* const pSelectedModel)
+{
+    mSelectedModel=pSelectedModel;
 }
 
 void UserInterface::setSelectedNode(Node * const pSelectedNode)

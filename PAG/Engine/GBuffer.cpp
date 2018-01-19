@@ -40,6 +40,7 @@ void GBuffer::createFramebuffer(const int& pScreenWidth, const int& pScreenHeigh
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER, mFramebuffer);
 
     mFramebufferTextures.resize(GBUFFER_TEXTURE_COUNT);
+    mFinalTexture.resize(2);
     createTextures(pScreenWidth, pScreenHeight);
     
     status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
@@ -57,7 +58,7 @@ void GBuffer::createTextures(const int& pScreenWidth, const int& pScreenHeight)
     int i;
     glGenTextures(mFramebufferTextures.size(), &mFramebufferTextures.at(0));
     glGenTextures(1, &mDepthTexture);
-    glGenTextures(1, &mFinalTexture);
+    glGenTextures(mFinalTexture.size(), &mFinalTexture.at(0));
     
     //Inicjalizacja tekstur dla framebuffera
     for (i=0; i<mFramebufferTextures.size(); i++) {
@@ -74,9 +75,13 @@ void GBuffer::createTextures(const int& pScreenWidth, const int& pScreenHeight)
                  GL_FLOAT_32_UNSIGNED_INT_24_8_REV, NULL);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, mDepthTexture, 0);
     
-    glBindTexture(GL_TEXTURE_2D, mFinalTexture);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, pScreenWidth, pScreenHeight, 0, GL_RGB, GL_FLOAT, NULL);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0+mFramebufferTextures.size(), GL_TEXTURE_2D, mFinalTexture, 0);    
+    for (i=0; i<mFinalTexture.size(); i++) {
+        glBindTexture(GL_TEXTURE_2D, mFinalTexture[i]);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, pScreenWidth, pScreenHeight, 0, GL_RGB, GL_FLOAT, NULL);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0+mFramebufferTextures.size()+i, GL_TEXTURE_2D, mFinalTexture[i], 0);   
+    }
 }
 
 void GBuffer::clearFinalTexture()
@@ -104,14 +109,10 @@ void GBuffer::bindForStencilPass()
     glDrawBuffer(GL_NONE);
 }
 
-void GBuffer::bindForReading()
-{
-    glBindFramebuffer(GL_READ_FRAMEBUFFER, mFramebuffer);
-}
-
-void GBuffer::bindForReadingLightPass()
+void GBuffer::bindForLightPass()
 {
     int i;
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, mFramebuffer);
     glDrawBuffer(GL_COLOR_ATTACHMENT0+mFramebufferTextures.size());
     for (i=0; i<mFramebufferTextures.size(); i++)
     {
@@ -120,11 +121,21 @@ void GBuffer::bindForReadingLightPass()
     }
 }
 
+void GBuffer::bindForPostProcess()
+{
+    mTextureSwaper=!mTextureSwaper;
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, mFramebuffer);
+    glDrawBuffer(GL_COLOR_ATTACHMENT0+mFramebufferTextures.size()+(int)mTextureSwaper);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, mFinalTexture[(int)!mTextureSwaper]);
+}
+
 void GBuffer::bindForFinalPass()
 {
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
     glBindFramebuffer(GL_READ_FRAMEBUFFER, mFramebuffer);
-    glReadBuffer(GL_COLOR_ATTACHMENT0+mFramebufferTextures.size());
+    glReadBuffer(GL_COLOR_ATTACHMENT0+mFramebufferTextures.size()+(int)mTextureSwaper);
+    mTextureSwaper=false;
 }
 
 void GBuffer::setReadBuffer(const unsigned int& textureType)

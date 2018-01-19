@@ -1,6 +1,6 @@
-// Model.hpp
+// Postprocess.cpp
 //
-// Copyright (c) 2017 Krystian Owoc
+// Copyright (c) 2018 Krystian Owoc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -20,39 +20,37 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef Skybox_hpp
-#define Skybox_hpp
+#include "Postprocess.hpp"
 
-#include <stdio.h>
-#include <glad/glad.h>
-#include <glm/glm.hpp>
-#include <vector>
-#include <string>
+#include "Shader.hpp"
+#include "ModelCreator.hpp"
+#include "Model.hpp"
 
-#include "CubeTexture.hpp"
+#include "Config.hpp"
 
-class Transform;
-class Mesh;
-class Shader;
-class Scene;
-
-class Skybox
+PostProcess::PostProcess(const Shader& pShader): mShader(new Shader(pShader)), mPlane(ModelCreator::createPlane())
 {
-private:
-	std::vector<Mesh> mMeshes;
-	CubeTexture* mTexture=NULL;
-	Transform* mTransform = NULL;
-    
-    float mIntensity;
-    
-    void createMesh();
-public:
-    Skybox(const std::string pTexturePath, const float& pIntensity=1.0f, const glm::vec3& pScale=glm::vec3(10));
-	Skybox(const Skybox& pSourceSkybox);
-	~Skybox();
-   
-    void setSkyboxTexture();
-    void draw(Shader* const pShader, const glm::mat4& pVP);
-};
+    GLenum status;
+    mShader->useProgram();
+    mShader->setInt("screenMap", 0);
+    mShader->setVec2("screenSize",glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT));
+}
 
-#endif /* Skybox_hpp */
+PostProcess::PostProcess(const PostProcess& pSourcePostProcess): PostProcess(*pSourcePostProcess.mShader)
+{}
+
+PostProcess::~PostProcess()
+{
+    if (mShader) delete mShader;
+}
+
+void PostProcess::preparePostProcess()
+{
+    mShader->useProgram();
+}
+
+void PostProcess::applyPostProcess()
+{
+    preparePostProcess();
+    mPlane.draw(mShader, glm::mat4(1));
+}

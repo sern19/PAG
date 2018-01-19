@@ -219,6 +219,15 @@ const unsigned int Node::getNodeLevel()
     else return mParentNode->getNodeLevel()+1;
 }
 
+const bool Node::isNode(Node* const pNode)
+{
+    if (pNode==this) return true;
+    for (Node& node: mChildNodes)
+        if (node.isNode(pNode)) return true;
+    
+    return false;
+}
+
 const std::vector<std::pair<glm::vec4, glm::vec4>> Node::getOBBs()
 {
     int i;

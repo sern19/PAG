@@ -71,11 +71,7 @@ const bool ModelNodePicker::checkRayIntersectionOBB(const glm::vec3& pRaySource,
     glm::vec3 skew;
     glm::vec4 perspective;
     
-    glm::decompose(pTransform, scale, rotation, translation, skew, perspective);
-    
-    glm::mat4 correctedTransform;
-    correctedTransform=glm::translate(correctedTransform, translation);
-    correctedTransform=glm::rotate(correctedTransform, glm::angle(rotation), glm::axis(rotation));
+    glm::decompose(pTransform, scale, rotation, translation, skew, perspective);    
     
     std::pair<glm::vec3, glm::vec3> transformedOBB;
     transformedOBB.first=glm::vec3(pOBB.first);
@@ -94,10 +90,10 @@ const bool ModelNodePicker::checkRayIntersectionOBB(const glm::vec3& pRaySource,
     float tMax=FLT_MAX;
     
     //Używana do przeliczania przecięć z płaszczyznami
-    glm::vec3 delta=glm::vec3(correctedTransform[3].x, correctedTransform[3].y, correctedTransform[3].z)-pRaySource;
+    glm::vec3 delta=glm::vec3(pTransform[3].x, pTransform[3].y, pTransform[3].z)-pRaySource;
     
     //Sprawdzanie z dwiema płaszczyznami równoległymi do osi x
-    glm::vec3 axisX(correctedTransform[0].x, correctedTransform[0].y, correctedTransform[0].z);
+    glm::vec3 axisX(pTransform[0].x, pTransform[0].y, pTransform[0].z);
     f=glm::dot(pRayDirection, axisX);
     e=glm::dot(axisX, delta);
     
@@ -121,7 +117,7 @@ const bool ModelNodePicker::checkRayIntersectionOBB(const glm::vec3& pRaySource,
             return false;
     
     //Sprawdzanie z dwiema płaszczyznami równoległymi do osi y
-    glm::vec3 axisY(correctedTransform[0][1], correctedTransform[1][1], correctedTransform[2][1]);
+    glm::vec3 axisY(pTransform[0][1], pTransform[1][1], pTransform[2][1]);
     f=glm::dot(pRayDirection, axisY);
     e=glm::dot(axisY, delta);
     
@@ -145,7 +141,7 @@ const bool ModelNodePicker::checkRayIntersectionOBB(const glm::vec3& pRaySource,
             return false;
     
     //Sprawdzanie z dwiema płaszczyznami równoległymi do osi z
-    glm::vec3 axisZ(correctedTransform[0][2], correctedTransform[1][2], correctedTransform[2][2]);
+    glm::vec3 axisZ(pTransform[0][2], pTransform[1][2], pTransform[2][2]);
     f=glm::dot(pRayDirection, axisZ);
     e=glm::dot(axisZ, delta);
     

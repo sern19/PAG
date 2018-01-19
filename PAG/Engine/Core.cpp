@@ -33,6 +33,7 @@
 #include "Input.hpp"
 #include "Transform.hpp"
 #include "Model.hpp"
+#include "Postprocess.hpp"
 #include "Skybox.hpp"
 #include "ModelCreator.hpp"
 #include "Materials.hpp"
@@ -73,7 +74,7 @@ Core::Core()
         mLightPassShader=new Shader({{"Shaders/lightPass.vert", GL_VERTEX_SHADER}, {"Shaders/lightPass.frag", GL_FRAGMENT_SHADER}});
 		mSkyboxShader = new Shader({ { "Shaders/skybox.vert", GL_VERTEX_SHADER },{ "Shaders/skybox.frag", GL_FRAGMENT_SHADER } });
         mGBuffer=new GBuffer(SCREEN_WIDTH, SCREEN_HEIGHT);
-        //mShader=new Shader({ {"Shaders/debug.vert", GL_VERTEX_SHADER}, {"Shaders/debug.geom", GL_GEOMETRY_SHADER}, {"Shaders/debug.frag", GL_FRAGMENT_SHADER} });
+        mPostProcess.push_back(Shader({ { "Shaders/hdr.vert", GL_VERTEX_SHADER },{ "Shaders/hdr.frag", GL_FRAGMENT_SHADER } }));
         mScene=new Scene(mWindow->getWindow());
         mCamera=new Camera();
         mInput=new Input(mWindow->getWindow());
@@ -95,8 +96,9 @@ Core::Core()
     mLightPassShader->setInt("texCoordsMap", 5);
     //Początkowe wartości skyboxPassa
     mSkyboxShader->useProgram();
-    mSkyboxShader->setInt("cubeMap", 0);
+    mSkyboxShader->setInt("cubeMap", 31);
     mGeometryPassShader->useProgram();
+    mGeometryPassShader->setInt("cubeMap", 31);
 }
 Core::~Core()
 {
@@ -122,6 +124,7 @@ Core::~Core()
 void Core::geometryPass()
 {
     mGeometryPassShader->useProgram();
+    mGeometryPassShader->setVec3("cameraPos", mCamera->getCameraPos());
     mGBuffer->bindForWritingGeometryPass();
     
     //Żeby tylko geometrypass modyfikował głębokość
@@ -137,38 +140,6 @@ void Core::geometryPass()
         for (BaseLight* light: mLights)
             light->drawModel(mLightModel, mGeometryPassShader, mScene->getWVP());
     glDepthMask(GL_FALSE);
-}
-
-void Core::debugPass()
-{
-    mGeometryPassShader->useProgram();
-    glEnable(GL_BLEND);
-    glBlendEquation(GL_FUNC_ADD);
-    glBlendFunc(GL_ONE, GL_ONE);
-    
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    
-    mGBuffer->bindForReading();
-    
-    GLsizei halfWidth = (GLsizei)(SCREEN_WIDTH / 2.0f);
-    GLsizei halfHeight = (GLsizei)(SCREEN_HEIGHT / 2.0f);
-    
-    mGBuffer->setReadBuffer(GBUFFER_TEXTURE_DIFFUSE);
-    glBlitFramebuffer(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT,
-                      0, 0, halfWidth, halfHeight, GL_COLOR_BUFFER_BIT, GL_LINEAR);
-    
-    mGBuffer->setReadBuffer(GBUFFER_TEXTURE_NORMAL);
-    glBlitFramebuffer(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT,
-                      0, halfHeight, halfWidth, SCREEN_HEIGHT, GL_COLOR_BUFFER_BIT, GL_LINEAR);
-    
-    mGBuffer->setReadBuffer(GBUFFER_TEXTURE_POSITION);
-    glBlitFramebuffer(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT,
-                      halfWidth, halfHeight, SCREEN_WIDTH, SCREEN_HEIGHT, GL_COLOR_BUFFER_BIT, GL_LINEAR);
-    
-    mGBuffer->setReadBuffer(GBUFFER_TEXTURE_TEXCOORDS);
-    glBlitFramebuffer(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT,
-                      halfWidth, 0, SCREEN_WIDTH, halfHeight, GL_COLOR_BUFFER_BIT, GL_LINEAR);
 }
 
 void Core::lightPass()
@@ -196,7 +167,7 @@ void Core::lightPass()
         //
         
         //Punktowe lub stożkowe
-        mGBuffer->bindForReadingLightPass();
+        mGBuffer->bindForLightPass();
         mLightPassShader->useProgram();
         glStencilFunc(GL_NOTEQUAL, 0, 0xFF);
         
@@ -220,7 +191,7 @@ void Core::lightPass()
     glDisable(GL_STENCIL_TEST);
 
     //Kierunkowe światło
-    mGBuffer->bindForReadingLightPass();
+    mGBuffer->bindForLightPass();
     mLightPassShader->useProgram();
     //Potrzebujemy blendingu bo każde światło ma swoje własne wywołanie
     glDisable(GL_DEPTH_TEST);
@@ -254,6 +225,12 @@ void Core::skyboxPass()
 
 void Core::finalPass()
 {
+    for (PostProcess& postProcess: mPostProcess)
+    {
+        postProcess.preparePostProcess();
+        mGBuffer->bindForPostProcess();
+        postProcess.applyPostProcess();
+    }
     mGBuffer->bindForFinalPass();
     glBlitFramebuffer(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 
                       0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, GL_COLOR_BUFFER_BIT, GL_LINEAR);
@@ -266,11 +243,10 @@ void Core::display()
     std::chrono::duration<double, std::ratio<1, 1000>> timePoint=time.time_since_epoch(); //W ms
     
     mScene->updateViewSpace(mCamera->generateViewSpace());
-    mLights[3]->setLightPos(glm::vec3(sin(timePoint.count()/1000.0)*2, 0.5, cos(timePoint.count()/1000.0)*2));
+    //mLights[3]->setLightPos(glm::vec3(sin(timePoint.count()/1000.0)*2, 0.5, cos(timePoint.count()/1000.0)*2));
     
     mGBuffer->clearFinalTexture();
     geometryPass();
-    //debugPass();
     lightPass();
 	skyboxPass();
     finalPass();
@@ -282,24 +258,24 @@ void Core::display()
 
 void Core::loadModels()
 {
-    mModels.push_back(Model("Models/2B/source/2B.fbx"));
-	mSkybox=new Skybox("Skybox/");
-    //mModels.push_back(Model("Models/Spheres/source/Spheres.obj", mShader));
-    //mModels.push_back(Model("Models/Plane/source/plane.obj", mShader));
-    mModels[0].getRootNode()->getNodeTransform()->setScale(glm::vec3(0.004,0.004,0.004));
+    //mModels.push_back(Model("Models/2B/source/2B.fbx"));
+    mModels.push_back(Model("Models/Skull/source/Skull.obj",true));
+    mModels[0].getMaterials()->getMaterial(0)->mAmbientColor=glm::vec3(1,1,1);
     mModels[0].getRootNode()->getNodeTransform()->setRotation(glm::vec3(0,-90,0));
-    mModels[0].getRootNode()->getNodeTransform()->setPosition(glm::vec3(0,0,-0.2));
-    //mModels[1].getRootNode()->getNodeTransform()->setScale(glm::vec3(0.3,0.3,0.3));
+    mModels[0].getRootNode()->getNodeTransform()->setPosition(glm::vec3(0.5,0,-0.2));
 
-    //mModels[1].getRootNode()->getNodeTransform()->setPosition(glm::vec3(0,0.3,0));
+//    mModels[0].getRootNode()->getNodeTransform()->setScale(glm::vec3(0.004,0.004,0.004));
+//    mModels[0].getRootNode()->getNodeTransform()->setRotation(glm::vec3(0,-90,0));
+//    mModels[0].getRootNode()->getNodeTransform()->setPosition(glm::vec3(-0.5,0,-0.2));
 
-    //mModels[2].getRootNode()->getNodeTransform()->setRotation(glm::vec3(-90, 0, 0));
     
-    Transform sponzaScaler;
-    sponzaScaler.setScale(glm::vec3(0.005,0.005,0.005));
+    //Transform sponzaScaler;
+    //sponzaScaler.setScale(glm::vec3(0.005,0.005,0.005));
 
-    mModels.push_back(Model("Models/Sponza/source/sponza.obj", &sponzaScaler));
+    //mModels.push_back(Model("Models/Sponza/source/sponza.obj", &sponzaScaler));
     
+    
+    mSkybox=new Skybox("Skybox/");
     mLightModel=new Model("Models/LightSphere/source/LightSphere.obj");
 }
 
@@ -307,12 +283,13 @@ void Core::loadLights()
 {
     int i;
     //Kierunkowe
-    mLights.push_back(new DirectionalLight(glm::vec3(-0.2, -1, 0), glm::vec3(1.0,1.0,1.0), 0));
+    mLights.push_back(new DirectionalLight(glm::vec3(0.8, -1, 0), glm::vec3(1.5,1.5,1.5), 0.3));
     //Spotlighty
-    mLights.push_back(new SpotLight(glm::vec3(-1,1,1), glm::vec3(0,0.7,0)-glm::vec3(-1,1,1), glm::vec3(1.2,0,0), 8, 0.5, 0));
-    mLights.push_back(new SpotLight(glm::vec3(1,1,1), glm::vec3(0,0.7,0)-glm::vec3(1,1,1), glm::vec3(0,0,1.2), 8, 0.5, 0));
+//    mLights.push_back(new SpotLight(glm::vec3(-1,1,1), glm::vec3(0,0.7,0)-glm::vec3(-1,1,1), glm::vec3(1.2,0,0), 8, 0.5, 0));
+//    mLights.push_back(new SpotLight(glm::vec3(1,1,1), glm::vec3(0,0.7,0)-glm::vec3(1,1,1), glm::vec3(0,0,1.2), 8, 0.5, 0));
     //Punktowe
-    mLights.push_back(new PointLight(glm::vec3(2,0.5,2), glm::vec3(1.2,1.2,1.2), 0.1));
+    mLights.push_back(new PointLight(glm::vec3(0.5,0.5,2), glm::vec3(5,1.2,1.2), 0.1));
+    mLights.push_back(new PointLight(glm::vec3(0.5,0.5,-2), glm::vec3(1.2,1.2,5), 0.1));
     
     for (i=0; i<mLights.size(); i++)
         if (mLights[i]) mLights[i]->setLight(mLightPassShader, mScene);

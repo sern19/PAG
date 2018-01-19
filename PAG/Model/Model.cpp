@@ -26,18 +26,19 @@
 #include "Materials.hpp"
 #include "Texture.hpp"
 #include "Node.hpp"
+#include "Shader.hpp"
 #include "Config.hpp"
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
-Model::Model(const std::string& pModelPath)
+Model::Model(const std::string& pModelPath, const bool& pIsReflective): mIsReflective(pIsReflective)
 {
     loadModel(pModelPath);
 }
 
-Model::Model(const std::string& pModelPath, Transform* const pBakeTransform): Model(pModelPath)
+Model::Model(const std::string& pModelPath, Transform* const pBakeTransform, const bool& pIsReflective): Model(pModelPath, pIsReflective)
 {
     bakeTransfrom(pBakeTransform);
 }
@@ -48,7 +49,7 @@ Model::Model(const Node& pRootNode, const Materials& pMaterials)
     mMaterials=new Materials(pMaterials);
 }
 
-Model::Model(const Model& pSourceModel): mModelDirectory(pSourceModel.mModelDirectory), mModelFilename(pSourceModel.mModelFilename), mAdditionalGLSettings(pSourceModel.mAdditionalGLSettings)
+Model::Model(const Model& pSourceModel): mModelDirectory(pSourceModel.mModelDirectory), mModelFilename(pSourceModel.mModelFilename), mAdditionalGLSettings(pSourceModel.mAdditionalGLSettings), mIsReflective(pSourceModel.mIsReflective)
 {
     mRootNode=new Node(*pSourceModel.mRootNode);
     mMaterials=new Materials(*pSourceModel.mMaterials);
@@ -118,6 +119,7 @@ void Model::draw(Shader* const pShader, const glm::mat4& pVP)
     int i;
     if (mRootNode)
     {
+        pShader->setInt("isReflective", mIsReflective);
         for (i=0;i<mAdditionalGLSettings.size();i++)
             glEnable(mAdditionalGLSettings[i]);
         mRootNode->drawContent(pShader, pVP, mMaterials);
@@ -140,6 +142,19 @@ void Model::removeGLSetting(const GLenum& pSetting)
         if (mAdditionalGLSettings[i]==pSetting) mAdditionalGLSettings.erase(mAdditionalGLSettings.begin()+i);
 }
 
+Model* Model::findModelForNode(Node* const pNode)
+{
+    if (mRootNode) 
+    {
+        if (mRootNode->isNode(pNode))
+            return this;
+    }
+    return NULL;
+}
+
+const bool& Model::getIsRefective() { return mIsReflective; }
+void Model::setIsRefective(const bool& pIsReflective) { mIsReflective=pIsReflective; }
+
 Node* const Model::getRootNode() { return mRootNode; }
 Materials* const Model::getMaterials() { return mMaterials; }
 
@@ -153,7 +168,7 @@ const std::pair<Node*,float> Model::testRayOBBIntersection(const glm::vec3& pRay
 {
     int i;
     float distance;
-    if (mRootNode!=NULL) //&& ModelNodePicker::checkRayIntersectionOBB(pRaySource, pRayDirection, calculateModelOBB(), glm::mat4(1.0f), distance) - wyłączone do momentu naprawienia
+    if (mRootNode!=NULL && ModelNodePicker::checkRayIntersectionOBB(pRaySource, pRayDirection, calculateModelOBB(), glm::mat4(1.0f), distance)) // - wyłączone do momentu naprawienia
     {
         std::vector<std::pair<Node*,float>> intersectedNodes=mRootNode->testRayOBBIntersection(pRaySource, pRayDirection);
         

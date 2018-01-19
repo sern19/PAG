@@ -2,11 +2,14 @@
 
 uniform samplerCube cubeMap;
 
+uniform float intensity;
+
 in vec3 fragVertexPosition;
 
 out vec4 fragColor;
 
 void main()
 {
-    fragColor=texture(cubeMap, fragVertexPosition);
+    vec3 skyboxTexel=texture(cubeMap, fragVertexPosition).rgb;
+    fragColor=vec4(skyboxTexel*intensity,1.0f);
 }

@@ -44,6 +44,10 @@ Shader::~Shader()
     if (mProgramHandle) glDeleteProgram(mProgramHandle);
 }
 
+Shader::Shader(const Shader& pSourceShader):Shader(pSourceShader.mShaderPrograms)
+{}
+
+
 std::string Shader::loadFile(const std::string& pFileName)
 {
     std::ifstream inputFile(pFileName);

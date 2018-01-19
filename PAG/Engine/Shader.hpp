@@ -40,6 +40,7 @@ private:
 public:
     Shader();
     Shader(std::vector<std::pair<std::string, GLenum>> pShaderPrograms);
+    Shader(const Shader& pSourceShader);
     ~Shader();
     void linkAndReloadProgram();
     void unlinkAndDeleteProgram();

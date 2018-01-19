@@ -34,7 +34,9 @@ private:
     GLuint mFramebuffer;
     std::vector<GLuint> mFramebufferTextures;
     GLuint mDepthTexture;
-    GLuint mFinalTexture;
+    std::vector<GLuint> mFinalTexture;
+    
+    bool mTextureSwaper=false;
     
     void createFramebuffer(const int& pScreenWidth, const int& pScreenHeight);
     void createTextures(const int& pScreenWidth, const int& pScreenHeight);
@@ -45,7 +47,8 @@ public:
     void bindForWritingGeometryPass();
     void bindForStencilPass();
     void bindForReading();
-    void bindForReadingLightPass();
+    void bindForLightPass();
+    void bindForPostProcess();
     void bindForFinalPass();
     void setReadBuffer(const unsigned int& textureType);
 };

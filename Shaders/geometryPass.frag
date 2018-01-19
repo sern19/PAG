@@ -17,16 +17,19 @@ layout (location = 5) out vec3 texCoordsOut;
 uniform sampler2D diffuseTexture[5];
 uniform sampler2D specularTexture[5];
 uniform sampler2D normalTexture[5];
+uniform samplerCube cubeMap;
 
 uniform vec3 diffuseColor;
 uniform vec3 specularColor;
 uniform vec3 ambientColor;
+uniform vec3 cameraPos;
 
 uniform float shininess;
 
 uniform bool shouldUseDiffuseTexture;
 uniform bool shouldUseSpecularTexture;
 uniform bool shouldUseNormalTexture;
+uniform bool isReflective;
 
 uniform mat3 normalMatrix;
 
@@ -64,10 +67,27 @@ void main()
     }
     else normal=normalize(normalMatrix*fragVertexNormal);
     
-    diffuseOut=diffuse.rgb;
+    if (!isReflective)
+        diffuseOut=diffuse.rgb;
+    else
+    {
+        float air = 1.0;
+        float glass = 1.51714;
+        vec3 I = normalize(fragVertexPosition - cameraPos);
+        vec3 refraction = refract(I, normalize(normal), air/glass);
+        vec3 reflection = reflect(I, normalize(normal));
+        float r0 = ((air-glass)*(air-glass))/((air+glass)*(air+glass));
+        float fresnel=r0 + (1.0 - r0) * pow((1.0 - dot(-I, normal)), 5.0);
+        diffuseOut=mix(texture(cubeMap, normalize(refraction)).rgb, texture(cubeMap, normalize(reflection)).rgb, fresnel);
+    }
     normalOut=normal;
     positionOut=fragVertexPosition;
-    specularColorOut=specular;
+    
+    if (isReflective)
+        specularColorOut=vec3(0,0,0);
+    else
+        specularColorOut=specular.rgb;
+    
     ambientColorOut=ambientColor;
     texCoordsOut=vec3(fragVertexTexture, shininess);
 }

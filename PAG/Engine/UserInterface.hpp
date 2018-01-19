@@ -28,6 +28,7 @@
 #include <vector>
 #include <GLFW/glfw3.h>
 
+class Model;
 class Node;
 class BaseLight;
 class Transform;
@@ -37,13 +38,15 @@ class UserInterface
 private:
     bool mShouldShowInterface=false;
 	Node* mSelectedNode=NULL;
+    Model* mSelectedModel=NULL;
 	BaseLight* mSelectedLight=NULL;
 	Transform* mSelectedTransform=NULL;
 
 	int mMainMenuHeight;
 
-	//Stringi do wyświetlania
+	//Do wyświetlania
 	float mTranslateX, mTranslateY, mTranslateZ, mScaleX, mScaleY, mScaleZ, mRotationX, mRotationY, mRotationZ;
+    bool mIsReflective;
 
 	float mLightX, mLightY, mLightZ, mLightR, mLightG, mLightB, mLightAttenuation, mLightAmbient, mLightConeX, mLightConeY, mLightConeZ, mLightConeAngle;
     
@@ -58,6 +61,7 @@ public:
     UserInterface(GLFWwindow* const pWindow);
     void draw();
     void setShouldShowInterface(const bool& pShouldShowInterface);
+    void setSelectedModel(Model* const pSelectedModel);
 	void setSelectedNode(Node* const pSelectedNode);
 	void setSelectedLight(BaseLight* const pSelectedLight);
 };

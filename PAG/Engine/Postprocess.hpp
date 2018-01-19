@@ -1,6 +1,6 @@
-// Core.hpp
+// Postprocess.hpp
 //
-// Copyright (c) 2017 Krystian Owoc
+// Copyright (c) 2018 Krystian Owoc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -20,60 +20,28 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef Core_hpp
-#define Core_hpp
-
-#define GLFW_INCLUDE_NONE
+#ifndef Postprocess_hpp
+#define Postprocess_hpp
 
 #include <stdio.h>
-#include <glm/glm.hpp>
-#include <vector>
-#include <glad/glad.h> //Do pobierania funkcji
-#include <GLFW/glfw3.h> //Główna pętla i inicjalizacja
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+#include "Model.hpp"
 
-class Window;
 class Shader;
-class GBuffer;
-class Scene;
-class Camera;
-class Input;
-class Model;
-class PostProcess;
-class Skybox;
-class BaseLight;
-class UserInterface;
 
-class Core
+class PostProcess
 {
 private:
-    Window* mWindow=NULL;
-    Shader* mGeometryPassShader=NULL;
-    Shader* mStencilTestShader=NULL;
-    Shader* mLightPassShader=NULL;
-	Shader* mSkyboxShader = NULL;
-    GBuffer* mGBuffer=NULL;
-    Scene* mScene=NULL;
-    Camera* mCamera=NULL;
-    Input* mInput=NULL;
-    UserInterface* mUI=NULL;
+    Shader* mShader=NULL;
     
-    Model* mLightModel=NULL;
-	Skybox* mSkybox = NULL;
-    std::vector<Model> mModels;
-    std::vector<BaseLight*> mLights;
-    std::vector<PostProcess> mPostProcess;
-    
-    void geometryPass();
-    void lightPass();
-	void skyboxPass();
-    void finalPass();
-    void display();
-    void loadModels();
-    void loadLights();
+    Model mPlane;
 public:
-    Core();
-    ~Core();
-    void mainLoop();
+    PostProcess(const Shader& pShader);
+    PostProcess(const PostProcess& pSourcePostProcess);
+    ~PostProcess();
+    void preparePostProcess();
+    void applyPostProcess();
 };
 
-#endif /* Core_hpp */
+#endif /* Postprocess_hpp */

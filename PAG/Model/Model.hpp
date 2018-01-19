@@ -44,20 +44,29 @@ private:
     std::string mModelDirectory;
     std::string mModelFilename;
     
+    bool mIsReflective;
+    
     void loadModel(const std::string& pModelPath);
     const std::pair<glm::vec4, glm::vec4> calculateModelOBB();
     void bakeTransfrom(Transform* const pBakeTransform);
 public:
     Model(const Node& pRootNode, const Materials& pMaterials);
-    Model(const std::string& pModelPath);
-    Model(const std::string& pModelPath, Transform* const pBakeTransform);
+    Model(const std::string& pModelPath, const bool& pIsReflective=false);
+    Model(const std::string& pModelPath, Transform* const pBakeTransform, const bool& pIsReflective=false);
     Model(const Model& pSourceModel);
     ~Model();
     void draw(Shader* const pShader, const glm::mat4& pVP);
     void addGLSetting(const GLenum& pSetting);
     void removeGLSetting(const GLenum& pSetting);
+    
+    Model* findModelForNode(Node* const pNode);
+    
     Node* const getRootNode();
     Materials* const getMaterials();
+    
+    const bool& getIsRefective();
+    void setIsRefective(const bool& pIsReflective);
+    
     const std::pair<Node*,float> testRayOBBIntersection(const glm::vec3& pRaySource, const glm::vec3& pRayDirection); //To samo co w Node, OBB dla optymalizacji
 };
 
