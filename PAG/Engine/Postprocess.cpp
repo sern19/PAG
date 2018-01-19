@@ -30,7 +30,6 @@
 
 PostProcess::PostProcess(const Shader& pShader): mShader(new Shader(pShader)), mPlane(ModelCreator::createPlane())
 {
-    GLenum status;
     mShader->useProgram();
     mShader->setInt("screenMap", 0);
     mShader->setVec2("screenSize",glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT));

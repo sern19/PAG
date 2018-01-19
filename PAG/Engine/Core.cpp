@@ -73,8 +73,8 @@ Core::Core()
         mStencilTestShader=new Shader({{"Shaders/lightPass.vert", GL_VERTEX_SHADER}, {"Shaders/nullShader.frag", GL_FRAGMENT_SHADER}});
         mLightPassShader=new Shader({{"Shaders/lightPass.vert", GL_VERTEX_SHADER}, {"Shaders/lightPass.frag", GL_FRAGMENT_SHADER}});
 		mSkyboxShader = new Shader({ { "Shaders/skybox.vert", GL_VERTEX_SHADER },{ "Shaders/skybox.frag", GL_FRAGMENT_SHADER } });
-        mGBuffer=new GBuffer(SCREEN_WIDTH, SCREEN_HEIGHT);
-        mPostProcess.push_back(Shader({ { "Shaders/hdr.vert", GL_VERTEX_SHADER },{ "Shaders/hdr.frag", GL_FRAGMENT_SHADER } }));
+        mGBuffer=new GBuffer(SCREEN_WIDTH*SUPERSAMPLING, SCREEN_HEIGHT*SUPERSAMPLING);
+        mPostProcess.push_back(Shader({ { "Shaders/Postprocess/nullShader.vert", GL_VERTEX_SHADER },{ "Shaders/Postprocess/fisheye.frag", GL_FRAGMENT_SHADER } }));
         mScene=new Scene(mWindow->getWindow());
         mCamera=new Camera();
         mInput=new Input(mWindow->getWindow());
@@ -87,13 +87,13 @@ Core::Core()
     glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     //Początkowe wartości lightPassa
     mLightPassShader->useProgram();
-    mLightPassShader->setVec2("screenSize",glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT));
-    mLightPassShader->setInt("diffuseMap", 0);
-    mLightPassShader->setInt("normalMap", 1);
-    mLightPassShader->setInt("positionMap", 2);
-    mLightPassShader->setInt("specularColorMap", 3);
-    mLightPassShader->setInt("ambientColorMap", 4);
-    mLightPassShader->setInt("texCoordsMap", 5);
+    mLightPassShader->set("screenSize",glm::vec2(SCREEN_WIDTH*SUPERSAMPLING, SCREEN_HEIGHT*SUPERSAMPLING));
+    mLightPassShader->set("diffuseMap", (int)0);
+    mLightPassShader->set("normalMap", (int)1);
+    mLightPassShader->set("positionMap", (int)2);
+    mLightPassShader->set("specularColorMap", (int)3);
+    mLightPassShader->set("ambientColorMap", (int)4);
+    mLightPassShader->set("texCoordsMap", (int)5);
     //Początkowe wartości skyboxPassa
     mSkyboxShader->useProgram();
     mSkyboxShader->setInt("cubeMap", 31);
@@ -102,12 +102,8 @@ Core::Core()
 }
 Core::~Core()
 {
-    if (mLights.size()!=0)
-    {
-        int i;
-        for (BaseLight* light: mLights)
-            if (light) delete light;
-    }
+    for (BaseLight* light: mLights)
+        if (light) delete light;
     if (mLightModel) delete mLightModel;
 	if (mSkybox) delete mSkybox;
     if (mWindow) delete mWindow;
@@ -148,6 +144,8 @@ void Core::lightPass()
     mLightPassShader->useProgram();
     mLightPassShader->setVec3("cameraPos", mCamera->getCameraPos());
 
+    glDisable(GL_DEPTH_TEST);
+    
     //Punktowe
     glEnable(GL_STENCIL_TEST);
     
@@ -194,7 +192,6 @@ void Core::lightPass()
     mGBuffer->bindForLightPass();
     mLightPassShader->useProgram();
     //Potrzebujemy blendingu bo każde światło ma swoje własne wywołanie
-    glDisable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
     glBlendEquation(GL_FUNC_ADD);
     glBlendFunc(GL_ONE, GL_ONE);
@@ -210,7 +207,6 @@ void Core::lightPass()
 
 void Core::skyboxPass()
 {
-    glDepthMask(GL_TRUE);
     glEnable(GL_DEPTH_TEST);
     
     glDepthFunc(GL_LEQUAL);
@@ -219,7 +215,6 @@ void Core::skyboxPass()
     glDepthFunc(GL_LESS);
     
     glDisable(GL_DEPTH_TEST);
-    glDepthMask(GL_FALSE);
 }
 
 
@@ -232,13 +227,12 @@ void Core::finalPass()
         postProcess.applyPostProcess();
     }
     mGBuffer->bindForFinalPass();
-    glBlitFramebuffer(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 
-                      0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+    glBlitFramebuffer(0, 0, SCREEN_WIDTH*SUPERSAMPLING, SCREEN_HEIGHT*SUPERSAMPLING, 
+                      0, 0, SCREEN_WIDTH*SUPERSAMPLING, SCREEN_HEIGHT*SUPERSAMPLING, GL_COLOR_BUFFER_BIT, GL_LINEAR);
 }
 
 void Core::display()
 {
-    int i;
     std::chrono::high_resolution_clock::time_point time=std::chrono::high_resolution_clock::now();
     std::chrono::duration<double, std::ratio<1, 1000>> timePoint=time.time_since_epoch(); //W ms
     

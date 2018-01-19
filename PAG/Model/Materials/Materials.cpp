@@ -44,9 +44,9 @@ Materials::Materials(const Material& pMaterial, const Texture& pDiffuseTexture):
 std::string Materials::getTextureName(const aiString& pTexturePath)
 {
     std::string output=pTexturePath.C_Str();
-    int positionToCut=output.rfind("/")+1;
+    int positionToCut=(int)output.rfind("/")+1;
     if (output.rfind("/")+1==0)
-        positionToCut=output.rfind("\\")+1;
+        positionToCut=(int)output.rfind("\\")+1;
     output=output.substr(positionToCut);
     return output;
 }

@@ -159,7 +159,6 @@ Mesh Node::processMesh(const aiMesh* const pMesh, const aiScene* const pScene, M
 
 void Node::updateCache()
 {
-    int i;
     if (mParentNode==NULL) mCachedTransform=mElementTransform->getChildCombinedTransform();
     else mCachedTransform=mParentNode->mCachedTransform*mElementTransform->getChildCombinedTransform();
     for (Node& childNode: mChildNodes)
@@ -168,7 +167,6 @@ void Node::updateCache()
 
 void Node::updateChildrenPointers(Node* const pParent)
 {
-    int i;
     if (mParentNode!=NULL && pParent!=this) mParentNode=pParent;
     for (Node& childNode: mChildNodes)
         childNode.updateChildrenPointers(this);
@@ -176,7 +174,6 @@ void Node::updateChildrenPointers(Node* const pParent)
 
 void Node::drawContent(Shader *const pShader, const glm::mat4& pVP, Materials* const pTextures)
 {
-    int i;
     if (mElementTransform&&mElementTransform->getNeedsUpdateCache()) updateCache();
     
     glm::mat4 MVPMatrix=pVP*mCachedTransform;
@@ -194,7 +191,6 @@ void Node::drawContent(Shader *const pShader, const glm::mat4& pVP, Materials* c
 
 void Node::setIsSelected(const bool& pIsSelected)
 {
-    int i;
     for (Mesh& mesh: mMeshes)
         mesh.setIsSelected(pIsSelected);
     for (Node& childNode: mChildNodes)
@@ -230,7 +226,6 @@ const bool Node::isNode(Node* const pNode)
 
 const std::vector<std::pair<glm::vec4, glm::vec4>> Node::getOBBs()
 {
-    int i;
     std::vector<std::pair<glm::vec4, glm::vec4>> output;
     
     if (mElementTransform&&mElementTransform->getNeedsUpdateCache()) updateCache();
@@ -255,7 +250,7 @@ const std::vector<std::pair<glm::vec4, glm::vec4>> Node::getOBBs()
     return output;
 }
 
-const unsigned int Node::getChildrensCount() { return mChildNodes.size(); }
+const unsigned int Node::getChildrensCount() { return (unsigned int)mChildNodes.size(); }
 Transform* const Node::getNodeTransform() { return mElementTransform; }
 Node * const Node::getParentNode() { return mParentNode; }
 Node* const Node::getChildren(const unsigned int& pChildNumber)

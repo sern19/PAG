@@ -58,6 +58,8 @@
 		DD041AE61FC3902900AC2AF7 /* Model.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Model.hpp; sourceTree = "<group>"; };
 		DD041AE91FC3AF6500AC2AF7 /* Node.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Node.cpp; sourceTree = "<group>"; };
 		DD041AEA1FC3AF6500AC2AF7 /* Node.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Node.hpp; sourceTree = "<group>"; };
+		DD19E9B62011D3C800A79BE8 /* tonemap.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = tonemap.frag; sourceTree = "<group>"; };
+		DD19E9B72011D3C800A79BE8 /* nullShader.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = nullShader.vert; sourceTree = "<group>"; };
 		DD21E07C201002D5007F606D /* ModelCreator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ModelCreator.cpp; sourceTree = "<group>"; };
 		DD21E07D201002D5007F606D /* ModelCreator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ModelCreator.hpp; sourceTree = "<group>"; };
 		DD21E07F20101449007F606D /* lightPass.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = lightPass.vert; sourceTree = "<group>"; };
@@ -68,8 +70,7 @@
 		DD25524820114DCB000AECA4 /* skybox.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = skybox.vert; sourceTree = "<group>"; };
 		DD25524920118D18000AECA4 /* Postprocess.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Postprocess.cpp; sourceTree = "<group>"; };
 		DD25524A20118D18000AECA4 /* Postprocess.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Postprocess.hpp; sourceTree = "<group>"; };
-		DD25524C201197F3000AECA4 /* hdr.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = hdr.frag; sourceTree = "<group>"; };
-		DD25524D201197F3000AECA4 /* hdr.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = hdr.vert; sourceTree = "<group>"; };
+		DD25524C201197F3000AECA4 /* fisheye.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = fisheye.frag; sourceTree = "<group>"; };
 		DD3705CC1FD916ED000DE9C4 /* DirectionalLight.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DirectionalLight.cpp; sourceTree = "<group>"; };
 		DD3705CD1FD916ED000DE9C4 /* DirectionalLight.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DirectionalLight.hpp; sourceTree = "<group>"; };
 		DD3705CF1FD91A58000DE9C4 /* SpotLight.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SpotLight.cpp; sourceTree = "<group>"; };
@@ -303,6 +304,16 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		DD19E9B52011D0B600A79BE8 /* Postprocess */ = {
+			isa = PBXGroup;
+			children = (
+				DD19E9B72011D3C800A79BE8 /* nullShader.vert */,
+				DD25524C201197F3000AECA4 /* fisheye.frag */,
+				DD19E9B62011D3C800A79BE8 /* tonemap.frag */,
+			);
+			path = Postprocess;
+			sourceTree = "<group>";
+		};
 		DD3B1AB71FBF7D90005E9485 = {
 			isa = PBXGroup;
 			children = (
@@ -379,6 +390,7 @@
 		DD79D2BE1FBF8DE200558940 /* Shaders */ = {
 			isa = PBXGroup;
 			children = (
+				DD19E9B52011D0B600A79BE8 /* Postprocess */,
 				DDF9C625200FD273005F68B7 /* debug.frag */,
 				DDF9C622200FD273005F68B7 /* debug.geom */,
 				DDF9C623200FD273005F68B7 /* debug.vert */,
@@ -389,8 +401,6 @@
 				DDEF9D3F2010652200CCF4AE /* nullShader.frag */,
 				DD25524720114DCB000AECA4 /* skybox.frag */,
 				DD25524820114DCB000AECA4 /* skybox.vert */,
-				DD25524C201197F3000AECA4 /* hdr.frag */,
-				DD25524D201197F3000AECA4 /* hdr.vert */,
 			);
 			path = Shaders;
 			sourceTree = "<group>";
@@ -723,7 +733,7 @@
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
@@ -778,7 +788,7 @@
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;

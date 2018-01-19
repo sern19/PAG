@@ -101,7 +101,7 @@ void Mesh::drawContent(Shader* const pShader)
 {
 	//Bindowanie tablicy obiektów
 	glBindVertexArray(mVertexArrayObject);
-	glDrawElements(GL_TRIANGLES, mIndices.size(), GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, (int)mIndices.size(), GL_UNSIGNED_INT, 0);
 	glBindVertexArray(NULL);
 }
 
@@ -112,7 +112,7 @@ void Mesh::drawContent(Shader* const pShader, Materials* const pMaterials)
     
     //Bindowanie tablicy obiektów
     glBindVertexArray(mVertexArrayObject);
-    glDrawElements(GL_TRIANGLES, mIndices.size(), GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_TRIANGLES, (int)mIndices.size(), GL_UNSIGNED_INT, 0);
     glBindVertexArray(NULL);
 }
 
