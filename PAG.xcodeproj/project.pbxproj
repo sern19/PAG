@@ -233,6 +233,8 @@
 		DD041AE21FC38E3400AC2AF7 /* Scene */ = {
 			isa = PBXGroup;
 			children = (
+				DD25524420114D86000AECA4 /* Skybox.cpp */,
+				DD25524520114D86000AECA4 /* Skybox.hpp */,
 				DDD8782B1FBF8C9A00109AC6 /* Camera.cpp */,
 				DDD878211FBF8C9900109AC6 /* Camera.hpp */,
 				DDD8782C1FBF8C9A00109AC6 /* Input.cpp */,
@@ -265,8 +267,6 @@
 				DDD878231FBF8C9900109AC6 /* Core.hpp */,
 				DDD8782E1FBF8C9A00109AC6 /* Shader.cpp */,
 				DDD8781E1FBF8C9900109AC6 /* Shader.hpp */,
-				DD25524420114D86000AECA4 /* Skybox.cpp */,
-				DD25524520114D86000AECA4 /* Skybox.hpp */,
 				DDD878201FBF8C9900109AC6 /* Window.cpp */,
 				DDD878251FBF8C9900109AC6 /* Window.hpp */,
 				DD9E91111FC6AEA2009C0AE3 /* UserInterface.cpp */,

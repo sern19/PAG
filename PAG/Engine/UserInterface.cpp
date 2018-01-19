@@ -33,6 +33,7 @@
 #include "PointLight.hpp"
 #include "DirectionalLight.hpp"
 #include "SpotLight.hpp"
+#include "Postprocess.hpp"
 
 #include <algorithm>
 #include <iterator>
@@ -241,7 +242,23 @@ void UserInterface::drawLightUI()
     ImGui::End();
 }
 
-void UserInterface::draw()
+void UserInterface::drawPostprocessUI(std::vector<PostProcess>& pPostProcess) { 
+    static bool* temporaryBool = NULL; //Fix dla pokazującego się przyciusku X
+    int i;
+    
+    ImGui::SetNextWindowPos(ImVec2(mMainMenuWidth-240, mMainMenuHeight));
+    ImGui::SetNextWindowSize(ImVec2(240, 480));
+    ImGui::Begin("PostProcess Manager", temporaryBool, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
+    for (i=0; i<(int)pPostProcess.size(); i++)
+    {
+        std::string name="PostProcess ";
+        name+=std::to_string(i);
+        ImGui::Checkbox(name.c_str(), pPostProcess[i].isEnabled());
+    }
+    ImGui::End();
+}
+
+void UserInterface::draw(std::vector<PostProcess>& pPostProcess)
 {    
     ImGui_ImplGlfwGL3_NewFrame();
     if (mShouldShowInterface)
@@ -249,7 +266,9 @@ void UserInterface::draw()
         ImGui::BeginMainMenuBar();
         ImGui::Text("Edit mode - press 'T' to enter explore mode");
         mMainMenuHeight=ImGui::GetWindowSize().y;
+        mMainMenuWidth=ImGui::GetWindowSize().x;
         ImGui::EndMainMenuBar();
+        drawPostprocessUI(pPostProcess);
         if (mSelectedTransform!=NULL) drawTransformUI();
         else if (mSelectedLight!=NULL) drawLightUI();
 		else
@@ -306,3 +325,4 @@ void UserInterface::setSelectedLight(BaseLight* const pSelectedLight)
 		updateUILightData();
 	}
 }
+

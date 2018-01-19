@@ -74,9 +74,9 @@ Core::Core()
         mLightPassShader=new Shader({{"Shaders/lightPass.vert", GL_VERTEX_SHADER}, {"Shaders/lightPass.frag", GL_FRAGMENT_SHADER}});
 		mSkyboxShader = new Shader({ { "Shaders/skybox.vert", GL_VERTEX_SHADER },{ "Shaders/skybox.frag", GL_FRAGMENT_SHADER } });
         mGBuffer=new GBuffer(SCREEN_WIDTH*SUPERSAMPLING, SCREEN_HEIGHT*SUPERSAMPLING);
-        mPostProcess.push_back(Shader({ { "Shaders/Postprocess/nullShader.vert", GL_VERTEX_SHADER },{ "Shaders/Postprocess/depthOfField.frag", GL_FRAGMENT_SHADER } }));
         mPostProcess.push_back(Shader({ { "Shaders/Postprocess/nullShader.vert", GL_VERTEX_SHADER },{ "Shaders/Postprocess/tonemap.frag", GL_FRAGMENT_SHADER } }));
-        //mPostProcess.push_back(Shader({ { "Shaders/Postprocess/nullShader.vert", GL_VERTEX_SHADER },{ "Shaders/Postprocess/fisheye.frag", GL_FRAGMENT_SHADER } }));
+        mPostProcess.push_back(PostProcess(Shader({ { "Shaders/Postprocess/nullShader.vert", GL_VERTEX_SHADER },{ "Shaders/Postprocess/depthOfField.frag", GL_FRAGMENT_SHADER } }), false));
+        mPostProcess.push_back(PostProcess(Shader({ { "Shaders/Postprocess/nullShader.vert", GL_VERTEX_SHADER },{ "Shaders/Postprocess/fisheye.frag", GL_FRAGMENT_SHADER } }), false));
         mScene=new Scene(mWindow->getWindow());
         mCamera=new Camera();
         mInput=new Input(mWindow->getWindow());
@@ -224,7 +224,7 @@ void Core::finalPass()
 {
     for (PostProcess& postProcess: mPostProcess)
     {
-        if (postProcess.isEnabled())
+        if (*postProcess.isEnabled())
         {
             postProcess.preparePostProcess();
             mGBuffer->bindForPostProcess();
@@ -250,14 +250,18 @@ void Core::display()
 	skyboxPass();
     finalPass();
 
-    mUI->draw();
+    mUI->draw(mPostProcess);
     glfwSwapBuffers(mWindow->getWindow()); //Swap front- i backbuffer
     glfwPollEvents(); //Poll dla eventów
 }
 
 void Core::loadModels()
 {
-    //mModels.push_back(Model("Models/2B/source/2B.fbx"));
+//    mModels.push_back(ModelCreator::createPlane());
+//    mModels[0].getRootNode()->getNodeTransform()->setRotation(glm::vec3(90,0,0));
+//    mModels[0].getRootNode()->getNodeTransform()->setScale(glm::vec3(-10,10,10));
+//    mModels[0].getRootNode()->getNodeTransform()->setPosition(glm::vec3(0.5,-1,-0.2));
+//    mModels[0].getMaterials()->getMaterial(0)->mAmbientColor=glm::vec3(1,1,1);
     mModels.push_back(Model("Models/Skull/source/Skull.obj",true));
     mModels[0].getMaterials()->getMaterial(0)->mAmbientColor=glm::vec3(1,1,1);
     mModels[0].getRootNode()->getNodeTransform()->setRotation(glm::vec3(0,-90,0));

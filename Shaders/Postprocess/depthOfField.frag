@@ -8,7 +8,7 @@ out vec4 fragColor;
 
 const float focus=0.1;
 const float blurclamp=0.02;  // max blur amount
-const float bias=0.3;    //aperture - bigger values for shallower depth of field
+const float bias=0.05;    //aperture - bigger values for shallower depth of field
 
 vec2 calcCoords()
 {

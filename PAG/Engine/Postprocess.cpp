@@ -28,8 +28,9 @@
 
 #include "Config.hpp"
 
-PostProcess::PostProcess(const Shader& pShader): mShader(new Shader(pShader)), mPlane(ModelCreator::createPlane())
+PostProcess::PostProcess(const Shader& pShader, const bool& pIsEnabled): mShader(new Shader(pShader)), mPlane(ModelCreator::createPlane())
 {
+    mIsEnabled=new bool(pIsEnabled);
     mShader->useProgram();
     mShader->setInt("screenMap", 0);
     mShader->setInt("depthMap", 1);
@@ -38,11 +39,14 @@ PostProcess::PostProcess(const Shader& pShader): mShader(new Shader(pShader)), m
 }
 
 PostProcess::PostProcess(const PostProcess& pSourcePostProcess): PostProcess(*pSourcePostProcess.mShader)
-{}
+{
+    *mIsEnabled=*pSourcePostProcess.mIsEnabled;
+}
 
 PostProcess::~PostProcess()
 {
     if (mShader) delete mShader;
+    if (mIsEnabled) delete mIsEnabled;
 }
 
 void PostProcess::preparePostProcess()
@@ -56,7 +60,6 @@ void PostProcess::applyPostProcess()
     mPlane.draw(mShader, glm::mat4(1));
 }
 
-void PostProcess::setEnabled(const bool &pIsEnabled) { mIsEnabled=pIsEnabled; }
-const bool &PostProcess::isEnabled() { return mIsEnabled; }
+bool* PostProcess::isEnabled() { return mIsEnabled; }
 
 

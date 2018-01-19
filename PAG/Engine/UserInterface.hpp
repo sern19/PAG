@@ -32,6 +32,7 @@ class Model;
 class Node;
 class BaseLight;
 class Transform;
+class PostProcess;
 
 class UserInterface
 {
@@ -41,8 +42,8 @@ private:
     Model* mSelectedModel=NULL;
 	BaseLight* mSelectedLight=NULL;
 	Transform* mSelectedTransform=NULL;
-
-	int mMainMenuHeight;
+    
+	int mMainMenuHeight, mMainMenuWidth;
 
 	//Do wyświetlania
 	float mTranslateX, mTranslateY, mTranslateZ, mScaleX, mScaleY, mScaleZ, mRotationX, mRotationY, mRotationZ;
@@ -57,9 +58,10 @@ private:
 
 	void drawTransformUI();
 	void drawLightUI();
+    void drawPostprocessUI(std::vector<PostProcess>& pPostProcess);
 public:
     UserInterface(GLFWwindow* const pWindow);
-    void draw();
+    void draw(std::vector<PostProcess>& pPostProcess);
     void setShouldShowInterface(const bool& pShouldShowInterface);
     void setSelectedModel(Model* const pSelectedModel);
 	void setSelectedNode(Node* const pSelectedNode);
