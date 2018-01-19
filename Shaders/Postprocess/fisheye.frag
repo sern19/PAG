@@ -3,13 +3,11 @@
 uniform sampler2D screenMap;
 uniform vec2 screenSize;
 
-uniform float renderScale;
-
 out vec4 fragColor;
 
 vec2 calcCoords()
 {
-    return (gl_FragCoord.xy/renderScale)/screenSize;
+    return (gl_FragCoord.xy/screenSize);
 }
 
 void main()

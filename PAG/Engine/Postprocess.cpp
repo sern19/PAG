@@ -33,6 +33,7 @@ PostProcess::PostProcess(const Shader& pShader): mShader(new Shader(pShader)), m
     mShader->useProgram();
     mShader->setInt("screenMap", 0);
     mShader->setVec2("screenSize",glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT));
+    
 }
 
 PostProcess::PostProcess(const PostProcess& pSourcePostProcess): PostProcess(*pSourcePostProcess.mShader)
@@ -53,3 +54,8 @@ void PostProcess::applyPostProcess()
     preparePostProcess();
     mPlane.draw(mShader, glm::mat4(1));
 }
+
+void PostProcess::setEnabled(const bool &pIsEnabled) { mIsEnabled=pIsEnabled; }
+const bool &PostProcess::isEnabled() { return mIsEnabled; }
+
+

@@ -74,7 +74,8 @@ Core::Core()
         mLightPassShader=new Shader({{"Shaders/lightPass.vert", GL_VERTEX_SHADER}, {"Shaders/lightPass.frag", GL_FRAGMENT_SHADER}});
 		mSkyboxShader = new Shader({ { "Shaders/skybox.vert", GL_VERTEX_SHADER },{ "Shaders/skybox.frag", GL_FRAGMENT_SHADER } });
         mGBuffer=new GBuffer(SCREEN_WIDTH*SUPERSAMPLING, SCREEN_HEIGHT*SUPERSAMPLING);
-        mPostProcess.push_back(Shader({ { "Shaders/Postprocess/nullShader.vert", GL_VERTEX_SHADER },{ "Shaders/Postprocess/fisheye.frag", GL_FRAGMENT_SHADER } }));
+        mPostProcess.push_back(Shader({ { "Shaders/Postprocess/nullShader.vert", GL_VERTEX_SHADER },{ "Shaders/Postprocess/tonemap.frag", GL_FRAGMENT_SHADER } }));
+        //mPostProcess.push_back(Shader({ { "Shaders/Postprocess/nullShader.vert", GL_VERTEX_SHADER },{ "Shaders/Postprocess/fisheye.frag", GL_FRAGMENT_SHADER } }));
         mScene=new Scene(mWindow->getWindow());
         mCamera=new Camera();
         mInput=new Input(mWindow->getWindow());
@@ -87,13 +88,13 @@ Core::Core()
     glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     //Początkowe wartości lightPassa
     mLightPassShader->useProgram();
-    mLightPassShader->set("screenSize",glm::vec2(SCREEN_WIDTH*SUPERSAMPLING, SCREEN_HEIGHT*SUPERSAMPLING));
-    mLightPassShader->set("diffuseMap", (int)0);
-    mLightPassShader->set("normalMap", (int)1);
-    mLightPassShader->set("positionMap", (int)2);
-    mLightPassShader->set("specularColorMap", (int)3);
-    mLightPassShader->set("ambientColorMap", (int)4);
-    mLightPassShader->set("texCoordsMap", (int)5);
+    mLightPassShader->setVec2("screenSize",glm::vec2(SCREEN_WIDTH*SUPERSAMPLING, SCREEN_HEIGHT*SUPERSAMPLING));
+    mLightPassShader->setInt("diffuseMap", 0);
+    mLightPassShader->setInt("normalMap", 1);
+    mLightPassShader->setInt("positionMap", 2);
+    mLightPassShader->setInt("specularColorMap", 3);
+    mLightPassShader->setInt("ambientColorMap", 4);
+    mLightPassShader->setInt("texCoordsMap", 5);
     //Początkowe wartości skyboxPassa
     mSkyboxShader->useProgram();
     mSkyboxShader->setInt("cubeMap", 31);
@@ -222,9 +223,12 @@ void Core::finalPass()
 {
     for (PostProcess& postProcess: mPostProcess)
     {
-        postProcess.preparePostProcess();
-        mGBuffer->bindForPostProcess();
-        postProcess.applyPostProcess();
+        if (postProcess.isEnabled())
+        {
+            postProcess.preparePostProcess();
+            mGBuffer->bindForPostProcess();
+            postProcess.applyPostProcess();
+        }
     }
     mGBuffer->bindForFinalPass();
     glBlitFramebuffer(0, 0, SCREEN_WIDTH*SUPERSAMPLING, SCREEN_HEIGHT*SUPERSAMPLING, 
@@ -288,7 +292,7 @@ void Core::loadLights()
     for (i=0; i<mLights.size(); i++)
         if (mLights[i]) mLights[i]->setLight(mLightPassShader, mScene);
     
-    mLightPassShader->setInt("numberOfActiveLights", mLights.size());
+    mLightPassShader->setInt("numberOfActiveLights", (int)mLights.size());
 }
 
 void Core::mainLoop()

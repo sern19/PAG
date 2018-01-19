@@ -35,6 +35,8 @@ class PostProcess
 private:
     Shader* mShader=NULL;
     
+    bool mIsEnabled=true;
+    
     Model mPlane;
 public:
     PostProcess(const Shader& pShader);
@@ -42,6 +44,9 @@ public:
     ~PostProcess();
     void preparePostProcess();
     void applyPostProcess();
+    
+    void setEnabled(const bool& pIsEnabled);
+    const bool& isEnabled();
 };
 
 #endif /* Postprocess_hpp */
