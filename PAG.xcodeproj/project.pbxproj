@@ -12,11 +12,11 @@
 		DD21E07E201002D5007F606D /* ModelCreator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD21E07C201002D5007F606D /* ModelCreator.cpp */; };
 		DD25524620114D86000AECA4 /* Skybox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD25524420114D86000AECA4 /* Skybox.cpp */; };
 		DD25524B20118D18000AECA4 /* Postprocess.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD25524920118D18000AECA4 /* Postprocess.cpp */; };
+		DD322EB02034FD4900B57838 /* libglfw.3.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DD322EAF2034FD4900B57838 /* libglfw.3.2.dylib */; };
+		DD322EB22034FD5D00B57838 /* libassimp.4.1.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DD322EB12034FD5D00B57838 /* libassimp.4.1.0.dylib */; };
 		DD3705CE1FD916ED000DE9C4 /* DirectionalLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD3705CC1FD916ED000DE9C4 /* DirectionalLight.cpp */; };
 		DD3705D11FD91A58000DE9C4 /* SpotLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD3705CF1FD91A58000DE9C4 /* SpotLight.cpp */; };
 		DD3B1AD01FBF7E74005E9485 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD3B1ACF1FBF7E6B005E9485 /* OpenGL.framework */; };
-		DD3B1ADD1FBF830E005E9485 /* libassimp.4.0.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DD3B1ACB1FBF7E48005E9485 /* libassimp.4.0.1.dylib */; };
-		DD3B1ADE1FBF8318005E9485 /* libglfw.3.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DD3B1ACD1FBF7E64005E9485 /* libglfw.3.3.dylib */; };
 		DD3B1AE31FBF8518005E9485 /* glad.c in Sources */ = {isa = PBXBuildFile; fileRef = DD3B1AE11FBF8517005E9485 /* glad.c */; settings = {COMPILER_FLAGS = "-w"; }; };
 		DD3B1AE41FBF8518005E9485 /* stb_image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD3B1AE21FBF8518005E9485 /* stb_image.cpp */; settings = {COMPILER_FLAGS = "-w"; }; };
 		DD7002A41FC4F4E200B198C5 /* Materials.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD7002A21FC4F4E200B198C5 /* Materials.cpp */; };
@@ -71,6 +71,8 @@
 		DD25524920118D18000AECA4 /* Postprocess.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Postprocess.cpp; sourceTree = "<group>"; };
 		DD25524A20118D18000AECA4 /* Postprocess.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Postprocess.hpp; sourceTree = "<group>"; };
 		DD25524C201197F3000AECA4 /* fisheye.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = fisheye.frag; sourceTree = "<group>"; };
+		DD322EAF2034FD4900B57838 /* libglfw.3.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libglfw.3.2.dylib; path = ../../../../../../../../usr/local/Cellar/glfw/3.2.1/lib/libglfw.3.2.dylib; sourceTree = "<group>"; };
+		DD322EB12034FD5D00B57838 /* libassimp.4.1.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libassimp.4.1.0.dylib; path = ../../../../../../../../usr/local/Cellar/assimp/4.1.0/lib/libassimp.4.1.0.dylib; sourceTree = "<group>"; };
 		DD3705CC1FD916ED000DE9C4 /* DirectionalLight.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DirectionalLight.cpp; sourceTree = "<group>"; };
 		DD3705CD1FD916ED000DE9C4 /* DirectionalLight.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DirectionalLight.hpp; sourceTree = "<group>"; };
 		DD3705CF1FD91A58000DE9C4 /* SpotLight.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SpotLight.cpp; sourceTree = "<group>"; };
@@ -130,10 +132,7 @@
 		DDEF9D412010817800CCF4AE /* CubeTexture.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CubeTexture.hpp; sourceTree = "<group>"; };
 		DDF9C61F200FC1C6005F68B7 /* GBuffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GBuffer.cpp; sourceTree = "<group>"; };
 		DDF9C620200FC1C6005F68B7 /* GBuffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GBuffer.hpp; sourceTree = "<group>"; };
-		DDF9C622200FD273005F68B7 /* debug.geom */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = debug.geom; sourceTree = "<group>"; };
-		DDF9C623200FD273005F68B7 /* debug.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = debug.vert; sourceTree = "<group>"; };
 		DDF9C624200FD273005F68B7 /* geometryPass.frag */ = {isa = PBXFileReference; explicitFileType = sourcecode.glsl; path = geometryPass.frag; sourceTree = "<group>"; };
-		DDF9C625200FD273005F68B7 /* debug.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = debug.frag; sourceTree = "<group>"; };
 		DDF9C628200FD273005F68B7 /* geometryPass.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = geometryPass.vert; sourceTree = "<group>"; };
 		DDF9C62B200FD281005F68B7 /* Cubes.fbx */ = {isa = PBXFileReference; lastKnownFileType = file; path = Cubes.fbx; sourceTree = "<group>"; };
 		DDF9C62E200FD281005F68B7 /* 2b_head_dif.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 2b_head_dif.png; sourceTree = "<group>"; };
@@ -221,8 +220,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DD3B1ADE1FBF8318005E9485 /* libglfw.3.3.dylib in Frameworks */,
-				DD3B1ADD1FBF830E005E9485 /* libassimp.4.0.1.dylib in Frameworks */,
+				DD322EB22034FD5D00B57838 /* libassimp.4.1.0.dylib in Frameworks */,
+				DD322EB02034FD4900B57838 /* libglfw.3.2.dylib in Frameworks */,
 				DD3B1AD01FBF7E74005E9485 /* OpenGL.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -354,6 +353,8 @@
 		DD3B1ACA1FBF7E48005E9485 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DD322EB12034FD5D00B57838 /* libassimp.4.1.0.dylib */,
+				DD322EAF2034FD4900B57838 /* libglfw.3.2.dylib */,
 				DD3B1ADB1FBF826B005E9485 /* libglfw3.3.dylib */,
 				DD3B1AD91FBF8232005E9485 /* libglfw.dylib */,
 				DD3B1AD31FBF7FC1005E9485 /* libglfw.3.3.dylib */,
@@ -393,9 +394,6 @@
 			isa = PBXGroup;
 			children = (
 				DD19E9B52011D0B600A79BE8 /* Postprocess */,
-				DDF9C625200FD273005F68B7 /* debug.frag */,
-				DDF9C622200FD273005F68B7 /* debug.geom */,
-				DDF9C623200FD273005F68B7 /* debug.vert */,
 				DDF9C624200FD273005F68B7 /* geometryPass.frag */,
 				DDF9C628200FD273005F68B7 /* geometryPass.vert */,
 				DD21E08020101449007F606D /* lightPass.frag */,
@@ -828,7 +826,12 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				HEADER_SEARCH_PATHS = "./Dependencies\\ Mac/include/**";
-				LIBRARY_SEARCH_PATHS = /usr/local/lib/;
+				LIBRARY_SEARCH_PATHS = (
+					/usr/local/lib/,
+					/usr/local/Cellar/glfw/3.2.1/lib,
+					/usr/local/Cellar/assimp/4.1.0/lib,
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -838,7 +841,12 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				HEADER_SEARCH_PATHS = "./Dependencies\\ Mac/include/**";
-				LIBRARY_SEARCH_PATHS = /usr/local/lib/;
+				LIBRARY_SEARCH_PATHS = (
+					/usr/local/lib/,
+					/usr/local/Cellar/glfw/3.2.1/lib,
+					/usr/local/Cellar/assimp/4.1.0/lib,
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

@@ -11,7 +11,19 @@ layout (location = 1) out vec3 normalOut;
 layout (location = 2) out vec3 positionOut;
 layout (location = 3) out vec3 specularColorOut;
 layout (location = 4) out vec3 ambientColorOut;
-layout (location = 5) out vec3 texCoordsOut;
+layout (location = 5) out vec3 additionalVarsOut;
+
+//Typy cieniowania
+#define SHADING_FLAT 0x1
+#define SHADING_GOURAUD 0x2
+#define SHADING_PHONG 0x3
+#define SHADING_BLINN 0x4
+#define SHADING_TOON 0x5
+#define SHADING_ORENNAYAR 0x6
+#define SHADING_MINNAERT 0x7
+#define SHADING_COOKTORRANCE 0x8
+#define SHADING_NONE 0x9
+#define SHADING_FRESNEL 0xa
 
 //Jak narazie silnik nie obsługuje wielu tekstur tego samego typu
 uniform sampler2D diffuseTexture[5];
@@ -24,6 +36,7 @@ uniform vec3 specularColor;
 uniform vec3 ambientColor;
 uniform vec3 cameraPos;
 
+uniform int shadingMode;
 uniform float shininess;
 
 uniform bool shouldUseDiffuseTexture;
@@ -67,7 +80,7 @@ void main()
     }
     else normal=normalize(normalMatrix*fragVertexNormal);
     
-    if (!isReflective)
+    if (!isReflective||shadingMode==SHADING_NONE)
         diffuseOut=diffuse.rgb;
     else
     {
@@ -89,5 +102,5 @@ void main()
         specularColorOut=specular.rgb;
     
     ambientColorOut=ambientColor;
-    texCoordsOut=vec3(fragVertexTexture, shininess);
+    additionalVarsOut=vec3(0, shadingMode, shininess);
 }

@@ -73,7 +73,7 @@ Core::Core()
         mStencilTestShader=new Shader({{"Shaders/lightPass.vert", GL_VERTEX_SHADER}, {"Shaders/nullShader.frag", GL_FRAGMENT_SHADER}});
         mLightPassShader=new Shader({{"Shaders/lightPass.vert", GL_VERTEX_SHADER}, {"Shaders/lightPass.frag", GL_FRAGMENT_SHADER}});
 		mSkyboxShader = new Shader({ { "Shaders/skybox.vert", GL_VERTEX_SHADER },{ "Shaders/skybox.frag", GL_FRAGMENT_SHADER } });
-        mGBuffer=new GBuffer(SCREEN_WIDTH*SUPERSAMPLING, SCREEN_HEIGHT*SUPERSAMPLING);
+        mGBuffer=new GBuffer(SCREEN_WIDTH, SCREEN_HEIGHT);
         mPostProcess.push_back(Shader({ { "Shaders/Postprocess/nullShader.vert", GL_VERTEX_SHADER },{ "Shaders/Postprocess/tonemap.frag", GL_FRAGMENT_SHADER } }));
         mPostProcess.push_back(PostProcess(Shader({ { "Shaders/Postprocess/nullShader.vert", GL_VERTEX_SHADER },{ "Shaders/Postprocess/depthOfField.frag", GL_FRAGMENT_SHADER } }), false));
         mPostProcess.push_back(PostProcess(Shader({ { "Shaders/Postprocess/nullShader.vert", GL_VERTEX_SHADER },{ "Shaders/Postprocess/fisheye.frag", GL_FRAGMENT_SHADER } }), false));
@@ -89,13 +89,13 @@ Core::Core()
     glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     //Początkowe wartości lightPassa
     mLightPassShader->useProgram();
-    mLightPassShader->setVec2("screenSize",glm::vec2(SCREEN_WIDTH*SUPERSAMPLING, SCREEN_HEIGHT*SUPERSAMPLING));
-    mLightPassShader->setInt("diffuseMap", 0);
-    mLightPassShader->setInt("normalMap", 1);
-    mLightPassShader->setInt("positionMap", 2);
-    mLightPassShader->setInt("specularColorMap", 3);
-    mLightPassShader->setInt("ambientColorMap", 4);
-    mLightPassShader->setInt("texCoordsMap", 5);
+    mLightPassShader->setVec2("screenSize",glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT));
+    mLightPassShader->setInt("diffuseMap", GBUFFER_TEXTURE_DIFFUSE);
+    mLightPassShader->setInt("normalMap", GBUFFER_TEXTURE_NORMAL);
+    mLightPassShader->setInt("positionMap", GBUFFER_TEXTURE_POSITION);
+    mLightPassShader->setInt("specularColorMap", GBUFFER_TEXTURE_SPECULARCOLOR);
+    mLightPassShader->setInt("ambientColorMap", GBUFFER_TEXTURE_AMBIENTCOLOR);
+    mLightPassShader->setInt("additionalVarsMap", GBUFFER_TEXTURE_ADDITIONALVARS);
     //Początkowe wartości skyboxPassa
     mSkyboxShader->useProgram();
     mSkyboxShader->setInt("cubeMap", 31);
@@ -232,8 +232,8 @@ void Core::finalPass()
         }
     }
     mGBuffer->bindForFinalPass();
-    glBlitFramebuffer(0, 0, SCREEN_WIDTH*SUPERSAMPLING, SCREEN_HEIGHT*SUPERSAMPLING, 
-                      0, 0, SCREEN_WIDTH*SUPERSAMPLING, SCREEN_HEIGHT*SUPERSAMPLING, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+    glBlitFramebuffer(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 
+                      0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, GL_COLOR_BUFFER_BIT, GL_LINEAR);
 }
 
 void Core::display()
@@ -257,26 +257,30 @@ void Core::display()
 
 void Core::loadModels()
 {
-//    mModels.push_back(ModelCreator::createPlane());
-//    mModels[0].getRootNode()->getNodeTransform()->setRotation(glm::vec3(90,0,0));
-//    mModels[0].getRootNode()->getNodeTransform()->setScale(glm::vec3(-10,10,10));
-//    mModels[0].getRootNode()->getNodeTransform()->setPosition(glm::vec3(0.5,-1,-0.2));
-//    mModels[0].getMaterials()->getMaterial(0)->mAmbientColor=glm::vec3(1,1,1);
-    mModels.push_back(Model("Models/Skull/source/Skull.obj",true));
+    mModels.push_back(ModelCreator::createPlane());
+    mModels[0].getRootNode()->getNodeTransform()->setRotation(glm::vec3(90,0,0));
+    mModels[0].getRootNode()->getNodeTransform()->setScale(glm::vec3(-10,10,10));
+    mModels[0].getRootNode()->getNodeTransform()->setPosition(glm::vec3(0.5,-1,-0.2));
     mModels[0].getMaterials()->getMaterial(0)->mAmbientColor=glm::vec3(1,1,1);
-    mModels[0].getRootNode()->getNodeTransform()->setRotation(glm::vec3(0,-90,0));
-    mModels[0].getRootNode()->getNodeTransform()->setPosition(glm::vec3(0.5,0,-0.2));
-
-//    mModels[0].getRootNode()->getNodeTransform()->setScale(glm::vec3(0.004,0.004,0.004));
+//    mModels.push_back(Model("Models/Skull/source/Skull.obj",true));
+//    mModels[0].getMaterials()->getMaterial(0)->mAmbientColor=glm::vec3(1,1,1);
 //    mModels[0].getRootNode()->getNodeTransform()->setRotation(glm::vec3(0,-90,0));
-//    mModels[0].getRootNode()->getNodeTransform()->setPosition(glm::vec3(-0.5,0,-0.2));
+//    mModels[0].getRootNode()->getNodeTransform()->setPosition(glm::vec3(0.5,0,-0.2));
+
+    mModels[0].getRootNode()->getNodeTransform()->setScale(glm::vec3(0.004,0.004,0.004));
+    mModels[0].getRootNode()->getNodeTransform()->setRotation(glm::vec3(0,-90,0));
+    mModels[0].getRootNode()->getNodeTransform()->setPosition(glm::vec3(-0.5,0,-0.2));
 
     
-    //Transform sponzaScaler;
-    //sponzaScaler.setScale(glm::vec3(0.005,0.005,0.005));
+    Transform sponzaScaler;
+    sponzaScaler.setScale(glm::vec3(0.005,0.005,0.005));
 
-    //mModels.push_back(Model("Models/Sponza/source/sponza.obj", &sponzaScaler));
+    mModels.push_back(Model("Models/Sponza/source/sponza.obj", &sponzaScaler));
     
+    mModels.push_back(Model("Models/2B/source/2B.fbx"));
+    mModels[2].getRootNode()->getNodeTransform()->setScale(glm::vec3(0.005,0.005,0.005));
+    mModels[2].getRootNode()->getNodeTransform()->setRotation(glm::vec3(0,-90,0));
+    mModels[2].getRootNode()->getNodeTransform()->setPosition(glm::vec3(0,0,-0.2f));
     
     mSkybox=new Skybox("Skybox/");
     mLightModel=new Model("Models/LightSphere/source/LightSphere.obj");

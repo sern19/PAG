@@ -161,3 +161,16 @@ const bool Mesh::checkRayIntersections(const glm::vec3& pRaySource, const glm::v
     pDistanceOutput=*std::min_element(std::begin(distances), std::end(distances));
     return true;
 }
+
+Mesh::Mesh(const Mesh &pSource):mVerticles(pSource.mVerticles), mIndices(pSource.mIndices), mMaterialID(pSource.mMaterialID)  {
+    fixMirroredTan();
+    loadContent();
+}
+
+Mesh::~Mesh()
+{
+    glDeleteVertexArrays(1,&mVertexArrayObject);
+    glDeleteBuffers(1,&mVertexBufferObject);
+    glDeleteBuffers(1,&mElementObjectBuffer);
+}
+

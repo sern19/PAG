@@ -12,7 +12,7 @@
 #define SHADING_NONE 0x9
 #define SHADING_FRESNEL 0xa
 
-int shadingMode=SHADING_BLINN;
+int shadingMode;
 
 uniform vec3 cameraPos;
 
@@ -21,7 +21,7 @@ uniform sampler2D normalMap;
 uniform sampler2D positionMap;
 uniform sampler2D specularColorMap;
 uniform sampler2D ambientColorMap;
-uniform sampler2D texCoordsMap;
+uniform sampler2D additionalVarsMap;
 uniform vec2 screenSize;
 
 out vec4 fragColor;
@@ -100,8 +100,8 @@ vec4 shadeColor(const in vec4 inputColor, const in vec3 fragVertex, const in vec
     
     if (shadingMode==SHADING_NONE)
         outputColor=inputColor;
-    //else if (shadingMode==SHADING_GOURAUD)
-        //outputColor=vec4(1,1,1,1); //Narazie nieobsługiwane
+    else if (shadingMode==SHADING_GOURAUD)
+        outputColor=vec4(1,1,1,1); //Narazie nieobsługiwane
     else if (shadingMode==SHADING_PHONG || shadingMode==SHADING_BLINN)
     {
         int i;
@@ -125,9 +125,11 @@ void main()
     vec4 diffuse=texture(diffuseMap, coords);
     vec3 normal=texture(normalMap, coords).rgb;
     vec3 position=texture(positionMap, coords).rgb;
-    float shininess=texture(texCoordsMap, coords).z;
+    float shininess=texture(additionalVarsMap, coords).z;
     vec3 specular=texture(specularColorMap, coords).rgb;
     vec3 ambient=texture(ambientColorMap, coords).rgb;
+    
+    shadingMode=int(texture(additionalVarsMap, coords).y);
     
     fragColor=shadeColor(diffuse, position, specular, ambient, shininess, normal);
 }

@@ -211,6 +211,9 @@ const Material Materials::fillMaterialData(aiMaterial* const pMaterial)
     if (pMaterial->Get(AI_MATKEY_SHADING_MODEL, output.mShadingMode)!=AI_SUCCESS)
         output.mShadingMode=DEFAULT_SHADING_MODE; //Domyślne cieniowanie w przypadku niepowodzenia
     
+    if (output.mShadingMode==aiShadingMode_Gouraud)
+        output.mShadingMode=aiShadingMode_Blinn;
+    
     return output;
 }
 
